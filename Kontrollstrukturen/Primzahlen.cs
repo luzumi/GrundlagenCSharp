@@ -54,19 +54,19 @@ namespace Kontrollstrukturen
         {
             for (int i = 2; i <= primesList.Max() + 1; i++)
             {
-                int anzahl = 0;
-                foreach (var wert in primesList)
-                {
-                    if (i % wert == 0)
-                    {
-                        anzahl++;
-                    }
-                }
-
-                if (anzahl <= 2)
-                {
+                // int anzahl = 0;
+                // foreach (var wert in primesList)                 //Überprüfung auf Anzahl der Teiler ist nicht notwendig
+                // {
+                //     if (i % wert == 0)
+                //     {
+                //         anzahl++;
+                //     }
+                // }
+                //
+                // if (anzahl <= 2)
+                // {
                     LöscheProduktAusListe(primesList, i);
-                }
+                // }
             }
         }
 
