@@ -4,6 +4,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.VisualBasic.CompilerServices;
 
 // normaler Kommentar
 /*
@@ -82,16 +86,18 @@ namespace Kontrollstrukturen
             }
 
             List<int> ListeOfNumbers = new List<int>();
-                //___Unterschied List -Array___:
-                    /*Array enthält den Speicherplatz des ersten Elements. die darauffolgenden Werte sind in festen darauf folgenden Speicherplätzen 
-                        Sie sind fest in der Größe und können nicht nachträglich vergrößert/verklenert werden*/
-                    /*List einhält jedes Element den Speicherplatz der vorhergehenden Elelemnts, den Wert und den Speicherplatz des nachfolgenden Elements
-                        Eine List kann nachträglich in der Größe verändert werden*/
+            //___Unterschied List -Array___:
+            /*Array enthält den Speicherplatz des ersten Elements. die darauffolgenden Werte sind in festen darauf folgenden Speicherplätzen 
+                Sie sind fest in der Größe und können nicht nachträglich vergrößert/verklenert werden*/
+            /*List einhält jedes Element den Speicherplatz der vorhergehenden Elelemnts, den Wert und den Speicherplatz des nachfolgenden Elements
+                Eine List kann nachträglich in der Größe verändert werden*/
 
             foreach (var item in ListeOfNumbers) //foreach geht jedes Element in einer Liste durch
             {
-                
             }
+
+
+            Primzahlen.PrimeZahl(1000);
 
             #endregion
         }
