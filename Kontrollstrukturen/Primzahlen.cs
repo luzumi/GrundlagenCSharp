@@ -15,7 +15,7 @@ namespace Kontrollstrukturen
         {
             List<int> primzahlenListe = new List<int>();
             
-            ListeFüllen(primzahlenListe, maximum);
+            ListeFuellen(primzahlenListe, maximum);
 
             PrimezahlenFinden(primzahlenListe);
 
@@ -30,7 +30,7 @@ namespace Kontrollstrukturen
         /// </summary>
         /// <param name="primzahlenListe">Leere Liste zum Befüllen</param>
         /// <param name="maximalZahl">Maximalwert der zu erstellenden Liste</param>
-        private static void ListeFüllen(List<int> primzahlenListe, int maximalZahl)
+        private static void ListeFuellen(List<int> primzahlenListe, int maximalZahl)
         {
             for (int i = 1; i <= maximalZahl; i++)
             {
@@ -61,7 +61,7 @@ namespace Kontrollstrukturen
                 //
                 // if (anzahl <= 2)
                 // {
-                    LöscheProduktAusListe(primzahlenListe, i);
+                    LoescheProduktAusListe(primzahlenListe, i);
                 // }
             }
         }
@@ -72,7 +72,7 @@ namespace Kontrollstrukturen
         /// </summary>
         /// <param name="primzahlenListe">Liste der zu überprüfenden Zahlen, alle Produkte der Primzahl werden daraus gelöscht</param>
         /// <param name="primzahl">Die berechnete Primzahl</param>
-        private static void LöscheProduktAusListe(List<int> primzahlenListe, int primzahl)
+        private static void LoescheProduktAusListe(List<int> primzahlenListe, int primzahl)
         {
             int zahl = primzahl;
 

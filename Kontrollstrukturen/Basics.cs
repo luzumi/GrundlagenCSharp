@@ -50,9 +50,13 @@ namespace Kontrollstrukturen
         /// <param name="args">Kommandozeilenparameter</param>
         static void Main(string[] args)
         {
+            
+            Primzahlen.PrimeZahl(1000);     //Primzahlenberechnung bis zu einem definierten Maximalwert
+
+
             #region Verzweigungen und Schleifen
 
-            int zahl = 0;
+            int zahl = 3;
 
             if (zahl == 0)
             {
@@ -106,6 +110,7 @@ namespace Kontrollstrukturen
                 goto zielpunkt; //springt auf die Position an der "zielpunkt:" erstellt wurde
             }
 
+            zahl = 3;
             switch (zahl)
             {
                 case 1:
@@ -152,7 +157,6 @@ namespace Kontrollstrukturen
             #endregion
 
 
-            Primzahlen.PrimeZahl(100000);
         }
 
         #endregion
