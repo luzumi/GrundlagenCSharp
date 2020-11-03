@@ -4,10 +4,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.VisualBasic.CompilerServices;
+using System.Reflection.Metadata;
 
 // normaler Kommentar
 /*
@@ -23,6 +20,14 @@ namespace Kontrollstrukturen
     /// </summary>
     class Program
     {
+        enum Programmzustaende
+        {
+            Starting,
+            Running,
+            Stopping,
+            Stopped
+        }
+
         #region Was ist eine Region
 
         //Eine Region wird genutzt und Codeblöcke über mehrere Methoden und Teilabschnitte zu bündeln
@@ -51,9 +56,9 @@ namespace Kontrollstrukturen
         /// <param name="args">Kommandozeilenparameter</param>
         static void Main(string[] args)
         {
-            int zahl = 0;
-
             #region Verzweigungen und Schleifen
+
+            int zahl = 0;
 
             if (zahl == 0)
             {
@@ -85,21 +90,75 @@ namespace Kontrollstrukturen
                 }
             }
 
-            List<int> ListeOfNumbers = new List<int>();
+            List<int> ListOfNumbers = new List<int>();
             //___Unterschied List -Array___:
             /*Array enthält den Speicherplatz des ersten Elements. die darauffolgenden Werte sind in festen darauf folgenden Speicherplätzen 
                 Sie sind fest in der Größe und können nicht nachträglich vergrößert/verklenert werden*/
             /*List einhält jedes Element den Speicherplatz der vorhergehenden Elelemnts, den Wert und den Speicherplatz des nachfolgenden Elements
                 Eine List kann nachträglich in der Größe verändert werden*/
 
-            foreach (var item in ListeOfNumbers) //foreach geht jedes Element in einer Liste durch
+            foreach (var item in ListOfNumbers
+            ) //foreach geht jedes Element in einem Container (z.B. Liste oder Array) durch
             {
             }
 
 
-            Primzahlen.PrimeZahl(1000);
+            zielpunkt:  //Zielposition für ein goto
+
+            zahl--;
+
+            if (zahl > 0)
+            {
+                goto zielpunkt; //springt auf die Position an der "zielpunkt:" erstellt wurde
+            }
+
+            switch (zahl)
+            {
+                case 1:
+                    //code wenn in zahl die 1 steht
+                    break;  //break; verhindert das Ausführen weiterer cases
+                case 2:
+                    //code wenn in zahl die 1 steht
+                    break;
+                default:
+                    //code der ausgeführt wird, wenn kein case zutraf
+                    break;
+            }
+
+            Programmzustaende MeinProgramm = Programmzustaende.Starting;
+
+            switch (zahl)
+            {
+                case 1:
+                    MeinProgramm = Programmzustaende.Starting;
+                    break;
+                case 2:
+                    MeinProgramm = Programmzustaende.Running;
+                    break;      //beendet switch block
+                case 3:
+                    MeinProgramm = Programmzustaende.Stopping;
+                    break;      //fehlt break: wird code bis zum nächsten break ausgeführt!
+                case 4:
+                    MeinProgramm = Programmzustaende.Stopped;
+                    break;
+                default:
+                    Console.WriteLine("Unbekannter Zustand");
+                    break;
+            }
+
+            //Kurzform des Switchblocks
+            MeinProgramm = zahl switch
+            {
+                1 => Programmzustaende.Running,
+                2 => Programmzustaende.Stopped,
+                3 => Programmzustaende.Stopping,
+                _ => Programmzustaende.Stopping      // _  = Default
+            };
 
             #endregion
+
+
+            Primzahlen.PrimeZahl(100000);
         }
 
         #endregion
