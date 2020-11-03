@@ -20,13 +20,7 @@ namespace Kontrollstrukturen
     /// </summary>
     class Program
     {
-        enum Programmzustaende
-        {
-            Starting,
-            Running,
-            Stopping,
-            Stopped
-        }
+        
 
         #region Was ist eine Region
 
