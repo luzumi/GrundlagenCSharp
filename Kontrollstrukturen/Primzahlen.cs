@@ -7,6 +7,7 @@ namespace Kontrollstrukturen
     public static class Primzahlen
     {
         /// <summary>
+        /// statische Methode
         /// Berechne Primzahlen im Bereich bist Maximum
         /// </summary>
         /// <param name="maximum">Bis zu diesem Wert werden alle Primezahlen berechnet</param>
