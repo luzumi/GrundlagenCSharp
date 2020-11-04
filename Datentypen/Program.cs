@@ -86,6 +86,7 @@ namespace Datentypen
             int B = 9;
             //PreInkrement
             int ErgebnisA = A++; // ErgebnisA = 4, A wird übergeben und erst danach hochgezählt, A ist dann 5
+            //PostInkrement
             int ErgebnisB = ++B; // ErgebnisB = 10, B wird erst hochgezählt und dann übergeben, B ist dann 10
 
             int Alpha = 4;
