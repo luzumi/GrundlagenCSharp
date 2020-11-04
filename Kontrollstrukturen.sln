@@ -11,6 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Methoden", "Methoden\Method
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{5A11FEA0-9618-4D77-BDEA-CD50A5EB1BB3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BEDA871-AB95-4ACB-A1AA-7E9519F0129C}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Übungesaufgaben", "Übungesaufgaben\Übungesaufgaben.csproj", "{34D8C94E-43DF-46CE-9A93-8F2540AC13FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +36,10 @@ Global
 		{4C84CFB2-2236-4E31-B094-26BCC28AFD15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C84CFB2-2236-4E31-B094-26BCC28AFD15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C84CFB2-2236-4E31-B094-26BCC28AFD15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34D8C94E-43DF-46CE-9A93-8F2540AC13FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34D8C94E-43DF-46CE-9A93-8F2540AC13FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34D8C94E-43DF-46CE-9A93-8F2540AC13FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34D8C94E-43DF-46CE-9A93-8F2540AC13FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

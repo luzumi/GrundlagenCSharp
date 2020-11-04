@@ -50,8 +50,6 @@ namespace Kontrollstrukturen
         /// <param name="args">Kommandozeilenparameter</param>
         static void Main(string[] args)
         {
-            
-            Primzahlen.PrimeZahl(1000);     //Primzahlenberechnung bis zu einem definierten Maximalwert
 
 
             #region Verzweigungen und Schleifen
