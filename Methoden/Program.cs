@@ -37,17 +37,13 @@ namespace Methoden
         /// <summary>
         /// Benötigt eine Ganzzahl und gibt diese auf der Konsole aus.  
         ///     <example>For example:
-        ///         <code>
-        ///             <c>pTextVorDerZahl</c> - beschreibt die Ausgabe.
+        ///         <code> <c>pTextVorDerZahl</c> - beschreibt die Ausgabe.
         ///         </code>
-        ///         <code> 
-        ///             <c>pZahl</c> - Ganzahl zur Ausgabe auf der Konsole
+        ///         <code> <c>pZahl</c> - Ganzahl zur Ausgabe auf der Konsole
         ///         </code>
-        ///         <code> 
-        ///             int EineZahl = 5;
+        ///         <code> int EineZahl = 5;
         ///         </code>
-        ///         <code>
-        ///             AusgabeZahl("Testausgabe: ", EineZahl);
+        ///         <code> AusgabeZahl("Testausgabe: ", EineZahl);
         ///         </code>
         ///         results in <c>Testausgabe: 5</c>
         ///     </example>
@@ -62,11 +58,9 @@ namespace Methoden
         /// <summary>
         /// Methode benötigt eine Ganzahl und erhöht diese um 2
         ///     <example>For Example:
-        ///         <code>
-        ///             <c>int EineZahl = 5;</c>
+        ///         <code> <c>int EineZahl = 5;</c>
         ///         </code>
-        ///         <code>
-        ///             <c>Addiere2(EineZahl)</c>
+        ///         <code> <c>Addiere2(EineZahl)</c>
         ///         </code>
         ///         results in <c>7</c>
         ///     </example>
@@ -84,11 +78,9 @@ namespace Methoden
         /// <summary>
         /// Methode erhöht Eingabewert um 2 und verändert den Ausgangswert der Variable
         /// <example>
-        ///     <code>
-        ///         <c>ref</c> verweist auf die Speicheradresse 
+        ///     <code> <c>ref</c> verweist auf die Speicheradresse 
         ///     </code>
-        ///     <code>
-        ///         Mit ref verändert sich das Original!
+        ///     <code> Mit ref verändert sich das Original!
         ///     </code>
         /// </example>
         /// </summary>
@@ -102,13 +94,12 @@ namespace Methoden
         /// <summary>
         /// Methode simmuliert ein i++
         ///     <example>
-        ///         <code>
-        ///             <c>int EineZahl = 5 </c>
+        ///         <code> <c>int EineZahl = 5 </c>
         ///         </code>
-        ///         <code>
-        ///             <c>PostInkrement(EineZahl)</c>
-        ///         </code> results in <c>5</c>
-        ///         <code> Original EineZahl bleibt gleich
+        ///         <code> <c>PostInkrement(EineZahl)</c>
+        ///         </code>
+        ///         results in <c>5</c>
+        ///         <code> Das Original <c>EineZahl</c> bleibt gleich
         ///         </code>
         ///     </example>
         /// </summary>
@@ -126,11 +117,10 @@ namespace Methoden
         ///     <example>
         ///         <code> int EineZahl = 5
         ///         </code>
-        ///         <code>
-        ///             <c>PostInkrement(EineZahl)</c>
+        ///         <code> <c>PostInkrement(EineZahl)</c>
         ///         </code>
         ///         <code>results in <c>6</c></code>
-        ///         <c> Original EineZahl wird geändert
+        ///         <c> Das Original <c>EineZahl</c> wird geändert
         ///         </c>
         ///     </example>
         /// </summary>
