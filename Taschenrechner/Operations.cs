@@ -6,10 +6,12 @@ namespace Taschenrechner
 {
     enum Operations
     {
-        Plus,
-        Minus,
-        Mal,
-        Geteilt,
-        Modulo
+        UnSet,
+        Addition,
+        Substraktion,
+        Multiplikation,
+        Division,
+        Modulo,
+        Count
     }
 }

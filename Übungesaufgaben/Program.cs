@@ -10,6 +10,9 @@ namespace Übungesaufgaben
             int[] Array = new int[20];
             long[] ArrayLong = new long[20];
 
+            List<int> ListInt = new List<int>(20);
+            List<long> ListLong = new List<long>(20);
+
             //Console.WriteLine(SummeArray(Array));
 
             AusgabeArray(ArrayBerechnungen.IntitilaizeFibunacci(Array));
@@ -18,6 +21,15 @@ namespace Übungesaufgaben
 
             AusgabeArray(ArrayBerechnungen.Fakultät(Array));
 
+            //ArrayBerechnungen.IntitilaizeFibunacci<int>(ListInt);
+
+            AusgabeArray<int>(ListInt);
+            
+            Console.WriteLine();
+
+            ArrayBerechnungen.Fakultät<int>(ListInt);
+            
+            AusgabeArray<long>(ListLong);
             Console.ReadLine();
             //Primzahlen.PrimeZahl(1000);     //Primzahlenberechnung bis zu einem definierten Maximalwert
         }
@@ -39,7 +51,7 @@ namespace Übungesaufgaben
         /// Gibt alle Elemente des generischen Arrays in einer Zeile auf der Console aus
         /// </summary>
         /// <param name="pArray">generisches Array</param>
-        static void AusgabeArray<T>(IList<T> pArray)
+        static void AusgabeArray<T>(List<T> pArray)
         {
             foreach (var VARIABLE in pArray)
             {
