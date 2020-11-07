@@ -7,30 +7,42 @@ namespace Übungesaufgaben
     {
         static void Main(string[] args)
         {
-            int[] Array = new int[20];
-            long[] ArrayLong = new long[20];
-
-            List<int> ListInt = new List<int>(20);
-            List<long> ListLong = new List<long>(20);
+            //int[] Array = new int[20];
+            //long[] ArrayLong = new long[20];
 
             //Console.WriteLine(SummeArray(Array));
+            //AusgabeArray(ArrayBerechnungen.IntitilaizeFibunacci(Array));
+            //Console.WriteLine();
+            //AusgabeArray(ArrayBerechnungen.Fakultät(Array));
 
-            AusgabeArray(ArrayBerechnungen.IntitilaizeFibunacci(Array));
 
+            List<int> ListInt = new List<int>(13);
+            List<long> ListLong = new List<long>(20);
+
+
+            Console.WriteLine(ArrayBerechnungen.Fakultät<int>(ListInt));
+            Console.WriteLine(ArrayBerechnungen.Fakultät<long>(ListLong));
+            
             Console.WriteLine();
 
-            AusgabeArray(ArrayBerechnungen.Fakultät(Array));
-
-            //ArrayBerechnungen.IntitilaizeFibunacci<int>(ListInt);
+            ArrayBerechnungen.FuelleArray(ref ListInt);
+            ArrayBerechnungen.FuelleArray(ref ListLong);
 
             AusgabeArray<int>(ListInt);
-            
-            Console.WriteLine();
-
-            ArrayBerechnungen.Fakultät<int>(ListInt);
-            
             AusgabeArray<long>(ListLong);
+
+            Console.WriteLine();
+            ListLong = new List<long>(50);
+            ArrayBerechnungen.IntitilaizeFibunacci<int>(ref ListInt);
+            ArrayBerechnungen.IntitilaizeFibunacci<long>(ref ListLong);
+
+            AusgabeArray<int>(ListInt);
+            AusgabeArray<long>(ListLong);
+
+
+
             Console.ReadLine();
+
             //Primzahlen.PrimeZahl(1000);     //Primzahlenberechnung bis zu einem definierten Maximalwert
         }
 

@@ -31,7 +31,7 @@ namespace Übungesaufgaben
         /// Füllt Array mit Zufallszahlen 0-100
         /// </summary>
         /// <param name="pArray"></param>
-        private static void FuelleArray(int[] pArray) 
+        private static void FuelleArray(int[] pArray)
         {
             Random r = new Random();
 
@@ -40,6 +40,7 @@ namespace Übungesaufgaben
                 pArray[i] = r.Next(100);
             }
         }
+
         /// <summary>
         /// Berechnet den Durschnitt aller Werte in einem Array
         /// </summary>
@@ -74,7 +75,7 @@ namespace Übungesaufgaben
         /// </summary>
         /// <param name="pArray"></param>
         /// <returns>Array mit Fakultäten</returns>
-        public static int[] Fakultät(int[] pArray) 
+        public static int[] Fakultät(int[] pArray)
         {
             pArray[0] = 0;
             int Nenner = 1;
@@ -127,13 +128,15 @@ namespace Übungesaufgaben
         /// Füllt Array mit Zufallszahlen 0-100
         /// </summary>
         /// <param name="pArray"></param>
-        private static void FuelleArray<T>(List<T> pArray) where T : struct
+        public static void FuelleArray<T>(ref List<T> pArray) where T : struct
         {
+            int laenge = pArray.Capacity;
             Random r = new Random();
+            pArray = new List<T>(laenge);
 
-            for (int i = 0; i < pArray.Count; i++)
+            for (int i = 0; i < laenge; i++)
             {
-                pArray[i] = (T)Convert.ChangeType(r.Next(100), typeof(List<T>));
+                pArray.Add((T)Convert.ChangeType(r.Next(100), typeof(T)));
             }
         }
 
@@ -142,31 +145,27 @@ namespace Übungesaufgaben
         /// </summary>
         /// <param name="pArray"></param>
         /// <returns>generische Array mit Fibunnacizahlen gefüllt</returns>
-        public static T IntitilaizeFibunacci<T>(List<T> pArray) where T : struct
+        public static List<T> IntitilaizeFibunacci<T>(ref List<T> pArray) where T : struct
         {
             //TODO System.InvalidCastException
             //HResult=0x80004002
             //Message=Invalid cast from 'System.Int32' to 'System.Collections.Generic.List`1[[System.Int32, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
             //    Source=System.Private.CoreLib
             //StackTrace:
-            //at System.Convert.DefaultToType(IConvertible value, Type targetType, IFormatProvider provider)
-            //at System.Int32.System.IConvertible.ToType(Type type, IFormatProvider provider)
-            //at System.Convert.ChangeType(Object value, Type conversionType, IFormatProvider provider)
-            //at System.Convert.ChangeType(Object value, Type conversionType)
-            //at Übungesaufgaben.ArrayBerechnungen.IntitilaizeFibunacci[T](List`1 pArray) in E:\VisualStudio-workspace\AnwendungsentwicklungTeil1\Kontrollstrukturen\Übungesaufgaben\ArrayBerechnungen.cs:line 147
-            //at Übungesaufgaben.Program.Main(String[] args) in E:\VisualStudio-workspace\AnwendungsentwicklungTeil1\Kontrollstrukturen\Übungesaufgaben\Program.cs:line 24
+            decimal summe = 0;
+            int laenge = pArray.Capacity;
+            pArray = new List<T>(laenge);
 
-            pArray.Insert(0, (T)Convert.ChangeType(0, typeof(List<T>)));
-            pArray.Insert(1, (T)Convert.ChangeType(0, typeof(List<T>)));
+            pArray.Add((T)Convert.ChangeType(0, typeof(T)));
+            pArray.Add((T)Convert.ChangeType(1, typeof(T)));
 
-            for (int i = 1; i < pArray.Count; i++)
+            for (int i = 2; i < laenge; i++)
             {
-                decimal summe = (decimal)Convert.ChangeType(i, typeof(List<T>)) +
-                                (decimal)Convert.ChangeType(pArray[i], typeof(List<T>));
-                pArray[i] = (T)Convert.ChangeType(summe, typeof(List<T>));
+                pArray.Add((T)Convert.ChangeType((decimal) ((decimal)Convert.ChangeType(pArray[i - 1], typeof(decimal)) + 
+                                                            (decimal)Convert.ChangeType(pArray[i - 2], typeof(decimal))), typeof(T)));
             }
 
-            return (T)Convert.ChangeType(pArray, typeof(List<T>));
+            return pArray;
         }
 
         /// <summary>
@@ -176,27 +175,15 @@ namespace Übungesaufgaben
         /// <returns>generisches Array mit Fakultäten</returns>
         public static T Fakultät<T>(List<T> pArray) where T : struct
         {
-            //TODO System.InvalidCastException
-            //HResult=0x80004002
-            //Message=Invalid cast from 'System.Int32' to 'System.Collections.Generic.List`1[[System.Int32, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
-            //    Source=System.Private.CoreLib
-            //StackTrace:
-            //at System.Convert.DefaultToType(IConvertible value, Type targetType, IFormatProvider provider)
-            //at System.Int32.System.IConvertible.ToType(Type type, IFormatProvider provider)
-            //at System.Convert.ChangeType(Object value, Type conversionType, IFormatProvider provider)
-            //at System.Convert.ChangeType(Object value, Type conversionType)
-            //at Übungesaufgaben.ArrayBerechnungen.Fakultät[T](List`1 pArray) in E:\VisualStudio-workspace\AnwendungsentwicklungTeil1\Kontrollstrukturen\Übungesaufgaben\ArrayBerechnungen.cs:line 179
-            //at Übungesaufgaben.Program.Main(String[] args) in E:\VisualStudio-workspace\AnwendungsentwicklungTeil1\Kontrollstrukturen\Übungesaufgaben\Program.cs:line 30
-
-            pArray.Insert(0, (T)Convert.ChangeType(0, typeof(List<T>)));
-            long Nenner = 1;
-            for (int i = 1; i < pArray.Count; i++)
+            pArray.Add((T)Convert.ChangeType(0, typeof(T)));
+            decimal Nenner = 1;
+            for (int i = 1; i < pArray.Capacity; i++)
             {
                 Nenner = Nenner * i;
-                pArray[i] = (T)Convert.ChangeType(Nenner, typeof(List<T>));
+                //pArray.Add((T)Convert.ChangeType(Nenner, typeof(T)));
             }
 
-            return (T)Convert.ChangeType(pArray, typeof(List<T>));
+            return (T)Convert.ChangeType(Nenner, typeof(T));
         }
 
         #endregion
