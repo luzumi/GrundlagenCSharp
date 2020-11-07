@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace Übungesaufgaben
 {
@@ -21,7 +19,7 @@ namespace Übungesaufgaben
 
             foreach (var VARIABLE in pArray)
             {
-                summe += (int)VARIABLE;
+                summe += VARIABLE;
             }
 
             return summe;
@@ -44,7 +42,9 @@ namespace Übungesaufgaben
         /// <summary>
         /// Berechnet den Durschnitt aller Werte in einem Array
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam T> 
+        ///     <name>T</name>
+        /// </typeparam>
         /// <param name="pArray"></param>
         /// <returns></returns>
         private static int SummeDurchschnitt(int[] pArray)
@@ -152,7 +152,7 @@ namespace Übungesaufgaben
             //Message=Invalid cast from 'System.Int32' to 'System.Collections.Generic.List`1[[System.Int32, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
             //    Source=System.Private.CoreLib
             //StackTrace:
-            decimal summe = 0;
+
             int laenge = pArray.Capacity;
             pArray = new List<T>(laenge);
 
@@ -161,7 +161,7 @@ namespace Übungesaufgaben
 
             for (int i = 2; i < laenge; i++)
             {
-                pArray.Add((T)Convert.ChangeType((decimal) ((decimal)Convert.ChangeType(pArray[i - 1], typeof(decimal)) + 
+                pArray.Add((T)Convert.ChangeType(((decimal)Convert.ChangeType(pArray[i - 1], typeof(decimal)) + 
                                                             (decimal)Convert.ChangeType(pArray[i - 2], typeof(decimal))), typeof(T)));
             }
 
