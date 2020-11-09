@@ -6,28 +6,28 @@ namespace Methoden
     {
         static void Main(string[] args)
         {
-            int MeineZahl = 12;
+            int meineZahl = 12;
 
-            AusgabeZahl("Ausgangszahl: ", MeineZahl);
+            AusgabeZahl("Ausgangszahl: ", meineZahl);
 
-            int andereZahl = Addiere2(Addiere2(MeineZahl));
+            int andereZahl = Addiere2(Addiere2(meineZahl));
             AusgabeZahl("AndereZahl nach addiere2(addiere2)): = " , andereZahl);
 
-            AusgabeZahl("MeineZahl aktuell: " , MeineZahl);
+            AusgabeZahl("MeineZahl aktuell: " , meineZahl);
             Console.WriteLine();
 
-            Addiere2UndVeraendereAusgangswert(ref MeineZahl);
-            AusgabeZahl("Addiere2UndVeraendereAusgangswert: = " , MeineZahl);
+            Addiere2UndVeraendereAusgangswert(ref meineZahl);
+            AusgabeZahl("Addiere2UndVeraendereAusgangswert: = " , meineZahl);
             Console.WriteLine();
 
-            AusgabeZahl("MeineZahl aktuell: " , MeineZahl);
-            AusgabeZahl("Postinkrement (i++): = ", + PostInkrement(ref MeineZahl));
-            AusgabeZahl("MeineZahl aktuell: " , MeineZahl);
+            AusgabeZahl("MeineZahl aktuell: " , meineZahl);
+            AusgabeZahl("Postinkrement (i++): = ", + PostInkrement(ref meineZahl));
+            AusgabeZahl("MeineZahl aktuell: " , meineZahl);
             Console.WriteLine();
 
-            AusgabeZahl("MeineZahl aktuell: " , MeineZahl);
-            AusgabeZahl("PreInkrement (++i): = ", PreInkrement(ref MeineZahl));
-            AusgabeZahl("MeineZahl aktuell: " , MeineZahl);
+            AusgabeZahl("MeineZahl aktuell: " , meineZahl);
+            AusgabeZahl("PreInkrement (++i): = ", PreInkrement(ref meineZahl));
+            AusgabeZahl("MeineZahl aktuell: " , meineZahl);
             
             
             

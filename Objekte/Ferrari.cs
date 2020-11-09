@@ -14,16 +14,7 @@ namespace Objekte
 
         public Ferrari()
         {
-            _aktivierbareTueren = (byte)(EnumAutotuer.MotorHaube | EnumAutotuer.SchiebeDach | EnumAutotuer.TankDeckel | EnumAutotuer.VornLinks | EnumAutotuer.VornRechts);
+            AktivierbareTueren = (byte)(EnumAutotuer.MotorHaube | EnumAutotuer.SchiebeDach | EnumAutotuer.TankDeckel | EnumAutotuer.VornLinks | EnumAutotuer.VornRechts);
         }
     }
-
-    class Delorean : Auto
-    {
-        public Delorean()
-        {
-            _aktivierbareTueren = 255;
-        }
-    }
-
 }

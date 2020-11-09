@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Objekte
 {
-    class Delorian : Auto
+    class Delorean : Auto
     {
-        public Delorian()
+        public Delorean()
         {
-            _aktivierbareTueren = 255;
+            AktivierbareTueren = 255;
         }
     }
 }

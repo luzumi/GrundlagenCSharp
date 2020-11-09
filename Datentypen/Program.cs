@@ -11,44 +11,44 @@ namespace Datentypen
 
             #region Ganzzahlen
 
-            long Ganzzahl64Bit = long.MaxValue; // 18.446.744.073.709.551.615
+            long ganzzahl64Bit = long.MaxValue; // 18.446.744.073.709.551.615
 
-            ulong Ganzzahl64BitPositiv = long.MaxValue; // 9.223.372.036.854.775.807
+            ulong ganzzahl64BitPositiv = long.MaxValue; // 9.223.372.036.854.775.807
 
-            int Ganzzahl32Bit = Int32.MaxValue; // 2.147.483.647
+            int ganzzahl32Bit = Int32.MaxValue; // 2.147.483.647
 
-            uint Ganzzahl32BitPositiv = UInt32.MaxValue; // 4.294.967.295
+            uint ganzzahl32BitPositiv = UInt32.MaxValue; // 4.294.967.295
 
-            short Ganzzahl16Bit = short.MaxValue; //32767
+            short ganzzahl16Bit = short.MaxValue; //32767
 
             ushort ganzzahl16BitPositivUshort = ushort.MaxValue; // 65535
 
-            sbyte Ganzzahl8Bit = sbyte.MaxValue; //-128 bis 127
+            sbyte ganzzahl8Bit = sbyte.MaxValue; //-128 bis 127
 
-            byte Ganzzahl8BitPositiv = byte.MaxValue; //0 bis 255
+            byte ganzzahl8BitPositiv = byte.MaxValue; //0 bis 255
 
-            bool Wahrheitswert; // true/false, als standard wird false gesetzt
+            bool wahrheitswert; // true/false, als standard wird false gesetzt
 
             #endregion
 
             #region Gleitkommazahlen
 
-            float Gleitkommazahl32Bit; // ca  6 Stellen nach Komma genau
+            float gleitkommazahl32Bit; // ca  6 Stellen nach Komma genau
 
-            double Gleitkommazahl64Bit; // ca 15 Stellen nach Komma genau
+            double gleitkommazahl64Bit; // ca 15 Stellen nach Komma genau
 
-            decimal Gleitkommazahl128Bit; // ca 30 Stellen nach Komma genau
+            decimal gleitkommazahl128Bit; // ca 30 Stellen nach Komma genau
 
             #endregion
 
             #region Listen, Arrays
 
-            char Buchstabe = 'a'; //16Bit (UTF8)
+            char buchstabe = 'a'; //16Bit (UTF8)
             char[] buchstabenChars = {'M', 'e', 'i', 'n', ' ', 'T', 'e', 'x', 't'};
-            string Text = "Mein Text"; // Array aus Char mit verstecktem NULL am Ende
+            string text = "Mein Text"; // Array aus Char mit verstecktem NULL am Ende
 
             byte[]
-                ByteArray =
+                byteArray =
                     new byte[20]; //Belegt festen Speichebereich (hier mit 20 byte) ohne Inhalt, aufgerufen werden können die Felder einzeln mit [0] - [19]
 
             List<byte> listeBytes = new List<byte>();
@@ -73,26 +73,26 @@ namespace Datentypen
 
 
 
-            byte AktiveOption =
+            byte aktiveOption =
                 (byte) (OptionenEnum.A |
                         OptionenEnum.D); //Werte aus enum werden mathematisch ODER verknüpft = 1 | 8 = 9
 
-            Console.WriteLine(AktiveOption);
+            Console.WriteLine(aktiveOption);
             #endregion
 
             #region Übung zu Datentypen
 
-            int A = 4;
-            int B = 9;
+            int a = 4;
+            int b = 9;
             //PreInkrement
-            int ErgebnisA = A++; // ErgebnisA = 4, A wird übergeben und erst danach hochgezählt, A ist dann 5
+            int ergebnisA = a++; // ErgebnisA = 4, A wird übergeben und erst danach hochgezählt, A ist dann 5
             //PostInkrement
-            int ErgebnisB = ++B; // ErgebnisB = 10, B wird erst hochgezählt und dann übergeben, B ist dann 10
+            int ergebnisB = ++b; // ErgebnisB = 10, B wird erst hochgezählt und dann übergeben, B ist dann 10
 
-            int Alpha = 4;
-            int Beta = 6;
+            int alpha = 4;
+            int beta = 6;
             //  4 + 7 -> Aplha wird in Berechnung gesetzt und erst danach erhöht, Beta wird erst erhöht und dann in die Berechnung eingetragen
-            Console.WriteLine(Alpha++ + ++Beta);
+            Console.WriteLine(alpha++ + ++beta);
 
 
 

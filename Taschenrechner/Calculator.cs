@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Net.Mime;
-using System.Text;
+using System.Globalization;
 
 namespace Taschenrechner
 {
@@ -14,13 +11,20 @@ namespace Taschenrechner
         public int NumberA { get; set; }
         public int NumberB { get; set; }
         public Operations Operator { get; set; }
-        public string UserInput;
+        private readonly string _userInput = "Herzlich Willkommen!\n***********************\nLass mich was Rechnen!";
 
 
         public Calculator()
         {
-            Console.WriteLine("Herzlich Willkommen!\n***********************\nLass mich was Rechnen!");
+            foreach (var t in _userInput)
+            {
+                Program.VordergrundFarbauswahl();
+                Console.Write(t);
+            }
+
+            Console.WriteLine();
         }
+
 
         /// <summary>
         /// Addition
@@ -28,7 +32,7 @@ namespace Taschenrechner
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns>a + b</returns>
-        public int Addiere(int a, int b)
+        private int Addiere(int a, int b)
         {
             return a + b;
         }
@@ -39,7 +43,7 @@ namespace Taschenrechner
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns>a - b</returns>
-        public int Minimiere(int a, int b)
+        private int Minimiere(int a, int b)
         {
             return a - b;
         }
@@ -50,7 +54,7 @@ namespace Taschenrechner
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns>a * b</returns>
-        public int Multipliziere(int a, int b)
+        private int Multipliziere(int a, int b)
         {
             return a * b;
         }
@@ -62,9 +66,9 @@ namespace Taschenrechner
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns>a / b</returns>
-        public int Dividiere(int a, int b)
+        private int Dividiere(int a, int b)
         {
-            return a / b;
+            return (int)Math.Round((double)a / b, 2);
         }
 
         /// <summary>
@@ -73,7 +77,7 @@ namespace Taschenrechner
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns>a % b</returns>
-        public int Moduliere(int a, int b)
+        private int Moduliere(int a, int b)
         {
             return a % b;
         }
@@ -83,21 +87,21 @@ namespace Taschenrechner
         /// Berechnet Ergebnis aus den gesammelten Usereingaben
         /// </summary>
         /// <returns></returns>
-        public int Calculate(int NumberA, int NumberB, Operations op)
+        public string Calculate(int numberA, int numberB, Operations op)
         {
-            var _result = op switch
+            var result = op switch
             {
-                Operations.Addition => Addiere(NumberA, NumberB),
-                Operations.Substraktion => Minimiere(NumberA, NumberB),
-                Operations.Multiplikation => Multipliziere(NumberA, NumberB),
-                Operations.Division => Dividiere(NumberA, NumberB),
-                Operations.Modulo => Moduliere(NumberA, NumberB),
+                Operations.Addition => Addiere(numberA, numberB),
+                Operations.Substraktion => Minimiere(numberA, numberB),
+                Operations.Multiplikation => Multipliziere(numberA, numberB),
+                Operations.Division => Dividiere(numberA, numberB),
+                Operations.Modulo => Moduliere(numberA, numberB),
                 _ => throw new NotImplementedException("Error 106")
             };
 
             Operator = 0;
 
-            return _result;
+            return result.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

@@ -17,11 +17,11 @@ namespace Objekte
 
             #endregion
 
-            Auto MeinAuto = new Auto();
+            Auto meinAuto = new Auto();
 
             Ferrari f40 = new Ferrari();
 
-            Delorian delorian = new Delorian();
+            Delorean delorean = new Delorean();
 
             //automobil.AlleTuerenBenutzen();
             //Console.WriteLine();
@@ -42,11 +42,11 @@ namespace Objekte
             ////MeinAuto.EinzelneTuerBenutzen(3);
             //MeinAuto.EinzelneTuerBenutzen(automobil.BenutzerAuswahl());
 
-            MeinAuto.TuerenAusgeben();
-            MeinAuto.TuerenBenutzen(EnumAutotuer.VornLinks);
-            MeinAuto.TuerenAusgeben();
-            MeinAuto.TuerenBenutzen(EnumAutotuer.VornLinks);
-            MeinAuto.TuerenAusgeben();
+            meinAuto.TuerenAusgeben();
+            meinAuto.TuerenBenutzen(EnumAutotuer.VornLinks);
+            meinAuto.TuerenAusgeben();
+            meinAuto.TuerenBenutzen(EnumAutotuer.VornLinks);
+            meinAuto.TuerenAusgeben();
 
             Console.ReadLine();
         }

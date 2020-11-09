@@ -17,9 +17,9 @@ namespace Übungesaufgaben
             FuelleArray(pArray);
             int summe = 0;
 
-            foreach (var VARIABLE in pArray)
+            foreach (var variable in pArray)
             {
-                summe += VARIABLE;
+                summe += variable;
             }
 
             return summe;
@@ -78,11 +78,11 @@ namespace Übungesaufgaben
         public static int[] Fakultät(int[] pArray)
         {
             pArray[0] = 0;
-            int Nenner = 1;
+            int nenner = 1;
             for (int i = 1; i < pArray.Length; i++)
             {
-                Nenner = Nenner * i;
-                pArray[i] = Nenner;
+                nenner = nenner * i;
+                pArray[i] = nenner;
             }
 
             return pArray;
@@ -115,9 +115,9 @@ namespace Übungesaufgaben
             int summe = 0;
             if (pArray[0].Equals(typeof(int)))
             {
-                foreach (T VARIABLE in pArray)
+                foreach (T variable in pArray)
                 {
-                    summe += (int)Convert.ChangeType(VARIABLE, typeof(List<T>));
+                    summe += (int)Convert.ChangeType(variable, typeof(List<T>));
                 }
             }
 
@@ -176,14 +176,14 @@ namespace Übungesaufgaben
         public static T Fakultät<T>(List<T> pArray) where T : struct
         {
             pArray.Add((T)Convert.ChangeType(0, typeof(T)));
-            decimal Nenner = 1;
+            decimal nenner = 1;
             for (int i = 1; i < pArray.Capacity; i++)
             {
-                Nenner = Nenner * i;
+                nenner = nenner * i;
                 //pArray.Add((T)Convert.ChangeType(Nenner, typeof(T)));
             }
 
-            return (T)Convert.ChangeType(Nenner, typeof(T));
+            return (T)Convert.ChangeType(nenner, typeof(T));
         }
 
         #endregion

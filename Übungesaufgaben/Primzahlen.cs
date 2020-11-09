@@ -93,7 +93,7 @@ namespace Kontrollstrukturen
         private static void ListeAusgeben(List<int> primzahlenListe)
         {
             int zaehler = 0;
-            foreach (var wert in primzahlenListe)
+            foreach (var item in primzahlenListe)
             {
                 zaehler++;
                 if (zaehler % 10 == 0)
@@ -101,7 +101,7 @@ namespace Kontrollstrukturen
                     Console.WriteLine();
                 }
 
-                Console.Write(wert + ", ");
+                Console.Write(item + ", ");
             }
         }
     }

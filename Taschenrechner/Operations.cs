@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
 namespace Taschenrechner
 {
-    enum Operations
+    public enum Operations
     {
-        UnSet,
-        Addition,
-        Substraktion,
-        Multiplikation,
-        Division,
-        Modulo,
-        Count
+        UnSet = 0,
+        Addition = 1,
+        Substraktion = 2,
+        Multiplikation = 3,
+        Division = 4,
+        Modulo = 5,
+        Count = 6
     }
 }

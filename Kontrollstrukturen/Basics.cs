@@ -86,14 +86,14 @@ namespace Kontrollstrukturen
                 }
             }
 
-            List<int> ListOfNumbers = new List<int>();
+            List<int> listOfNumbers = new List<int>();
             //___Unterschied List -Array___:
             /*Array enthält den Speicherplatz des ersten Elements. die darauffolgenden Werte sind in festen darauf folgenden Speicherplätzen 
                 Sie sind fest in der Größe und können nicht nachträglich vergrößert/verklenert werden*/
             /*List einhält jedes Element den Speicherplatz der vorhergehenden Elelemnts, den Wert und den Speicherplatz des nachfolgenden Elements
                 Eine List kann nachträglich in der Größe verändert werden*/
 
-            foreach (var item in ListOfNumbers
+            foreach (var item in listOfNumbers
             ) //foreach geht jedes Element in einem Container (z.B. Liste oder Array) durch
             {
             }
@@ -122,21 +122,21 @@ namespace Kontrollstrukturen
                     break;
             }
 
-            Programmzustaende MeinProgramm = Programmzustaende.Starting;
+            Programmzustaende meinProgramm = Programmzustaende.Starting;
 
             switch (zahl)
             {
                 case 1:
-                    MeinProgramm = Programmzustaende.Starting;
+                    meinProgramm = Programmzustaende.Starting;
                     break;
                 case 2:
-                    MeinProgramm = Programmzustaende.Running;
+                    meinProgramm = Programmzustaende.Running;
                     break;      //beendet switch block
                 case 3:
-                    MeinProgramm = Programmzustaende.Stopping;
+                    meinProgramm = Programmzustaende.Stopping;
                     break;      //fehlt break: wird code bis zum nächsten break ausgeführt!
                 case 4:
-                    MeinProgramm = Programmzustaende.Stopped;
+                    meinProgramm = Programmzustaende.Stopped;
                     break;
                 default:
                     Console.WriteLine("Unbekannter Zustand");
@@ -144,12 +144,12 @@ namespace Kontrollstrukturen
             }
 
             //Kurzform des Switchblocks
-            MeinProgramm = zahl switch
+            meinProgramm = zahl switch
             {
                 1 => Programmzustaende.Running,
                 2 => Programmzustaende.Stopped,
                 3 => Programmzustaende.Stopping,
-                _ => Programmzustaende.Stopping      // _  = Default
+                _ => Programmzustaende.Starting      // _  = Default
             };
 
             #endregion
