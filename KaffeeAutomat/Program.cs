@@ -1,152 +1,131 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 
-namespace KaffeeAutomat
+namespace Kaffeeautomat
 {
-    struct UserInterface
-    {
-        public string Text;
-        public Recipe MachineValue;
-    }
 
     class Program
     {
         static void Main()
         {
-            //Begrüßung
             Console.CursorVisible = false;
+            Console.SetCursorPosition(15, 0);
             Console.WriteLine("Hallo User, dies ist ein Kaffeeautomat");
-            Thread.Sleep(2000);
+            Console.SetCursorPosition(15, 1);
             Console.WriteLine("Kaffeemaschine wird gestartet");
-            Thread.Sleep(4000);
+            
             CoffeeMashine coffeeMashine = new CoffeeMashine();
-
+            ConsoleKey userInput;
             bool shutdownMashine = false;
-            byte lesekopf = 0;
-            ConsoleKey pressedKey;
 
-            List<string> buttons = new List<string>();
+            Button[] buttons = new Button[5];
+            buttons[0].Text = "Kaffee";
+            buttons[0].MachineValue = Recipe.Coffee;
 
-            buttons.Add(" Kaffee");
-            buttons.Add(" Heißes Wasser");
-            buttons.Add(" Capucchino");
-            buttons.Add(" Milchkaffee");
-            buttons.Add(" Heiße Milch");
-            buttons.Add(" Wartung");
-            buttons.Add(" Kaffeeautomat abschalten");
+            buttons[1].Text = "Capuchino";
+            buttons[1].MachineValue = Recipe.Capuchino;
 
+            buttons[2].Text = "Milchkaffee";
+            buttons[2].MachineValue = Recipe.CoffeeMilk;
 
-            Console.Clear();
+            buttons[3].Text = "Heiße Milch";
+            buttons[3].MachineValue = Recipe.HotMilk;
 
+            buttons[4].Text = "Heißes Wasser";
+            buttons[4].MachineValue = Recipe.HotWater;
+
+            byte activeButtonID = 0;
+
+            
             do
             {
-                Console.WriteLine(
-                    "Wählen Sie ihr Getränk mit den Pfeiltasten - bestätigen Sie ihre Auswahl mit der <Enter>-Taste.\n");
+                Thread.Sleep(500);
+                DrawButtons(activeButtonID, buttons);
+                userInput = Console.ReadKey(true).Key;
 
-                MarkRow(buttons, lesekopf);
-                
-                pressedKey = Console.ReadKey(true).Key;
+                switch (userInput)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (activeButtonID > 0)
+                            activeButtonID--;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        if (activeButtonID < buttons.Length -1)
+                            activeButtonID++;
+                        break;
 
-                lesekopf = SelectProgram(pressedKey, lesekopf, buttons, coffeeMashine, ref shutdownMashine);
-
-
-            } while (!shutdownMashine);
-
-            Console.WriteLine("Kaffeeautomat wird beendet");
-        }
-
-
-        /// <summary>
-        /// Startet Programm anhand der Usereingabe
-        /// </summary>
-        /// <param name="pressedKey">UserInput</param>
-        /// <param name="lesekopf">Aktive Row</param>
-        /// <param name="buttons">Ausgabetexte des Getränks</param>
-        /// <param name="coffeeMashine">Aktive Kaffemaschine</param>
-        /// <param name="shutdownMashine">Programmende</param>
-        /// <returns>Programm</returns>
-        private static byte SelectProgram(ConsoleKey pressedKey, byte lesekopf, List<string> buttons, CoffeeMashine coffeeMashine,
-            ref bool shutdownMashine)
-        {
-            switch (pressedKey)
-            {
-                case ConsoleKey.Enter:
-                    if (lesekopf == buttons.Count - 1)
-                    {
-                        shutdownMashine = true;
-                    }
-                    else if (lesekopf == buttons.Count - 2)
-                    {
-                        Console.Clear();
-                        coffeeMashine.Maintenance();
-                        Console.Write("Wartung wird durchgeführt...");
-                        Thread.Sleep(3000);
-                        Console.WriteLine(" Container sind wieder in Ordnung.");
-                        Thread.Sleep(2000);
-                        Console.Clear();
-                    }
-                    else
-                    {
-                        Console.Clear();
-                        if (coffeeMashine.Dispense((Recipe) lesekopf))
+                    case ConsoleKey.Enter:
+                        Console.WriteLine("Ihr " + buttons[activeButtonID].Text + " wird zubereitet");
+                        if (coffeeMashine.Dispense(buttons[activeButtonID].MachineValue))
+                            Console.WriteLine("Ihr " + buttons[activeButtonID].Text + " ist Fertig");
+                        else
                         {
-                            Console.WriteLine("Ihr" + buttons[lesekopf] + " wird jetzt zubereitet.");
-                            Console.WriteLine("Ihr" + buttons[lesekopf] + " ist jetzt fertig");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Fehler beim zubereten, prüfen sie die Kontainer");
+                            Console.ResetColor();
+                            Thread.Sleep(2000);
+                        }
+                        break;
+                    case ConsoleKey.K:
+                        Console.WriteLine("Ihr Kaffee wird zubereitet");
+                        if (coffeeMashine.Dispense(Recipe.Coffee))
+                        {
+                            Console.WriteLine("Ihr Kaffee ist fertig");
                         }
                         else
                         {
-                            Console.WriteLine("Container überprüfen. Bitte Wartung durchführen.");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Ihr Kaffee konnte nicht zubereitet werden, checken sie die Kontainer");
+                            Console.ResetColor();
                         }
+                        break;
+                    case ConsoleKey.A:
+                        shutdownMashine = true;
+                        break;
+                    case ConsoleKey.W:
+                        coffeeMashine.Maintenance();
+                        Console.WriteLine("Wartung durchgeführt, container sind wieder ok.");
+                        break;
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Die Eingabe verstehe ich nicht.");
+                        Console.ResetColor();
+                        break;
+                }
 
-                        Thread.Sleep(3000);
-                        Console.Clear();
-                    }
-
-                    break;
-
-                case ConsoleKey.UpArrow:
-                    if (lesekopf > 0)
-                    {
-                        lesekopf--;
-                    }
-
-                    Console.SetCursorPosition(0, 0);
-                    break;
-                case ConsoleKey.DownArrow:
-                    if (lesekopf < buttons.Count - 1)
-                    {
-                        lesekopf++;
-                    }
-
-                    Console.SetCursorPosition(0, 0);
-                    break;
-            }
-
-            return lesekopf;
+            } while (!shutdownMashine);
+            Console.WriteLine("Kaffeeautomat wird beendet");
+            
         }
 
-
-        /// <summary>
-        /// Markiert die aktive Zeile grün
-        /// </summary>
-        /// <param name="buttons"></param>
-        /// <param name="lesekopf"></param>
-        private static void MarkRow(List<string> buttons, byte lesekopf)
+        static void DrawButtons(byte IdActiveButton, Button[] buttons)
         {
-            for (int counter = 0; counter < buttons.Count; counter++)
+
+
+            for (int counter = 0; counter < buttons.Length; counter++)
             {
-                if (counter == lesekopf)
+                Console.SetCursorPosition(15, 5 + 2*counter);
+
+                if (counter == IdActiveButton)
                 {
+                    // ausgewählter button
+                    
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine(buttons[counter]);
+                    Console.Write(" -> " + buttons[counter].Text);
                     Console.ResetColor();
                 }
                 else
                 {
-                    Console.WriteLine(buttons[counter]);
+                    // nicht ausgewählt
+                    Console.Write("    " + buttons[counter].Text);
                 }
             }
+
+            
+            Console.SetCursorPosition(15, 18);
+            Console.Write(" A = Maschine abschalten");
+            Console.SetCursorPosition(15, 19);
+            Console.WriteLine(" W = Wartung durchführen");
         }
     }
 }

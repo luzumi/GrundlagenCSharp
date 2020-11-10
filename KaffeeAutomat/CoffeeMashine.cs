@@ -1,129 +1,129 @@
-﻿namespace KaffeeAutomat
+﻿using System.Collections.Generic;
+
+namespace Kaffeeautomat
 {
-    /// <summary>
-    /// Eine KaffeeMaschine
-    /// </summary>
     class CoffeeMashine
     {
+        //Todo: Maybe better with container class
         byte containerCoffee;
         byte containerWater;
         byte containerWasteCoffee;
         byte containerWasteWater;
         byte containerMilk;
 
-        public byte CCoffee
-        {
-            get { return containerCoffee; }
-            private set { containerCoffee = value; }
-        }
-        public byte CWater
-        {
-            get { return containerWater; }
-            private set { containerWater = value; }
-        }
-        public byte CWasteWater
-        {
-            get { return containerWasteWater; }
-            private set { containerWasteWater = value; }
-        }
-        public byte CWasteCoffee
-        {
-            get { return containerWasteCoffee; }
-            private set { containerWasteCoffee = value; }
-        }
+        List<Ingredient> ingredients;
 
         public byte CMilk
         {
             get { return containerMilk; }
-            private set { containerMilk = value; }
+        }
+        public byte CCoffee
+        {
+            get { return containerCoffee; }
+        }
+        public byte CWater
+        {
+            get { return containerWater; }
+        }
+        public byte CWasteWater
+        {
+            get { return containerWasteWater; }
+        }
+        public byte CWasteCoffee
+        {
+            get { return containerWasteCoffee; }
         }
 
 
 
         public CoffeeMashine()
         {
+            ingredients = new List<Ingredient>();
+
+            Ingredient newIngredient;
+            newIngredient.RecipeName = Recipe.Coffee;
+            newIngredient.ContainerCoffee = 3;
+            newIngredient.ContainerWasteCoffee = 3;
+            newIngredient.ContainerWater = 10;
+            newIngredient.ContainerWasteWater = 1;
+            newIngredient.ContainerMilk = 0;
+            ingredients.Add(newIngredient);
+
+            newIngredient.RecipeName = Recipe.Capuchino;
+            newIngredient.ContainerCoffee = 3;
+            newIngredient.ContainerWasteCoffee = 3;
+            newIngredient.ContainerWater = 3;
+            newIngredient.ContainerWasteWater = 1;
+            newIngredient.ContainerMilk = 7;
+            ingredients.Add(newIngredient);
+
+            newIngredient.RecipeName = Recipe.CoffeeMilk;
+            newIngredient.ContainerCoffee = 3;
+            newIngredient.ContainerWasteCoffee = 3;
+            newIngredient.ContainerWater = 8;
+            newIngredient.ContainerWasteWater = 1;
+            newIngredient.ContainerMilk = 2;
+            ingredients.Add(newIngredient);
+
+            newIngredient.RecipeName = Recipe.HotMilk;
+            newIngredient.ContainerCoffee = 0;
+            newIngredient.ContainerWasteCoffee = 0;
+            newIngredient.ContainerWater = 0;
+            newIngredient.ContainerWasteWater = 1;
+            newIngredient.ContainerMilk = 10;
+            ingredients.Add(newIngredient);
+
+            newIngredient.RecipeName = Recipe.HotWater;
+            newIngredient.ContainerCoffee = 0;
+            newIngredient.ContainerWasteCoffee = 0;
+            newIngredient.ContainerWater = 10;
+            newIngredient.ContainerWasteWater = 1;
+            newIngredient.ContainerMilk = 0;
+            ingredients.Add(newIngredient);
+
+
             Maintenance();
-
-            #region Recipes;
-
-            recipeInfos[0].containerCoffee = 3;
-            recipeInfos[0].containerWasteCoffee = 3;
-            recipeInfos[0].containerWasteWater = 1;
-            recipeInfos[0].containerWater = 10;
-            recipeInfos[0].containerMilk = 2;
-            recipeInfos[0].RecipeID = Recipe.Coffee;
-
-            recipeInfos[1].containerCoffee = 3;
-            recipeInfos[1].containerWasteCoffee = 3;
-            recipeInfos[1].containerWasteWater = 1;
-            recipeInfos[1].containerWater = 10;
-            recipeInfos[1].containerMilk = 2;
-            recipeInfos[1].RecipeID = Recipe.HotWater;
-
-            recipeInfos[2].containerCoffee = 3;
-            recipeInfos[2].containerWasteCoffee = 3;
-            recipeInfos[2].containerWasteWater = 1;
-            recipeInfos[2].containerWater = 10;
-            recipeInfos[2].containerMilk = 2;
-            recipeInfos[2].RecipeID = Recipe.Capucchino;
-
-            recipeInfos[3].containerCoffee = 2;
-            recipeInfos[3].containerWasteCoffee = 2;
-            recipeInfos[3].containerWasteWater = 1;
-            recipeInfos[3].containerWater = 5;
-            recipeInfos[3].containerMilk = 5;
-            recipeInfos[3].RecipeID = Recipe.CoffeeMilk;
-
-            recipeInfos[4].containerCoffee = 0;
-            recipeInfos[4].containerWasteCoffee = 0;
-            recipeInfos[4].containerWasteWater = 0;
-            recipeInfos[4].containerWater = 0;
-            recipeInfos[4].containerMilk = 10;
-            recipeInfos[4].RecipeID = Recipe.HotMilk;
-
-            #endregion;
         }
 
-
-        /// <summary>
-        /// Alle Behälter werden zurückgesetzt
-        /// </summary>
         public void Maintenance()
         {
-            CCoffee = 100;
-            CWater = 100;
-            CWasteCoffee = 0;
-            CWasteWater = 0;
+            containerCoffee = 100;
+            containerWater = 100;
+            containerWasteWater = 0;
+            containerWasteCoffee = 0;
+            containerMilk = 100;
         }
 
-        //Liste der Reszepte
-        RecipeInfo[] recipeInfos = new RecipeInfo[5];
-
-
-        /// <summary>
-        /// Prüft Ob ausreichend Vorräte vorhanden und entnimmt Zutaten den Behältern und befüllt die Waste laut Rezept
-        /// </summary>
-        /// <param name="ChosenProduct"></param>
-        /// <returns></returns>
         public virtual bool Dispense(Recipe ChosenProduct)
         {
-
-            if (recipeInfos[(int)ChosenProduct].containerMilk < CMilk &&
-                recipeInfos[(int)ChosenProduct].containerCoffee < CCoffee &&
-                recipeInfos[(int)ChosenProduct].containerWasteCoffee > CWasteCoffee &&
-                recipeInfos[(int)ChosenProduct].containerWasteWater > CWasteWater &&
-                recipeInfos[(int)ChosenProduct].containerWater < CWater)
+            //Hack: what if requested recipe is not in database?!
+            int counter = 0;
+            for (; counter < ingredients.Count; counter++)
             {
-                System.Threading.Thread.Sleep(4000);
-                CMilk -= recipeInfos[(int)ChosenProduct].containerMilk;
-                CCoffee -= recipeInfos[(int)ChosenProduct].containerCoffee;
-                containerWasteCoffee += recipeInfos[(int)ChosenProduct].containerWasteCoffee;
-                containerWasteWater += recipeInfos[(int)ChosenProduct].containerWasteWater;
-                containerMilk -= recipeInfos[(int)ChosenProduct].containerWater;
-                return true;
+                if (ingredients[counter].RecipeName == ChosenProduct)
+                {
+                    break;
+                }
             }
 
-            return false;
+            if (containerCoffee >= ingredients[counter].ContainerCoffee &&
+                containerWater >= ingredients[counter].ContainerWater &&
+                containerWasteWater <= ingredients[counter].ContainerWasteWater &&
+                containerWasteCoffee <= ingredients[counter].ContainerWasteCoffee &&
+                containerMilk >= ingredients[counter].ContainerMilk)
+            {
+                System.Threading.Thread.Sleep(4000);
+                containerCoffee -= ingredients[counter].ContainerCoffee;
+                containerWater -= ingredients[counter].ContainerWater;
+                containerWasteWater += ingredients[counter].ContainerWasteWater;
+                containerWasteCoffee += ingredients[counter].ContainerWasteCoffee;
+                containerMilk -= ingredients[counter].ContainerMilk;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

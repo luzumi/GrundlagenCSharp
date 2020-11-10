@@ -1,17 +1,13 @@
 ﻿
-namespace KaffeeAutomat
+
+namespace Kaffeeautomat
 {
-    /// <summary>
-    /// enum mit Rezeptnamen
-    /// </summary>
     enum Recipe
     {
         Coffee,
         HotWater,
-        Capucchino,
+        Capuchino,
         CoffeeMilk,
-        HotMilk,
-        Maintenance,
-        MenuEnd
+        HotMilk
     }
 }
