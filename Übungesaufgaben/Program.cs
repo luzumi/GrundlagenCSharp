@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+
 
 namespace Übungesaufgaben
 {
@@ -7,38 +9,16 @@ namespace Übungesaufgaben
     {
         static void Main()
         {
-            DateTime now = new DateTime();
-            Timer timer = new Timer();
-            int counter = 0;
-
-            do
+            Thread newThread = new Thread(Timer.FpsChecker)
             {
-                timer.TimerNow = DateTime.Now - now;
+                Name = "FpsChecker"
+            };
 
-                timer.Counter++;
+            newThread.Start();
+                
+            Primzahlen.PrimeZahl(30000);     //Primzahlenberechnung bis zu einem definierten Maximalwert
 
-                if (DateTime.Now - now >= TimeSpan.FromSeconds(1))
-                {
-                    counter++;
-                    if (counter == 5)
-                    {
-                        Console.SetCursorPosition(Console.BufferWidth-10,0);
-                        Console.WriteLine(timer.Counter / 5);
-                        counter = 0;
-                    }
-                    else
-                    {
-                        timer.Counter = timer.Counter / counter;
-                    }
-
-                    timer.Counter = 0;
-
-                    timer.TimerNow = new TimeSpan(0);
-
-                    now = DateTime.Now;
-                }
-            } while (!Console.KeyAvailable);
-
+            
             ////int[] Array = new int[20];
             ////long[] ArrayLong = new long[20];
 
@@ -74,8 +54,9 @@ namespace Übungesaufgaben
 
             //Console.ReadLine();
 
-            ////Primzahlen.PrimeZahl(1000);     //Primzahlenberechnung bis zu einem definierten Maximalwert
         }
+
+        
 
 
         /// <summary>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kontrollstrukturen
+namespace Übungesaufgaben
 {
     public static class Primzahlen
     {

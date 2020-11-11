@@ -5,86 +5,81 @@ namespace Geldautomat
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Geldautomat geldautomat = new Geldautomat(1234500);
-            byte activeButtonID = 0;
-            
-            Console.WriteLine("Welcome !");
-            
-            geldautomat.GetBalance();
+            ATM BankAutomat = new ATM();
 
-            do
+            Console.Write("Hallo User, ich bin ein Geldautomat!\n\nBitte geben sie ihren Namen ein : ");
+            // zuerst wird Console.ReadLine() ausgeführt und ein text von der Konsole gelesen
+            // der rückgabewert der methode ist ein string. auf diesem string führen wir direkt
+            // die methode ToLower() aus. Der rückgabewert davon in ein kleingeschriebener text
+            // dieser zurückgegebene text wird in der variable userName abgelegt.
+            string userName = Console.ReadLine().ToLower();
+            Console.Write("Bitte geben sie ihren PIN ein: ");
+            string userPinS = Console.ReadLine();
+            ushort userPin;
+
+            // versucht aus dem string userPinS einen ushort zu machen, falls es !nicht! klappt
+            // wird es als true gewertet für das if. Das Ausrufezeichen ist dabei für die invertierung
+            // zuständig. Der zweite test prüft ob der original-string alles andere als exakt 4 zeichen
+            // enthält. Dadurch haben wir alle möglichen fehler getestet und gehen bei einem fehler
+            // in das if rein.
+            if (! ushort.TryParse(userPinS, out userPin) || userPinS.Length != 4)
             {
-                QueryWithdrawMoney(geldautomat);
-
-                Console.WriteLine("Möchten Sie das Programm beenden? [y/n] ");
-
-            } while (Console.ReadKey(true).Key == ConsoleKey.N);
-
-            geldautomat.Message("Auf Wiedersehen!", true);
-        }
-
-
-        #region Methods
-
-        private static void QueryWithdrawMoney(Geldautomat geldautomat)
-        {
-            Console.WriteLine("Möchten SIe Geld abheben? (Y/N)");
-
-            switch (Console.ReadKey(true).KeyChar.ToString().ToLower())
-            {
-                case "y":
-                    Console.SetCursorPosition(0, 5);
-                    Console.WriteLine("\nGeben SIe einen Betrag (in Cent) ein");
-
-                    GetAmount(geldautomat);
-                    break;
-            }
-        }
-
-
-        private static void GetAmount(Geldautomat geldautomat)
-        {
-            int convertedNumber;
-            
-            if (int.TryParse(Console.ReadLine(), out convertedNumber))
-            {
-                geldautomat.Withdraw(convertedNumber);
-
-                geldautomat.GetBalance();
-            }
-            else
-            {
-                
-                Console.WriteLine("Das war keine gültige zahl");
-                return;
-            }
-        }
-
-        static void erstelleButtons(Buttons[] Rows)
-        {
-            for (int i = 0; i < Rows.Length; i++)
-            {
-
-                Rows[i] = new Buttons();
-
+                Console.WriteLine("Die Eingabe entspricht nicht dem PIN format, bye!");
+                return; // beendet die Main vorzeitig
             }
 
-            Rows[0].Text   = "************************************";
-            Rows[1].Text   = "*                                  *";
-            Rows[2].Text   = "*                                  *";
-            Rows[3].Text   = "*                                  *";
-            Rows[6].Text   = "*                                  *";
-            Rows[4].Text   = "*                                  *";
-            Rows[5].Text   = "*                                  *";
-            Rows[7].Text   = "*                                  *";
-            Rows[8].Text   = "*                                  *";
-            Rows[9].Text   = "*                                  *";
-            Rows[10].Text  = "*                                  *";
-            Rows[11].Text  = "************************************";
-        }
+            // der letzte parameter wird im inlined stil befüllt. Es wird die Variable userBalance
+            // erstellt und diese direkt als parameter übergeben.
+            switch (BankAutomat.GetBalance(userName, userPin, out int userBalance))
+            {
+                case ATMError.NoError:
+                    Console.WriteLine("Ihr Kontostand beträgt " + userBalance);
+                    break; // beendet den switch
+                case ATMError.PinError:
+                case ATMError.UserError:
+                    Console.WriteLine("Kommst hier nicht rein, du hacker!!");
+                    return; // beendet die ganze Main
+                default:
+                    Console.WriteLine("Der Gerät klappt irgendwie nischt...tschuligom");
+                    return; // beendet die ganze Main
+            }
 
-        #endregion
+            Console.WriteLine("Möchten Sie Geld abheben? [y/n]");
+
+            ConsoleKey nutzerTaste = Console.ReadKey(true).Key;// liesst die gedrückte taste auf der tastatur aus
+            if (nutzerTaste == ConsoleKey.Y ) // ist die gedrückte taste die Y taste gewesen?
+            {
+                Console.WriteLine("Wieviel möchten sie abheben?");
+                int convertedNumber; // lagerplatz für die Zahl vom nutzer, falls die konvertierung geklappt hat
+                if (!int.TryParse(Console.ReadLine(), out convertedNumber)) // versuchen die nutzereingabe in eine Zahl zu verwandeln. Wenn es nicht klappt wird das if ausgeführt (wegen dem ! )
+                {
+                    // wenn tryparse sagt das die konvertierung fehlschlägt
+                    Console.WriteLine("Das war keine gültige Zahl. Ende!");
+                    return; // beendet die Main
+                }
+
+                switch (BankAutomat.Withdraw(userName, userPin, convertedNumber))
+                {
+                    case ATMError.NoError:
+                        Console.WriteLine("Das Geld wurde abgebucht");
+                        BankAutomat.GetBalance(userName, userPin, out int newBalance);
+                        Console.WriteLine("Neuer Kontostand : " + newBalance);
+                        break;
+                    case ATMError.PinError:
+                    case ATMError.UserError:
+                        Console.WriteLine("Kommst hier nicht rein, du hacker!!");
+                        return;
+                    case ATMError.BalanceError:
+                        Console.WriteLine("Sie haben nicht genug Geld");
+                        break;
+                    default:
+                        Console.WriteLine("Der Gerät klappt irgendwie nischt...tschuligom");
+                        return; // beendet die ganze Main
+                }
+            }
+            Console.WriteLine("Bye");
+        }
     }
 }

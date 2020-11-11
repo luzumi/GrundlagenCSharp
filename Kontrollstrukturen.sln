@@ -24,7 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taschenrechner", "Taschenre
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kaffeeautomat", "KaffeeAutomat\Kaffeeautomat.csproj", "{24280216-0CB6-4926-A7FB-10FBFDA8BC53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geldautomat", "Geldautomat\Geldautomat.csproj", "{DAEA1EA2-5992-4460-A636-8C760F27EA78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Geldautomat", "Geldautomat\Geldautomat.csproj", "{DAEA1EA2-5992-4460-A636-8C760F27EA78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe", "TicTacToe\TicTacToe.csproj", "{8BC28B41-BA57-436C-87F7-E3F8ED3F1067}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{DAEA1EA2-5992-4460-A636-8C760F27EA78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAEA1EA2-5992-4460-A636-8C760F27EA78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAEA1EA2-5992-4460-A636-8C760F27EA78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BC28B41-BA57-436C-87F7-E3F8ED3F1067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BC28B41-BA57-436C-87F7-E3F8ED3F1067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BC28B41-BA57-436C-87F7-E3F8ED3F1067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BC28B41-BA57-436C-87F7-E3F8ED3F1067}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

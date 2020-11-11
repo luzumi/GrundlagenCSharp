@@ -3,7 +3,6 @@ using System.Threading;
 
 namespace Kaffeeautomat
 {
-
     class Program
     {
         static void Main()
@@ -13,7 +12,7 @@ namespace Kaffeeautomat
             Console.WriteLine("Hallo User, dies ist ein Kaffeeautomat");
             Console.SetCursorPosition(15, 1);
             Console.WriteLine("Kaffeemaschine wird gestartet");
-            
+
             CoffeeMashine coffeeMashine = new CoffeeMashine();
             ConsoleKey userInput;
             bool shutdownMashine = false;
@@ -36,10 +35,10 @@ namespace Kaffeeautomat
 
             byte activeButtonID = 0;
 
-            
+
             do
             {
-                Thread.Sleep(500);
+                Thread.Sleep(50);
                 DrawButtons(activeButtonID, buttons);
                 userInput = Console.ReadKey(true).Key;
 
@@ -50,7 +49,7 @@ namespace Kaffeeautomat
                             activeButtonID--;
                         break;
                     case ConsoleKey.DownArrow:
-                        if (activeButtonID < buttons.Length -1)
+                        if (activeButtonID < buttons.Length - 1)
                             activeButtonID++;
                         break;
 
@@ -65,12 +64,13 @@ namespace Kaffeeautomat
                             Console.ResetColor();
                             Thread.Sleep(2000);
                         }
+
+                        Console.WriteLine("Ihr Kaffee ist fertig");
                         break;
                     case ConsoleKey.K:
                         Console.WriteLine("Ihr Kaffee wird zubereitet");
                         if (coffeeMashine.Dispense(Recipe.Coffee))
                         {
-                            Console.WriteLine("Ihr Kaffee ist fertig");
                         }
                         else
                         {
@@ -78,6 +78,7 @@ namespace Kaffeeautomat
                             Console.WriteLine("Ihr Kaffee konnte nicht zubereitet werden, checken sie die Kontainer");
                             Console.ResetColor();
                         }
+
                         break;
                     case ConsoleKey.A:
                         shutdownMashine = true;
@@ -92,24 +93,21 @@ namespace Kaffeeautomat
                         Console.ResetColor();
                         break;
                 }
-
             } while (!shutdownMashine);
+
             Console.WriteLine("Kaffeeautomat wird beendet");
-            
         }
 
         static void DrawButtons(byte IdActiveButton, Button[] buttons)
         {
-
-
             for (int counter = 0; counter < buttons.Length; counter++)
             {
-                Console.SetCursorPosition(15, 5 + 2*counter);
+                Console.SetCursorPosition(15, 5 + 2 * counter);
 
                 if (counter == IdActiveButton)
                 {
                     // ausgewählter button
-                    
+
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write(" -> " + buttons[counter].Text);
                     Console.ResetColor();
@@ -121,7 +119,7 @@ namespace Kaffeeautomat
                 }
             }
 
-            
+
             Console.SetCursorPosition(15, 18);
             Console.Write(" A = Maschine abschalten");
             Console.SetCursorPosition(15, 19);
