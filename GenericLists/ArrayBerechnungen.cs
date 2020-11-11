@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Übungesaufgaben
+namespace GenericLists
 {
     class ArrayBerechnungen
     {

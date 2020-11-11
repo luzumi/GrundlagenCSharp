@@ -4,45 +4,28 @@ using System.Text;
 
 namespace Übungesaufgaben
 {
-    class Timer
+    public class Timer
     {
-        public int Counter { get; set; }
-        public TimeSpan TimerNow { get; set; }
+        DateTime lastUpdate;
+        uint framesSinceLastUpdate;
 
-        public static void FpsChecker()
+        public Timer()
         {
-            Timer timer = new Timer();
-            DateTime now = new DateTime();
-            DateTime start = new DateTime();
-            int counter = 0;
-
-            do
+            lastUpdate = DateTime.Now;
+            framesSinceLastUpdate = 0;
+        }
+        public void FpsChecker()
+        {
+            framesSinceLastUpdate++;
+            if ((DateTime.Now - lastUpdate).TotalMilliseconds >= 5000)
             {
-                timer.TimerNow = DateTime.Now - now;
-
-                timer.Counter++;
-                
-                if (DateTime.Now - now >= TimeSpan.FromSeconds(1))
-                {
-                    counter++;
-                    if (counter == 3)
-                    {
-                        Console.SetCursorPosition(Console.BufferWidth - 10, 0);
-                        Console.WriteLine(timer.Counter / 3);
-                        counter = 0;
-                    }
-                    else
-                    {
-                        timer.Counter /= counter;
-                    }
-
-                    timer.Counter = 0;
-
-                    timer.TimerNow = new TimeSpan();
-
-                    now = DateTime.Now;
-                }
-            } while (!Console.KeyAvailable);
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.SetCursorPosition(Console.BufferWidth - 10, 0);
+                Console.Write("{0,8} fps", framesSinceLastUpdate/5);
+                framesSinceLastUpdate = 0;
+                lastUpdate = DateTime.Now;
+                Console.ResetColor();
+            }
         }
     }
 }
