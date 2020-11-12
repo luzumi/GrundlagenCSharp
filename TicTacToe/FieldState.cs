@@ -9,6 +9,7 @@ namespace TicTacToe
         Empty,
         X,
         O,
-        Hint
+        Hint,
+        isSelected
     }
 }
