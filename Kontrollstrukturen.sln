@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kontrollstrukturen", "Kontrollstrukturen\Kontrollstrukturen.csproj", "{A306BAC4-90B8-4C7F-A584-CF1D1DA313D7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{34D8C94E-43DF-46CE-9A93-8F2540AC13FB} = {34D8C94E-43DF-46CE-9A93-8F2540AC13FB}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Datentypen", "Datentypen\Datentypen.csproj", "{4D8145B8-7B83-498F-90E7-209376DD113C}"
 EndProject
@@ -28,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Geldautomat", "Geldautomat\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe", "TicTacToe\TicTacToe.csproj", "{8BC28B41-BA57-436C-87F7-E3F8ED3F1067}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericLists", "GenericLists\GenericLists.csproj", "{ADAB2A53-F065-4F26-A4E9-44FFDAB50CEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericLists", "GenericLists\GenericLists.csproj", "{ADAB2A53-F065-4F26-A4E9-44FFDAB50CEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

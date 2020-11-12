@@ -8,7 +8,7 @@ namespace TicTacToe
     class Button
     {
         public Point Position { get; set; }
-        public FieldState Field;
+        public FieldState FieldState;
 
         public Button( Point position )
         {

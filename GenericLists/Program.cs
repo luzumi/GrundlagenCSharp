@@ -16,13 +16,7 @@ namespace GenericLists
             //AusgabeArray(ArrayBerechnungen.IntitilaizeFibunacci(Array));
             //Console.WriteLine();
             //AusgabeArray(ArrayBerechnungen.Fakultät(Array));
-            Thread newThread = new Thread(Übungesaufgaben.Timer.FpsChecker)
-            {
-                Name = "FpsChecker"
-            };
-
-            newThread.Start();
-
+            
             List<int> listInt = new List<int>(13);
             List<long> listLong = new List<long>(20);
 

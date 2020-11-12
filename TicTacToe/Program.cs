@@ -8,57 +8,100 @@ namespace TicTacToe
     {
         static void Main(string[] args)
         {
-            Spielfeld s = new Spielfeld();
-            Draw(s.Board);
+            Console.SetWindowSize(60,25);
+            Console.SetCursorPosition(9,0);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("TIC TAC TOE");
 
-            Console.SetCursorPosition(0, 18);
+            
+            
+            Spielfeld s = new Spielfeld();
+
+            for (int i = 1; i <= s.PlayerNames.Length; i++)
+            {
+                Console.SetCursorPosition(9,4+i);
+                Console.Write("Spieler{0}, geben Sie Ihren Namen ein:", i);
+                s.PlayerNames[i-1] = Console.ReadLine();
+            }
+            s.ResetBoard();
+
+            Console.SetCursorPosition(12,12);    
+
+            Draw(s.Board, s);
+
+
+            Console.ReadKey(true);
+            Console.Clear();
         }
 
-        public static void Draw(FieldState[,] pFieldStates)
+        static void Draw(FieldState[,] pFieldStates, Spielfeld s)
         {
-            Console.SetCursorPosition(9 , (9));
-            Console.Write("-------");
-            for (int row = 0; row < 3; row++)
+            byte fieldX = 0;
+            byte fieldY = 0;
+
+            s.GetBoard();
+
+            switch (Console.ReadKey(true).Key)
             {
-                Console.SetCursorPosition(9, (10 + 2*  row));
-                Console.Write("| | | |");
-                Console.SetCursorPosition(9 , (11 + 2*  row));
-                Console.Write("-------");
-                for (int column= 0; column < 3; column++)
+                case ConsoleKey.Spacebar:
+                case ConsoleKey.Enter:
+                    //s.Turn(s.buttons[fieldX + 1, fieldY + 1](new Point(fieldX, fieldY)));
+                    break;
+
+                case ConsoleKey.LeftArrow:
+                    
+                    break;
+                case ConsoleKey.UpArrow:
+                    break;
+                case ConsoleKey.RightArrow:
+                    break;
+                case ConsoleKey.DownArrow:
+                    break;
+                case ConsoleKey.Help:
+                    break;
+
+
+                case ConsoleKey.Escape:
+                    break;
+
+                default:
+                    //throw new ArgumentOutOfRangeException();
+                    break;
+            }
+        }
+
+
+        void Draw(Spielfeld s)
+
+        {
+            for (int xAchse = 0; xAchse < 3; xAchse++)
+            {
+                for (int yAchse = 0; yAchse < 3; yAchse++)
                 {
-                    switch (pFieldStates[column,row])
+                    switch (s.Board[xAchse, yAchse])
                     {
                         case FieldState.Empty:
-                            Console.SetCursorPosition(10 + 2 * column, 10 + 2 * row);
-                            Console.BackgroundColor = ConsoleColor.Black;
-                            Console.WriteLine(" ");
-                            Console.ResetColor();
+                            Console.Write("- ");
                             break;
+
                         case FieldState.X:
-                            Console.BackgroundColor = ConsoleColor.DarkGray;
-                            Console.ForegroundColor = ConsoleColor.DarkRed;
-                            Console.SetCursorPosition(10 + 2 *column, 10 + 2 * row);
-                            Console.Write("X");
-                            Console.ResetColor();
+                            Console.Write("X ");
                             break;
+
                         case FieldState.O:
-                            Console.BackgroundColor = ConsoleColor.DarkGray;
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.SetCursorPosition(10 + 2 * column, 10 + 2 * row);
-                            Console.Write("O");
-                            Console.ResetColor();
+                            Console.Write("O ");
                             break;
+
                         case FieldState.Hint:
-                            Console.BackgroundColor = ConsoleColor.Black;
-                            Console.ForegroundColor = ConsoleColor.DarkGray;
-                            Console.SetCursorPosition(10 + 2 * column, 10 + 2 *row);
-                            Console.Write("*");
-                            Console.ResetColor();
+                            Console.Write("+ ");
                             break;
+
                         default:
-                            throw new ArgumentOutOfRangeException();
+                            break;
                     }
                 }
+
+                Console.WriteLine();
             }
         }
     }
