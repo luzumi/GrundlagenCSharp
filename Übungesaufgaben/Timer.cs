@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Übungesaufgaben
 {
@@ -21,7 +20,7 @@ namespace Übungesaufgaben
             {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.SetCursorPosition(Console.BufferWidth - 10, 0);
-                Console.Write("{0,8} fps", framesSinceLastUpdate/5);
+                Console.Write(@"{0,8} fps", framesSinceLastUpdate/5);
                 framesSinceLastUpdate = 0;
                 lastUpdate = DateTime.Now;
                 Console.ResetColor();

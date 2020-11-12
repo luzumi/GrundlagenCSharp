@@ -42,7 +42,8 @@ namespace GenericLists
         /// <summary>
         /// Berechnet den Durschnitt aller Werte in einem Array
         /// </summary>
-        /// <typeparam T> 
+        /// <typeparam>
+        ///     <T>T</T>
         ///     <name>T</name>
         /// </typeparam>
         /// <param name="pArray"></param>
@@ -154,10 +155,8 @@ namespace GenericLists
             //StackTrace:
 
             int laenge = pArray.Capacity;
-            pArray = new List<T>(laenge);
+            pArray = new List<T>(laenge) {(T)Convert.ChangeType(0, typeof(T)), (T)Convert.ChangeType(1, typeof(T))};
 
-            pArray.Add((T)Convert.ChangeType(0, typeof(T)));
-            pArray.Add((T)Convert.ChangeType(1, typeof(T)));
 
             for (int i = 2; i < laenge; i++)
             {

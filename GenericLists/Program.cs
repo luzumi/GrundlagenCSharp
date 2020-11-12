@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using Übungesaufgaben;
+
 
 namespace GenericLists
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             //int[] Array = new int[20];
             //long[] ArrayLong = new long[20];
@@ -50,7 +49,7 @@ namespace GenericLists
         {
             foreach (var item in pArray)
             {
-                Console.Write("{0} ", item);
+                Console.Write(@"{0} ", item);
             }
         }
 
@@ -62,7 +61,7 @@ namespace GenericLists
         {
             foreach (var item in pArray)
             {
-                Console.Write("{0} ", item);
+                Console.Write(@"{0} ", item);
             }
         }
     }

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+
 
 namespace Geldautomat
 {
     class ATM
     {
-        List<BankAccount> bankAccounts;
+        readonly List<BankAccount> _bankAccounts;
 
         /// <summary>
         /// Creates an ATM with two sample accounts
@@ -16,7 +15,7 @@ namespace Geldautomat
             // erstellt eine liste für BankAccount und fügt direkt zwei einträge hinzu.
             // besonderheit dabei ist das keine runden klammern, sondern geschweifte
             // hinter der listenerstellung verwendet werden
-            bankAccounts =
+            _bankAccounts =
                 new List<BankAccount> {new BankAccount("hans", 1234, 5000), new BankAccount("katie", 4321, 6500)};
         }
 
@@ -36,22 +35,22 @@ namespace Geldautomat
             // sollte der erste test fehlschlagen wird auch der zweite test gemacht
             // dadurch wissen wir bereits im zweiten test das das objekt existieren
             // muss und wir problemlos auf eigenschaften des objektes zugreifen können.
-            if (bankAccounts == null || bankAccounts.Count == 0)
+            if (_bankAccounts == null || _bankAccounts.Count == 0)
             {
                 Balance = 0;
                 return ATMError.ATMError;
             }
 
             // durch die liste aller BankAccounts durchlaufen
-            for (int counter = 0; counter < bankAccounts.Count; counter++)
+            foreach (var t in _bankAccounts)
             {
                 // vergleichen ob nutzername und pin mit den hinterlegten übereinstimmt
-                if (UserName == bankAccounts[counter].UserName)
+                if (UserName == t.UserName)
                 {
-                    if (Pin == bankAccounts[counter].Pin)
+                    if (Pin == t.Pin)
                     {
                         // rückgabe und out füllen
-                        Balance = bankAccounts[counter].Balance;
+                        Balance = t.Balance;
                         return ATMError.NoError;
                     }
                     else
@@ -71,23 +70,23 @@ namespace Geldautomat
         public ATMError Withdraw(string UserName, ushort Pin, int Amount)
         {
             // testen ob der Container "bankAccounts" korrekt erstellt wurde
-            if (bankAccounts == null || bankAccounts.Count == 0)
+            if (_bankAccounts == null || _bankAccounts.Count == 0)
             {
                 return ATMError.ATMError;
             }
 
             // durch die liste aller BankAccounts durchlaufen
-            for (int counter = 0; counter < bankAccounts.Count; counter++)
+            foreach (var bac in _bankAccounts)
             {
                 // vergleichen ob nutzername und pin mit den hinterlegten übereinstimmt
-                if (UserName == bankAccounts[counter].UserName)
+                if (UserName == bac.UserName)
                 {
-                    if (Pin == bankAccounts[counter].Pin)
+                    if (Pin == bac.Pin)
                     {
                         // rückgabe und out füllen
-                        if (bankAccounts[counter].Balance >= Amount)
+                        if (bac.Balance >= Amount)
                         {
-                            bankAccounts[counter].Balance -= Amount;
+                            bac.Balance -= Amount;
                             return ATMError.NoError;
                         }
                         else

@@ -43,26 +43,14 @@ namespace Übungesaufgaben
         /// <summary>
         /// Berechnet Primzahlen. Jede Zahl kleiner oder gleich 2 in der Ausgangsliste wird auf Modulo"vorhergehende Zahlen" == 0 überprüft.
         /// Bei jedem Treffer wird anzahl um 1 erhöht
-        /// Wenn am Ende anzahl <= 2 ist, werden alle Produkte aus der Liste entfernt
+        /// Wenn am Ende anzahl 0, 1 oder 2 ist, werden alle Produkte aus der Liste entfernt
         /// </summary>
         /// <param name="primzahlenListe">Liste der zu überprüfenden Zahlen, Wird nach durchlaufen der Methode nur noch Primzahlen enthalten</param>
         private static void PrimezahlenFinden(List<int> primzahlenListe)
         {
             for (int i = 2; i <= primzahlenListe.Max() + 1; i++)
             {
-                // int anzahl = 0;
-                // foreach (var wert in primzahlenListe)                 //Überprüfung auf Anzahl der Teiler ist nicht notwendig
-                // {
-                //     if (i % wert == 0)
-                //     {
-                //         anzahl++;
-                //     }
-                // }
-                //
-                // if (anzahl <= 2)
-                // {
-                    LoescheProduktAusListe(primzahlenListe, i);
-                // }
+                LoescheProduktAusListe(primzahlenListe, i);
             }
         }
 
@@ -101,7 +89,7 @@ namespace Übungesaufgaben
                     Console.WriteLine();
                 }
 
-                Console.Write(item + ", ");
+                Console.Write(item + @", ");
             }
         }
     }

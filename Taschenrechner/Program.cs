@@ -141,7 +141,7 @@ namespace Taschenrechner
         /// Consolenausgabe in gelber Schrift auf rotem Hintergrund
         /// </summary>
         /// <paramref name="text"><code>Fehlertext</code></paramref>
-        public static void FehlerMeldung(string text)
+        private static void FehlerMeldung(string text)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.BackgroundColor = ConsoleColor.Red;

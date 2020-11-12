@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-
+﻿
 namespace TicTacToe
 {
     class Button
     {
-        public Point Position { get; set; }
+        private Point Position { get; }
+
         public FieldState FieldState;
 
         public Button( Point position )

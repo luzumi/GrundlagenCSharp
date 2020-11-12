@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Drawing;
+using System.Diagnostics;
 
 namespace Geldautomat
 {
-    class Program
+    static class Program
     {
         static void Main()
         {
@@ -14,17 +14,17 @@ namespace Geldautomat
             // der rückgabewert der methode ist ein string. auf diesem string führen wir direkt
             // die methode ToLower() aus. Der rückgabewert davon in ein kleingeschriebener text
             // dieser zurückgegebene text wird in der variable userName abgelegt.
-            string userName = Console.ReadLine().ToLower();
+            string userName = Console.ReadLine()?.ToLower();
             Console.Write("Bitte geben sie ihren PIN ein: ");
             string userPinS = Console.ReadLine();
-            ushort userPin;
 
             // versucht aus dem string userPinS einen ushort zu machen, falls es !nicht! klappt
             // wird es als true gewertet für das if. Das Ausrufezeichen ist dabei für die invertierung
             // zuständig. Der zweite test prüft ob der original-string alles andere als exakt 4 zeichen
             // enthält. Dadurch haben wir alle möglichen fehler getestet und gehen bei einem fehler
             // in das if rein.
-            if (! ushort.TryParse(userPinS, out userPin) || userPinS.Length != 4)
+            Debug.Assert(userPinS != null, nameof(userPinS) + " != null");
+            if (! ushort.TryParse(userPinS, out var userPin) || userPinS.Length != 4)
             {
                 Console.WriteLine("Die Eingabe entspricht nicht dem PIN format, bye!");
                 return; // beendet die Main vorzeitig
@@ -52,8 +52,7 @@ namespace Geldautomat
             if (nutzerTaste == ConsoleKey.Y ) // ist die gedrückte taste die Y taste gewesen?
             {
                 Console.WriteLine("Wieviel möchten sie abheben?");
-                int convertedNumber; // lagerplatz für die Zahl vom nutzer, falls die konvertierung geklappt hat
-                if (!int.TryParse(Console.ReadLine(), out convertedNumber)) // versuchen die nutzereingabe in eine Zahl zu verwandeln. Wenn es nicht klappt wird das if ausgeführt (wegen dem ! )
+                if (!int.TryParse(Console.ReadLine(), out var convertedNumber)) // versuchen die nutzereingabe in eine Zahl zu verwandeln. Wenn es nicht klappt wird das if ausgeführt (wegen dem ! )
                 {
                     // wenn tryparse sagt das die konvertierung fehlschlägt
                     Console.WriteLine("Das war keine gültige Zahl. Ende!");
