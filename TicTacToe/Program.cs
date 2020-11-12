@@ -8,7 +8,7 @@ namespace TicTacToe
 {
     class Program
     {
-        static Point Lesekopf = new Point {X = 0, Y = 0};
+        static public Point Lesekopf = new Point {X = 0, Y = 0};
         static private TurnResult gameResult;
 
 

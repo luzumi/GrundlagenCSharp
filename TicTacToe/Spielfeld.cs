@@ -141,30 +141,33 @@ namespace TicTacToe
 
         public void OutputSign(int column, int row)
         {
+            bool isSelected = (Program.Lesekopf.X == column && Program.Lesekopf.Y == row);
+            
+
             switch (buttons[column, row].FieldState)
             {
                 case FieldState.Empty:
                     Console.SetCursorPosition(10 + 2 * column, 10 + 2 * row);
-                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = (isSelected ? ConsoleColor.Blue: ConsoleColor.Black);
                     Console.WriteLine(" ");
                     Console.ResetColor();
                     break;
                 case FieldState.X:
-                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                    Console.BackgroundColor = (isSelected ? ConsoleColor.DarkGray : ConsoleColor.Black);
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.SetCursorPosition(10 + 2 * column, 10 + 2 * row);
                     Console.Write("X");
                     Console.ResetColor();
                     break;
                 case FieldState.O:
-                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                    Console.BackgroundColor = (isSelected ? ConsoleColor.DarkGray : ConsoleColor.Black);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.SetCursorPosition(10 + 2 * column, 10 + 2 * row);
                     Console.Write("O");
                     Console.ResetColor();
                     break;
                 case FieldState.Hint:
-                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = (isSelected ? ConsoleColor.Black : ConsoleColor.Black);
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     Console.SetCursorPosition(10 + 2 * column, 10 + 2 * row);
                     Console.Write("*");
