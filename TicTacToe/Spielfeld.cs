@@ -25,7 +25,7 @@
                 for (byte row = 0; row < 3; row++)
                 {
                     buttons[column, row] =
-                        new Button(new Point((byte)(column * 2), (byte)(row * 2))) {FieldState = FieldState.Empty};
+                        new Button(new Point((byte)(column * 4), (byte)(row * 2))) {FieldState = FieldState.Empty};
                 }
             }
         }
@@ -122,7 +122,7 @@
         /// <param name="column"></param>
         public void DrawHint(int row, int column)
         {
-            var notTheActualPlayer = !GetPlayerID() ? FieldState.X : FieldState.O;
+            var notTheActualPlayerColor = !GetPlayerID() ? FieldState.X : FieldState.O;
             var activePlayerColor = buttons[row, column].FieldState;
 
             //if(buttons[row, column].FieldState == activePlayerColor)
@@ -133,10 +133,10 @@
             if (row == 0 && column == 0)
             {   //  == 0,0 -> 1,0 -> 2,0
                 if (buttons[0, 0].FieldState == buttons[1, 0].FieldState ||
-                    buttons[1, 0].FieldState != notTheActualPlayer) // O != X        E != X
+                    buttons[1, 0].FieldState != notTheActualPlayerColor) // O != X        E != X
                 {   
                     if (buttons[0, 0].FieldState == buttons[2, 0].FieldState ||
-                        buttons[2, 0].FieldState != notTheActualPlayer)
+                        buttons[2, 0].FieldState != notTheActualPlayerColor)
                     {
                         //IsEmptySetHint(0,0, activePlayerColor);
                         IsEmptySetHint(1,0, activePlayerColor);
@@ -145,10 +145,10 @@
                 }
                 //  == 0,0 -> 0,1 -> 0,2
                 if (buttons[0, 0].FieldState == buttons[0, 1].FieldState ||
-                    buttons[0, 1].FieldState != notTheActualPlayer)
+                    buttons[0, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[0, 0].FieldState == buttons[1, 2].FieldState ||
-                        buttons[1, 2].FieldState != notTheActualPlayer)
+                        buttons[1, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(0, 1, activePlayerColor);
                         IsEmptySetHint(0, 2, activePlayerColor);
@@ -159,7 +159,7 @@
                     // buttons[1, 1].FieldState != notTheActualPlayer)
                 {
                     if (buttons[0, 0].FieldState == buttons[2, 2].FieldState ||
-                        buttons[2, 2].FieldState != notTheActualPlayer)
+                        buttons[2, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(0, 0, activePlayerColor);
                         IsEmptySetHint(1, 1, activePlayerColor);
@@ -175,10 +175,10 @@
             if (row == 0 && column == 1)
             {
                 if (buttons[0, 1].FieldState == buttons[0, 0].FieldState ||
-                    buttons[0, 0].FieldState != notTheActualPlayer)
+                    buttons[0, 0].FieldState != notTheActualPlayerColor)
                 {   //  == 0,1 -> 0,0 -> 0,2
                     if (buttons[0, 1].FieldState == buttons[0, 2].FieldState ||
-                        buttons[0, 2].FieldState != notTheActualPlayer)
+                        buttons[0, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(0, 0, activePlayerColor);
                         IsEmptySetHint(0, 2, activePlayerColor);
@@ -186,10 +186,10 @@
                 }
                 //  == 0,1 -> 1,1 -> 2,1                            
                 if (buttons[0, 1].FieldState == buttons[1, 1].FieldState ||
-                    buttons[1, 1].FieldState != notTheActualPlayer)
+                    buttons[1, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[0, 1].FieldState == buttons[2, 1].FieldState ||
-                        buttons[2, 1].FieldState != notTheActualPlayer)
+                        buttons[2, 1].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(0, 1, activePlayerColor);
                         IsEmptySetHint(1, 1, activePlayerColor);
@@ -205,10 +205,10 @@
             if (row == 0 && column == 2)
             {   //  == 0,2 -> 0,1 -> 0,0  
                 if (buttons[0, 2].FieldState == buttons[0, 1].FieldState ||
-                    buttons[0, 1].FieldState != notTheActualPlayer)
+                    buttons[0, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[0, 2].FieldState == buttons[0, 0].FieldState ||
-                        buttons[0, 0].FieldState != notTheActualPlayer)
+                        buttons[0, 0].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(0, 1, activePlayerColor);
                         IsEmptySetHint(0, 0, activePlayerColor);
@@ -216,10 +216,10 @@
                 }
                 //  == 0,2 -> 1,2 -> 2,2
                 if (buttons[0, 2].FieldState == buttons[1, 2].FieldState ||
-                    buttons[1, 2].FieldState != notTheActualPlayer)
+                    buttons[1, 2].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[0, 2].FieldState == buttons[2, 2].FieldState ||
-                        buttons[2, 2].FieldState != notTheActualPlayer)
+                        buttons[2, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(1, 2, activePlayerColor);
                         IsEmptySetHint(2, 2, activePlayerColor);
@@ -227,10 +227,10 @@
                 }
                 //  == 0,2 -> 1,1 -> 2.0
                 if (buttons[0, 2].FieldState == buttons[1, 1].FieldState ||
-                    buttons[1, 1].FieldState != notTheActualPlayer)
+                    buttons[1, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[0, 2].FieldState == buttons[2, 0].FieldState ||
-                        buttons[2, 0].FieldState != notTheActualPlayer)
+                        buttons[2, 0].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(0, 2, activePlayerColor);
                         IsEmptySetHint(1, 1, activePlayerColor);
@@ -247,10 +247,10 @@
             if (row == 1 && column == 0)
             {   //  == 1,0 -> 0,0 -> 2,0
                 if (buttons[1, 0].FieldState == buttons[0, 0].FieldState ||
-                    buttons[0, 0].FieldState != notTheActualPlayer)
+                    buttons[0, 0].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[1, 0].FieldState == buttons[2, 0].FieldState ||
-                        buttons[2, 0].FieldState != notTheActualPlayer)
+                        buttons[2, 0].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(0, 0, activePlayerColor);
                         IsEmptySetHint(2, 0, activePlayerColor);
@@ -258,10 +258,10 @@
                 }
                 //  == 1,0 -> 1,1 -> 1,2
                 if (buttons[1, 0].FieldState == buttons[1, 1].FieldState ||
-                    buttons[1, 1].FieldState != notTheActualPlayer)
+                    buttons[1, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[1, 0].FieldState == buttons[1, 2].FieldState ||
-                        buttons[1, 2].FieldState != notTheActualPlayer)
+                        buttons[1, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(1, 0, activePlayerColor);
                         IsEmptySetHint(1, 1, activePlayerColor);
@@ -279,10 +279,10 @@
             {
                 //  == 1,1 -> 1,0 -> 1,2
                 if (buttons[1, 1].FieldState == buttons[1, 0].FieldState ||
-                    buttons[1, 0].FieldState != notTheActualPlayer)
+                    buttons[1, 0].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[1, 1].FieldState == buttons[1, 2].FieldState ||
-                        buttons[1, 2].FieldState != notTheActualPlayer)
+                        buttons[1, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(1, 0, activePlayerColor);
                         IsEmptySetHint(1, 2, activePlayerColor);
@@ -290,10 +290,10 @@
                 }
                 //  == 1,1 -> 0,0 -> 2,2
                 if (buttons[1, 1].FieldState == buttons[0, 0].FieldState ||
-                    buttons[0, 0].FieldState != notTheActualPlayer)
+                    buttons[0, 0].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[1, 1].FieldState == buttons[2, 2].FieldState ||
-                        buttons[2, 2].FieldState != notTheActualPlayer)
+                        buttons[2, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(0, 0, activePlayerColor);
                         IsEmptySetHint(2, 2, activePlayerColor);
@@ -301,7 +301,7 @@
                 }
                 //  == 1,1 -> 1,0 -> 0,2
                 if (buttons[1, 1].FieldState == buttons[1, 0].FieldState ||
-                    buttons[1, 0].FieldState != notTheActualPlayer)
+                    buttons[1, 0].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[1, 1].FieldState == buttons[0, 2].FieldState)
                         //buttons[0, 2].FieldState != notTheActualPlayer)
@@ -312,10 +312,10 @@
                 }
                 //  == 1,1 -> 2,1 -> 0,1
                 if (buttons[1, 1].FieldState == buttons[2, 1].FieldState ||
-                    buttons[2, 1].FieldState != notTheActualPlayer)
+                    buttons[2, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[1, 1].FieldState == buttons[2, 1].FieldState ||
-                        buttons[2, 1].FieldState != notTheActualPlayer)
+                        buttons[2, 1].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(2, 1, activePlayerColor);
                         IsEmptySetHint(0, 1, activePlayerColor);
@@ -323,10 +323,10 @@
                 }
                 //  == 1,1 -> 2,0 -> 0,0
                 if (buttons[1, 1].FieldState == buttons[2, 0].FieldState ||
-                    buttons[2, 0].FieldState != notTheActualPlayer)
+                    buttons[2, 0].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[1, 1].FieldState == buttons[0, 2].FieldState ||
-                        buttons[0, 2].FieldState != notTheActualPlayer)
+                        buttons[0, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(1, 0, activePlayerColor);
                         IsEmptySetHint(2, 0, activePlayerColor);
@@ -343,10 +343,10 @@
             if (row == 1 && column == 2)
             {   //  == 1,2 -> 0,2 -> 2,2
                 if (buttons[1, 2].FieldState == buttons[0, 2].FieldState ||
-                    buttons[0, 2].FieldState != notTheActualPlayer)
+                    buttons[0, 2].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[1, 2].FieldState == buttons[2, 2].FieldState ||
-                        buttons[2, 2].FieldState != notTheActualPlayer)
+                        buttons[2, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(0, 2, activePlayerColor);
                         IsEmptySetHint(2, 2, activePlayerColor);
@@ -354,10 +354,10 @@
                 }
                 //  == 1,2 -> 1,1 -> 1,0
                 if (buttons[1, 2].FieldState == buttons[1, 1].FieldState ||
-                    buttons[1, 1].FieldState != notTheActualPlayer)
+                    buttons[1, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[1, 2].FieldState == buttons[1, 0].FieldState ||
-                        buttons[1, 0].FieldState != notTheActualPlayer)
+                        buttons[1, 0].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(1, 2, activePlayerColor);
                         IsEmptySetHint(1, 1, activePlayerColor);
@@ -374,10 +374,10 @@
             if (row == 2 && column == 0)
             {   //  == 2,0 -> 1,0 -> 0,0
                 if (buttons[2, 0].FieldState == buttons[1, 0].FieldState ||
-                    buttons[1, 0].FieldState != notTheActualPlayer)
+                    buttons[1, 0].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[2, 0].FieldState == buttons[0, 0].FieldState ||
-                        buttons[0, 0].FieldState != notTheActualPlayer)
+                        buttons[0, 0].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(1, 0, activePlayerColor);
                         IsEmptySetHint(0, 0, activePlayerColor);
@@ -385,10 +385,10 @@
                 }
                 //  == 2,0 -> 1,1 -> 0,2
                 if (buttons[2, 0].FieldState == buttons[1, 1].FieldState ||
-                    buttons[1, 1].FieldState != notTheActualPlayer)
+                    buttons[1, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[2, 0].FieldState == buttons[0, 2].FieldState ||
-                        buttons[0, 2].FieldState != notTheActualPlayer)
+                        buttons[0, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(1, 1, activePlayerColor);
                         IsEmptySetHint(0, 2, activePlayerColor);
@@ -396,10 +396,10 @@
                 }
                 //  == 2,0 -> 2,1 -> 2,2
                 if (buttons[2, 0].FieldState == buttons[2, 1].FieldState ||
-                    buttons[2, 1].FieldState != notTheActualPlayer)
+                    buttons[2, 1].FieldState != notTheActualPlayerColor)
                 {   
                     if (buttons[2, 0].FieldState == buttons[2, 2].FieldState ||
-                        buttons[2, 2].FieldState != notTheActualPlayer)
+                        buttons[2, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(2, 0, activePlayerColor);
                         IsEmptySetHint(2, 1, activePlayerColor);
@@ -417,10 +417,10 @@
             {
                 //  == 2,1 -> 2,0 -> 2,2
                 if (buttons[2, 1].FieldState == buttons[2, 0].FieldState ||
-                    buttons[2, 0].FieldState != notTheActualPlayer)
+                    buttons[2, 0].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[2, 1].FieldState == buttons[2, 2].FieldState ||
-                        buttons[2, 2].FieldState != notTheActualPlayer)
+                        buttons[2, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(2, 0, activePlayerColor);
                         IsEmptySetHint(2, 2, activePlayerColor);
@@ -428,10 +428,10 @@
                 }
                 //  == 2,1 -> 1,1 -> 0,1
                 if (buttons[2, 1].FieldState == buttons[1, 1].FieldState ||
-                    buttons[1, 1].FieldState != notTheActualPlayer)
+                    buttons[1, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[2, 1].FieldState == buttons[0, 1].FieldState ||
-                        buttons[0, 1].FieldState != notTheActualPlayer)
+                        buttons[0, 1].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(2, 1, activePlayerColor);
                         IsEmptySetHint(1, 1, activePlayerColor);
@@ -448,10 +448,10 @@
             if (row == 2 && column == 2)
             {   //  == 2,2 -> 1,2 -> 0,2
                 if (buttons[2, 2].FieldState == buttons[1, 2].FieldState ||
-                    buttons[1, 2].FieldState != notTheActualPlayer)
+                    buttons[1, 2].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[2, 2].FieldState == buttons[0, 2].FieldState ||
-                        buttons[0, 2].FieldState != notTheActualPlayer)
+                        buttons[0, 2].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(1, 2, activePlayerColor);
                         IsEmptySetHint(0, 2, activePlayerColor);
@@ -459,10 +459,10 @@
                 }
                 //  == 2,2 -> 1,1 -> 0,0
                 if (buttons[2, 2].FieldState == buttons[1, 1].FieldState ||
-                    buttons[1, 1].FieldState != notTheActualPlayer)
+                    buttons[1, 1].FieldState != notTheActualPlayerColor)
                 {
                     if (buttons[2, 2].FieldState == buttons[0, 0].FieldState ||
-                        buttons[0, 0].FieldState != notTheActualPlayer)
+                        buttons[0, 0].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(1, 1, activePlayerColor);
                         IsEmptySetHint(0, 0, activePlayerColor);
@@ -470,10 +470,10 @@
                 }
                 //  == 2,2 -> 2,1 -> 2.0
                 if (buttons[2, 2].FieldState == buttons[2, 1].FieldState ||
-                    buttons[2, 1].FieldState != notTheActualPlayer)
+                    buttons[2, 1].FieldState != notTheActualPlayerColor)
                 {   
                     if (buttons[2, 2].FieldState == buttons[2, 0].FieldState ||
-                        buttons[2, 0].FieldState != notTheActualPlayer)
+                        buttons[2, 0].FieldState != notTheActualPlayerColor)
                     {
                         IsEmptySetHint(2, 2, activePlayerColor);
                         IsEmptySetHint(2, 1, activePlayerColor);
