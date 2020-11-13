@@ -78,17 +78,7 @@ namespace TicTacToe
         /// <param name="s"></param>
         private static void ValidateInput(Spielfeld s)
         {
-            //Hints zurücksetzen
-            for (int row = 0; row < 3; row++)
-            {
-                for (int column = 0; column < 3; column++)
-                {
-                    Spielfeld.buttons[column, row].FieldState =
-                        Spielfeld.buttons[column, row].FieldState == FieldState.Hint
-                            ? FieldState.Empty
-                            : Spielfeld.buttons[column, row].FieldState;
-                }
-            }
+            ResetHints();
 
             switch (Console.ReadKey(true).Key)
             {
@@ -152,6 +142,25 @@ namespace TicTacToe
 
 
         /// <summary>
+        /// gesetzte Hints werden zurückgesetzt
+        /// </summary>
+        private static void ResetHints()
+        {
+            //Hints zurücksetzen
+            for (int row = 0; row < 3; row++)
+            {
+                for (int column = 0; column < 3; column++)
+                {
+                    Spielfeld.buttons[column, row].FieldState =
+                        Spielfeld.buttons[column, row].FieldState == FieldState.Hint
+                            ? FieldState.Empty
+                            : Spielfeld.buttons[column, row].FieldState;
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Bewegt den Cursor mit den Pfeiltasten durch Spielfeld und selectiertes Feld blau
         /// </summary>
         private static void MoveCursor()
@@ -183,6 +192,8 @@ namespace TicTacToe
 
             for (int J = 0; J < 8; J++)
             {
+                ScreenClear(delete);
+
                 Console.SetCursorPosition(horizonzal, 10);
 
                 Thread.Sleep(200);
@@ -192,8 +203,6 @@ namespace TicTacToe
                 ResetBoard();
 
                 Thread.Sleep(500);
-
-                ScreenClear(delete);
             }
         }
 
