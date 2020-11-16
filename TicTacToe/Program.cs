@@ -39,11 +39,32 @@ namespace TicTacToe
 
                 if (programmZustand == 2)
                 {
-                    Draw(s);
-                    
+                    ResetBoard2();
                 }
-                if (gameResult == TurnResult.Valid || gameResult == TurnResult.Invalid)
+
+                //if (gameResult == TurnResult.Valid || gameResult == TurnResult.Invalid)
+                //{
+                //}
+                //else if (gameResult == TurnResult.Win)
+                //{
+                //    Win(s);
+                //}
+                //else
+                //{
+                //    Console.WriteLine("Unentschieden");
+                //}
+
+                if (!Console.KeyAvailable) continue;
+                // code only processed when a key is down
+
+                key = Console.ReadKey(true).Key;            //TODO Spielauswertung
+
+                if (programmZustand == 2)
+                {
+                    ValidateInput(s, key);
+                    if (gameResult == TurnResult.Valid || gameResult == TurnResult.Invalid)
                     {
+                        ResetBoard2();
                     }
                     else if (gameResult == TurnResult.Win)
                     {
@@ -53,35 +74,16 @@ namespace TicTacToe
                     {
                         Console.WriteLine("Unentschieden");
                     }
-
-                if (!Console.KeyAvailable) continue;
-                // code only processed when a key is down
-
-                key = Console.ReadKey(true).Key;
-
-
-                switch (key)
-                {
-                    case ConsoleKey.UpArrow:
-                        break;
-                    case ConsoleKey.DownArrow:
-                        break;
-                    //case ConsoleKey.Enter:
-                    //    break;
-                    default:
-                        tbStart.ProcessKey(key);
-                        break;
                 }
-
-                //switch (programmZustand)
-                //{
-                //    case 0:
-                //        tbSpieler1.Draw();
-                //        break;
-                //    case 1:
-                //        tbSpieler2.Draw();
-                //        break;
-                //}
+                else
+                {
+                    switch (key)
+                    {
+                        default:
+                            tbStart.ProcessKey(key, s);
+                            break;
+                    }
+                }
             } while (key != ConsoleKey.Escape);
 
             Console.ResetColor();
@@ -89,29 +91,7 @@ namespace TicTacToe
 
             //___________________________________________________________________
             //___________________________________________________________________
-            ////Fenstereinstellungen
-            //Console.SetWindowSize(40, 25);
-            //Console.SetCursorPosition(15, 0);
-            //Console.ForegroundColor = ConsoleColor.Cyan;
-            //Console.WriteLine("TIC TAC TOE");
 
-
-            //Spielfeld s = new Spielfeld();
-
-            ////Abfrage Spielernamen
-            //for (int i = 1; i <= s.PlayerNames.Length; i++)
-            //{
-            //    Console.SetCursorPosition(2, 4 + i);
-            //    Console.Write("Spieler {0}, Ihr Namen bitte: ", i);
-            //    //TODO: change to read
-            //    s.PlayerNames[i - 1] = Console.ReadLine();
-            //    Console.SetCursorPosition(2, 4 + i);
-            //    Console.Write("Spieler{0}: {1,2}                                        ", i, s.PlayerNames[i - 1]);
-            //}
-
-            //Console.CursorVisible = false;
-
-            //ResetBoard2();
 
             ////Spiel läuft ab bis Sieg oder Win
             //do
@@ -137,11 +117,11 @@ namespace TicTacToe
         /// Spielablauf
         /// </summary>
         /// <param name="s"></param>
-        static void Draw(Spielfeld s)
+        public static void Draw(Spielfeld s, ConsoleKey key)
         {
             s.GetBoard();
 
-            ValidateInput(s);
+            ValidateInput(s, key);
 
             ResetBoard2();
         }
@@ -153,11 +133,11 @@ namespace TicTacToe
         /// Tastatuteingabe wird behandelt
         /// </summary>
         /// <param name="s"></param>
-        private static void ValidateInput(Spielfeld s)
+        public static void ValidateInput(Spielfeld s, ConsoleKey key)
         {
             ResetHints();
 
-            switch (Console.ReadKey(true).Key)
+            switch (key)
             {
                 case ConsoleKey.Spacebar:
                 case ConsoleKey.Enter:
@@ -368,21 +348,10 @@ namespace TicTacToe
         /// <summary>
         /// Spielfeld wird erstellt, bzw im laufenden Spiel neu geeschrieben
         /// </summary>
-        private static void ResetBoard2()
+        public static void ResetBoard2()
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
-            Console.SetCursorPosition(horizonzal - 1, vertikal + 1);
-            Console.Write("+---+---+---+");
-
             for (int row = 0; row < 3; row++)
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.BackgroundColor = ConsoleColor.DarkBlue;
-                Console.SetCursorPosition(horizonzal - 1, ((vertikal + 2) + 2 * row));
-                Console.Write("|   |   |   |");
-                Console.SetCursorPosition(horizonzal - 1, ((vertikal + 3) + 2 * row));
-                Console.Write("+---+---+---+");
                 for (int column = 0; column < 3; column++)
                 {
                     OutputSign(column, row);
@@ -402,7 +371,7 @@ namespace TicTacToe
         {
             bool isSelected = (Program.Lesekopf.X == column && Program.Lesekopf.Y == row);
 
-            Console.SetCursorPosition((horizonzal + 1) + 4 * column, (vertikal + 2) + 2 * row);
+            Console.SetCursorPosition((horizonzal + 5) + 4 * column, (vertikal + 2) + 2 * row);
 
             switch (Spielfeld.buttons[column, row].FieldState)
             {

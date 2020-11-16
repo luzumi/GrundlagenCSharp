@@ -40,7 +40,7 @@ namespace TicTacToe
             content = new StringBuilder();
         }
 
-        public void ProcessKey(ConsoleKey KeyInformation)
+        public void ProcessKey(ConsoleKey KeyInformation, Spielfeld s)
         {
             if (KeyInformation == ConsoleKey.Delete)
             {
@@ -81,10 +81,13 @@ namespace TicTacToe
                             content.Clear();
                             Program.programmZustand = 2;
                             Spiel();
+                            Program.ResetBoard2();
                         }
 
                         break;
                     case 2:
+                        content.Clear();
+                        Spiel();
                         break;
                     default:
                         content.Append(KeyInformation);
@@ -218,13 +221,13 @@ namespace TicTacToe
             content.AppendLine(spieler1);
             content.AppendLine(zeile);
             content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
+            content.AppendLine("*          +---+---+---+               *");
+            content.AppendLine("*          |   |   |   |               *");
+            content.AppendLine("*          +---+---+---+               *");
+            content.AppendLine("*          |   |   |   |               *");
+            content.AppendLine("*          +---+---+---+               *");
+            content.AppendLine("*          |   |   |   |               *");
+            content.AppendLine("*          +---+---+---+               *");
             content.AppendLine("****************************************");
         }
     }
