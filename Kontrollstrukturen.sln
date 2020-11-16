@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe", "TicTacToe\TicT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericLists", "GenericLists\GenericLists.csproj", "{ADAB2A53-F065-4F26-A4E9-44FFDAB50CEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sortieren", "Sortieren\Sortieren.csproj", "{EE210919-1712-42DD-ACFA-C1B592BC6736}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{ADAB2A53-F065-4F26-A4E9-44FFDAB50CEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADAB2A53-F065-4F26-A4E9-44FFDAB50CEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADAB2A53-F065-4F26-A4E9-44FFDAB50CEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE210919-1712-42DD-ACFA-C1B592BC6736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE210919-1712-42DD-ACFA-C1B592BC6736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE210919-1712-42DD-ACFA-C1B592BC6736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE210919-1712-42DD-ACFA-C1B592BC6736}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
