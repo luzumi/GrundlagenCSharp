@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Runtime.ConstrainedExecution;
+using System.Text;
 using System.Threading;
 
 namespace TicTacToe
@@ -9,49 +12,122 @@ namespace TicTacToe
         private static Point Lesekopf = new Point {X = 0, Y = 0};
         private static TurnResult gameResult;
         private static int horizonzal = 18;
+        private static int vertikal = 19;
+        private static List<TextBox> screenTextBoxes = new List<TextBox>();
+        public static int programmZustand = 0;
 
 
         static void Main()
         {
-            //Fenstereinstellungen
-            Console.SetWindowSize(40, 25);
-            Console.SetCursorPosition(15, 0);
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("TIC TAC TOE");
-
-
             Spielfeld s = new Spielfeld();
-
-            //Abfrage Spielernamen
-            for (int i = 1; i <= s.PlayerNames.Length; i++)
-            {
-                Console.SetCursorPosition(2, 4 + i);
-                Console.Write("Spieler {0}, Ihr Namen bitte: ", i);
-                //TODO: change to read
-                s.PlayerNames[i - 1] = Console.ReadLine();
-                Console.SetCursorPosition(2, 4 + i);
-                Console.Write("Spieler{0}: {1,2}                                        ", i, s.PlayerNames[i - 1]);
-            }
-
+            Timer fpsCounter = new Timer();
             Console.CursorVisible = false;
+            Console.ForegroundColor = ConsoleColor.Yellow;
 
-            ResetBoard2();
 
-            //Spiel läuft ab bis Sieg oder Win
+            ConsoleKey key = ConsoleKey.Attention;
+
+
+            TextBox tbStart = new TextBox(new Point(10, 10), ConsoleColor.DarkRed);
+            tbStart.Spieler1Abfragen();
+
+
             do
             {
-                Draw(s);
-            } while (gameResult == TurnResult.Valid || gameResult == TurnResult.Invalid);
+                fpsCounter.FpsChecker();
+                tbStart.Draw();
+
+                if (programmZustand == 2)
+                {
+                    Draw(s);
+                    
+                }
+                if (gameResult == TurnResult.Valid || gameResult == TurnResult.Invalid)
+                    {
+                    }
+                    else if (gameResult == TurnResult.Win)
+                    {
+                        Win(s);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Unentschieden");
+                    }
+
+                if (!Console.KeyAvailable) continue;
+                // code only processed when a key is down
+
+                key = Console.ReadKey(true).Key;
 
 
-            if (gameResult == TurnResult.Win)
-            {
-                Win(s);
-            }
-            else
-            {
-                Console.WriteLine("Unentschieden");
-            }
+                switch (key)
+                {
+                    case ConsoleKey.UpArrow:
+                        break;
+                    case ConsoleKey.DownArrow:
+                        break;
+                    //case ConsoleKey.Enter:
+                    //    break;
+                    default:
+                        tbStart.ProcessKey(key);
+                        break;
+                }
+
+                //switch (programmZustand)
+                //{
+                //    case 0:
+                //        tbSpieler1.Draw();
+                //        break;
+                //    case 1:
+                //        tbSpieler2.Draw();
+                //        break;
+                //}
+            } while (key != ConsoleKey.Escape);
+
+            Console.ResetColor();
+
+
+            //___________________________________________________________________
+            //___________________________________________________________________
+            ////Fenstereinstellungen
+            //Console.SetWindowSize(40, 25);
+            //Console.SetCursorPosition(15, 0);
+            //Console.ForegroundColor = ConsoleColor.Cyan;
+            //Console.WriteLine("TIC TAC TOE");
+
+
+            //Spielfeld s = new Spielfeld();
+
+            ////Abfrage Spielernamen
+            //for (int i = 1; i <= s.PlayerNames.Length; i++)
+            //{
+            //    Console.SetCursorPosition(2, 4 + i);
+            //    Console.Write("Spieler {0}, Ihr Namen bitte: ", i);
+            //    //TODO: change to read
+            //    s.PlayerNames[i - 1] = Console.ReadLine();
+            //    Console.SetCursorPosition(2, 4 + i);
+            //    Console.Write("Spieler{0}: {1,2}                                        ", i, s.PlayerNames[i - 1]);
+            //}
+
+            //Console.CursorVisible = false;
+
+            //ResetBoard2();
+
+            ////Spiel läuft ab bis Sieg oder Win
+            //do
+            //{
+            //    Draw(s);
+            //} while (gameResult == TurnResult.Valid || gameResult == TurnResult.Invalid);
+
+
+            //if (gameResult == TurnResult.Win)
+            //{
+            //    Win(s);
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Unentschieden");
+            //}
 
             Console.ReadKey(true);
         }
@@ -171,7 +247,8 @@ namespace TicTacToe
                 {
                     if (row == Lesekopf.X && column == Lesekopf.Y)
                     {
-                        Console.SetCursorPosition((horizonzal + 1 + column * 4), (10 + row * 2));
+                        Console.SetCursorPosition((horizonzal + 1 + column * 4),
+                            ((vertikal + 1) + row * 2)); //TODO vertikal
                         Console.BackgroundColor = ConsoleColor.Blue;
                         OutputSign(column, row);
                     }
@@ -228,12 +305,12 @@ namespace TicTacToe
         /// <param name="s"></param>
         private static void OutputWinner(Spielfeld s)
         {
-            var name = s.GetPlayerID() ? s.PlayerNames[0] : s.PlayerNames[1];
+            var name = s.GetPlayerID() ? Spielfeld.PlayerNames[0] : Spielfeld.PlayerNames[1];
             Random r = new Random();
             var gewonnen = String.Format(" WINNER  {0}                ", name);
             for (int row = 0; row < 25; row++)
             {
-                name = s.GetPlayerID() ? s.PlayerNames[0] : s.PlayerNames[1];
+                name = s.GetPlayerID() ? Spielfeld.PlayerNames[0] : Spielfeld.PlayerNames[1];
                 Console.SetCursorPosition(2 + r.Next(0, 12), r.Next(0, 25));
                 SwitchBackgroundColor(row);
                 Console.WriteLine(name + gewonnen.ToString().Substring(0, row));
@@ -295,16 +372,16 @@ namespace TicTacToe
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.BackgroundColor = ConsoleColor.DarkBlue;
-            Console.SetCursorPosition(horizonzal - 1, (9));
+            Console.SetCursorPosition(horizonzal - 1, vertikal + 1);
             Console.Write("+---+---+---+");
 
             for (int row = 0; row < 3; row++)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.BackgroundColor = ConsoleColor.DarkBlue;
-                Console.SetCursorPosition(horizonzal - 1, (10 + 2 * row));
+                Console.SetCursorPosition(horizonzal - 1, ((vertikal + 2) + 2 * row));
                 Console.Write("|   |   |   |");
-                Console.SetCursorPosition(horizonzal - 1, (11 + 2 * row));
+                Console.SetCursorPosition(horizonzal - 1, ((vertikal + 3) + 2 * row));
                 Console.Write("+---+---+---+");
                 for (int column = 0; column < 3; column++)
                 {
@@ -325,7 +402,7 @@ namespace TicTacToe
         {
             bool isSelected = (Program.Lesekopf.X == column && Program.Lesekopf.Y == row);
 
-            Console.SetCursorPosition((horizonzal + 1) + 4 * column, 10 + 2 * row);
+            Console.SetCursorPosition((horizonzal + 1) + 4 * column, (vertikal + 2) + 2 * row);
 
             switch (Spielfeld.buttons[column, row].FieldState)
             {

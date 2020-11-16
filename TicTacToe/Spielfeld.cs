@@ -7,7 +7,7 @@
     {
         private FieldState[,] board = new FieldState[3, 3];
         private bool currentPlayerID;
-        public readonly string[] PlayerNames = new string[2];
+        public static string[] PlayerNames = new string[2];
         public static readonly Button[,] buttons = new Button[3, 3];
         private int round;
 

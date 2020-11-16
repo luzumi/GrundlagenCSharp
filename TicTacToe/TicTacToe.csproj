@@ -5,4 +5,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="ConsoleApp1.csproj" />
+    <None Include="TicTacToe.csproj" />
+  </ItemGroup>
+
 </Project>
