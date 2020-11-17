@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading;
@@ -31,7 +32,7 @@ namespace TicTacToe
             TextBox tbStart = new TextBox(new Point(10, 10), ConsoleColor.DarkRed);
             tbStart.Spieler1Abfragen();
 
-
+            
             do
             {
                 fpsCounter.FpsChecker();
@@ -39,25 +40,19 @@ namespace TicTacToe
 
                 if (programmZustand == 2)
                 {
-                    ResetBoard2();      
+                    ResetBoard2();
                 }
 
-                //if (gameResult == TurnResult.Valid || gameResult == TurnResult.Invalid)
-                //{
-                //}
-                //else if (gameResult == TurnResult.Win)
-                //{
-                //    Win(s);
-                //}
-                //else
-                //{
-                //    Console.WriteLine("Unentschieden");
-                //}
 
+                if (programmZustand == 3)
+                {
+                    ResetBoard2();
+                    OutputTie();
+                }
                 if (!Console.KeyAvailable) continue;
                 // code only processed when a key is down
 
-                key = Console.ReadKey(true).Key;            //TODO Spielauswertung
+                key = Console.ReadKey(true).Key; //TODO Spielauswertung
 
                 if (programmZustand == 2)
                 {
@@ -70,11 +65,13 @@ namespace TicTacToe
                     {
                         Win(s);
                     }
-                    else
+                    else if (gameResult == TurnResult.Tie)
                     {
-                        Console.WriteLine("Unentschieden");
+                        programmZustand = 3;
+                        OutputTie();
                     }
                 }
+
                 else
                 {
                     switch (key)
@@ -88,42 +85,7 @@ namespace TicTacToe
 
             Console.ResetColor();
 
-
-            //___________________________________________________________________
-            //___________________________________________________________________
-
-
-            ////Spiel läuft ab bis Sieg oder Win
-            //do
-            //{
-            //    Draw(s);
-            //} while (gameResult == TurnResult.Valid || gameResult == TurnResult.Invalid);
-
-
-            //if (gameResult == TurnResult.Win)
-            //{
-            //    Win(s);
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Unentschieden");
-            //}
-
             Console.ReadKey(true);
-        }
-
-
-        /// <summary>
-        /// Spielablauf
-        /// </summary>
-        /// <param name="s"></param>
-        public static void Draw(Spielfeld s, ConsoleKey key)
-        {
-            s.GetBoard();
-
-            ValidateInput(s, key);
-
-            ResetBoard2();
         }
 
 
@@ -251,8 +213,6 @@ namespace TicTacToe
             {
                 ScreenClear(delete);
 
-                //Console.SetCursorPosition(horizonzal, 10);
-
                 Thread.Sleep(200);
 
                 OutputWinner(s);
@@ -270,9 +230,9 @@ namespace TicTacToe
         /// <param name="pDelete"></param>
         private static void ScreenClear(string pDelete)
         {
-            for (int i = 0; i < 22; i++)
+            for (int i = 0; i < 15; i++)
             {
-                Console.SetCursorPosition(0, i);
+                Console.SetCursorPosition(horizonzal - 5, i);
 
                 Console.Write(pDelete);
             }
@@ -287,14 +247,39 @@ namespace TicTacToe
         {
             var name = s.GetPlayerID() ? Spielfeld.PlayerNames[0] : Spielfeld.PlayerNames[1];
             Random r = new Random();
-            var gewonnen = String.Format(" WINNER  {0}                ", name);
-            for (int row = 0; row < 25; row++)
+            var gewonnen = String.Format("   WINNER  {0}                  ", name);
+            for (int row = 0; row < 16; row++)
             {
                 name = s.GetPlayerID() ? Spielfeld.PlayerNames[0] : Spielfeld.PlayerNames[1];
-                Console.SetCursorPosition(2 + r.Next(0, 12), r.Next(0, 25));
+                Console.SetCursorPosition(horizonzal - 2 + r.Next(0, 12), r.Next(6, 18) + 1);
                 SwitchBackgroundColor(row);
                 Console.WriteLine(name + gewonnen.ToString().Substring(0, row));
                 ResetBoard2();
+            }
+        }
+
+
+        public static void OutputTie()
+        {
+            Random r = new Random();
+            string line1 = " U-N-E-N-T-S-C-H-I-E-D-E-N ";
+            string ausgabe = "";
+            for (int zeichen = 0; zeichen < line1.Length; zeichen = r.Next(0,line1.Length))
+            {
+                SwitchForegroundColor(r.Next(0, 100));
+                Console.CursorVisible = false;
+                Console.SetCursorPosition(horizonzal + zeichen, vertikal);
+                if (zeichen % 2 == 0)
+                {
+                    line1[zeichen].ToString().Replace('-', '*');
+
+                    if (zeichen % 3 == 0)
+                    {
+                        line1[zeichen].ToString().Replace('-', '~');
+                    }
+                }
+
+                Console.Write(line1[zeichen]);
             }
         }
 
@@ -316,6 +301,29 @@ namespace TicTacToe
                     break;
                 case 4:
                     Console.BackgroundColor = ConsoleColor.White;
+                    break;
+            }
+        }
+
+
+        public static void SwitchForegroundColor(in int pRow)
+        {
+            switch (pRow % 5)
+            {
+                case 0:
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
+                case 1:
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    break;
+                case 2:
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    break;
+                case 3:
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    break;
+                case 4:
+                    Console.ForegroundColor = ConsoleColor.White;
                     break;
             }
         }

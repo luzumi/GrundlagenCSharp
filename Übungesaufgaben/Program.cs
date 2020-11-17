@@ -11,34 +11,114 @@ namespace Übungesaufgaben
         private static int counter = 0;
         static List<List<int>> LottoScheine = new List<List<int>>();
         static List<int> Gewinnschein = new List<int>(8);
+        static int count = 0;
+        static Random r = new Random();
 
         static void Main()
         {
-            Timer fps = new Timer();
-
+            Willkommen();
 
             Console.CursorVisible = false;
-            counter++;
 
             Gewinnschein = EuroJackpot(new List<int>(), new List<int>());
 
-            ErstelleLottoScheine();
-
-            Console.WriteLine(LottoScheine.Count);
 
             Thread.Sleep(500);
+            List<int> meinTip = ErstelleTipSchein();
+            Console.SetCursorPosition(15, 9);
+            Console.WriteLine("Sie hatten {0} Zahlen richtig",GewinnCheck(Gewinnschein, meinTip));
+            
 
-            //AusgabeAlleLottoscheine();
-
-            SummeTrefferscheine();
+            Console.WriteLine("Die gezogenen Lottzahlen sind:    " + AusgabeSchein(Gewinnschein));
+            Console.WriteLine("Ihre getippten Lottozahlen waren: " + AusgabeSchein(meinTip));
+            
+            
 
             Console.WriteLine("out");
 
 
-            fps.FpsChecker();
-
-
             Console.ReadLine();
+        }
+
+        private static void Willkommen()
+        {
+            //Console.CursorVisible = false;
+            Console.SetCursorPosition(12, 2);
+            Console.Write("LOTTO");
+            Console.SetCursorPosition(8, 4);
+            Console.Write("Willkommen, möchten Sie einen vorgefertigten Tip abgeben? [y,n]");
+
+            ErstelleTipSchein();
+        }
+
+        private static List<int> ErstelleTipSchein()
+        {
+            if (CheckEingabe(Console.ReadKey().Key) == "N")
+            {
+                return LottoscheinErstellenManuell();
+            }
+            if (CheckEingabe(Console.ReadKey().Key) == "Y")
+            {
+                return LottoscheinErstellenAutomatisch();
+            }
+
+            return null;
+        }
+
+        private static List<int> LottoscheinErstellenAutomatisch()
+        {
+            List<int> MeinSchein = new List<int>(8);
+
+            for (int i = 0; i < 7; i++)
+            {
+                MeinSchein.Add(r.Next(1, 51));
+            }
+
+            return MeinSchein;
+        }
+
+        private static List<int> LottoscheinErstellenManuell()
+        {
+            List<int> MeinSchein = new List<int>(8);
+            ;
+            for (int i = 0; i < 7; i++)
+            {
+                Console.SetCursorPosition(8+ 10*i, 8);
+                Console.Write("Zahl{0}: ", (i + 1));
+
+                MeinSchein.Add(CheckNumber(Console.ReadLine()));
+            }
+
+            return MeinSchein;
+        }
+
+        private static int CheckNumber(string pReadKey)
+        {
+            
+            if (!int.TryParse(pReadKey, out var userZahl) && userZahl > 0 && userZahl < 51)
+            {
+                Console.SetCursorPosition(8,5);
+                Console.Write("Die Eingabe entspricht keiner gültigen Lottozahl!");
+                count++;
+                if (count <= 3)
+                {
+                    CheckNumber(Console.ReadLine());
+                }
+                else
+                {
+                    Console.WriteLine("Keine Zeit für Späße! bye bye");
+                }
+            }
+
+            return userZahl;
+        }
+
+
+
+        private static string CheckEingabe(ConsoleKey pReadKey)
+        {
+
+            return  pReadKey == ConsoleKey.Y || pReadKey == ConsoleKey.N ? pReadKey.ToString() : "Bitte mit 'Y' oder 'N' antworten: ";
         }
 
 
@@ -79,36 +159,15 @@ namespace Übungesaufgaben
         /// <summary>
         /// Ermittelt die Anzahl der Treffer jedes Lottoscheins
         /// </summary>
-        private static void SummeTrefferscheine()
+        private static void SummeTrefferscheine(List<int> Lottoscheine)
         {
             int[] treffer = {0, 0, 0, 0, 0, 0};
             foreach (var Treffer in LottoScheine)
             {
                 GewinnCheck(Gewinnschein, Treffer);
-                switch (Treffer[7])
-                {
-                    case 0:
-                        treffer[0]++;
-                        break;
-                    case 1:
-                        treffer[1]++;
-                        break;
-                    case 2:
-                        treffer[2]++;
-                        break;
-                    case 3:
-                        treffer[3]++;
-                        break;
-                    case 4:
-                        treffer[4]++;
-                        break;
-                    case 5:
-                        treffer[5]++;
-                        break;
-                    default:
-                        break;
-                }
+                treffer[Treffer[7]]++;
             }
+
             //Ausgabe des Ergebnisses auf der Console
             for (int anzahlTreffer = 0; anzahlTreffer < treffer.Length; anzahlTreffer++)
             {
@@ -230,6 +289,7 @@ namespace Übungesaufgaben
                     Numbers.Add(newNumber);
                 }
             }
+
             //Zusatzzahlen
             while (Numbers.Count < 7)
             {

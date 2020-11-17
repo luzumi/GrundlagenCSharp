@@ -1,4 +1,6 @@
-﻿namespace TicTacToe
+﻿using System.Threading;
+
+namespace TicTacToe
 {
     /// <summary>
     /// Ein TicTacToe Spielfeld 3x3
@@ -91,6 +93,7 @@
             //Letzte Runde (9) ergibt das Unentschieden
             if (round == 9)
             {
+                Program.programmZustand = 3;
                 return TurnResult.Tie;
             }
 

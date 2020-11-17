@@ -31,6 +31,43 @@ namespace TicTacToe
                 Console.Write(zeilen[i]);
                 Console.SetCursorPosition(position.X, position.Y + i);
             }
+
+            if(Program.programmZustand == 2)
+                DrawSpielfeld();
+        }
+
+        public void DrawSpielfeld()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.CursorVisible = false;
+            for (int j = 0; j < 3; j++)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    Console.SetCursorPosition(horizonzal + 3 + i *4, vertikal + 2 + j * 2);
+                    Console.Write("|");
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                Console.SetCursorPosition(horizonzal + 3, (vertikal+1 + i * 2));
+                
+                Console.Write("+---+---+---+");
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                Console.SetCursorPosition(horizonzal+31, vertikal +1 +i);
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("*");
+            }
+
+            if (Program.programmZustand == 3)
+            {
+                Program.OutputTie();
+            }
+
         }
 
         public TextBox(Point Position, ConsoleColor TextColor)
@@ -40,6 +77,12 @@ namespace TicTacToe
             content = new StringBuilder();
         }
 
+
+        /// <summary>
+        /// eingegebene Taste wird behandelt
+        /// </summary>
+        /// <param name="KeyInformation"></param>
+        /// <param name="s"></param>
         public void ProcessKey(ConsoleKey KeyInformation, Spielfeld s)
         {
             if (KeyInformation == ConsoleKey.Delete)
@@ -48,7 +91,7 @@ namespace TicTacToe
                 Console.SetCursorPosition(position.X, position.Y);
                 Console.Write("                                ");
             }
-            
+
             if ((int)KeyInformation > 63 && (int)KeyInformation < 91 || (int)KeyInformation == 13)
             {
                 switch (Program.programmZustand)
@@ -81,7 +124,6 @@ namespace TicTacToe
                             content.Clear();
                             Program.programmZustand = 2;
                             Spiel();
-                            //StartContent();
                             Program.ResetBoard2();
                         }
 
@@ -90,6 +132,10 @@ namespace TicTacToe
                         content.Clear();
                         Spiel();
                         break;
+                    case 3:
+                        Program.OutputTie();
+                        
+                        break;
                     default:
                         content.Append(KeyInformation);
                         break;
@@ -97,27 +143,30 @@ namespace TicTacToe
             }
         }
 
-        public void StartContent()
+        public void Spiel()
         {
+            string spieler1 = String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString());
+            string spieler2 = String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString());
             string star = "*";
+
             content.AppendLine("");
             content.AppendLine("****************************************");
             content.AppendLine("* TTT I  CC  TTT  A    CC  TTT OO  EEE *");
             content.AppendLine("*  T  I C     T  A A  C     T O  O EE  *");
             content.AppendLine("*  T  I  CC   T A   A  CC   T  OO  EEE *");
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
-            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}", star));
+            content.AppendLine(String.Format("*{0,39}", star));
+            content.AppendLine(String.Format("*{0,39}", star));
+            content.AppendLine(String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString()));
+            content.AppendLine(String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[1].ToString()));
+            content.AppendLine(String.Format("*{0,39}", star));
+            content.AppendLine("*");
+            content.AppendLine("*");
+            content.AppendLine("*");
+            content.AppendLine("*");
+            content.AppendLine("*");
+            content.AppendLine("*");
+            content.AppendLine("*");
             content.AppendLine("****************************************");
         }
 
@@ -194,33 +243,7 @@ namespace TicTacToe
             content.AppendLine("****************************************");
         }
 
-
-        public void Spiel()
-        {
-            string spieler1 = String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString());
-            string spieler2 = String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString());
-
-            string star = "-";
-
-            content.AppendLine("");
-            content.AppendLine("****************************************");
-            content.AppendLine("* TTT I  CC  TTT  A    CC  TTT OO  EEE *");
-            content.AppendLine("*  T  I C     T  A A  C     T O  O EE  *");
-            content.AppendLine("*  T  I  CC   T A   A  CC   T  OO  EEE *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine(spieler1);
-            content.AppendLine(star);
-            content.AppendLine("*                                      *");
-            content.AppendLine("*          +---+---+---+               *");
-            content.AppendLine("*          |   |   |   |               *");
-            content.AppendLine("*          +---+---+---+               *");
-            content.AppendLine("*          |   |   |   |               *");
-            content.AppendLine("*          +---+---+---+               *");
-            content.AppendLine("*          |   |   |   |               *");
-            content.AppendLine(String.Format("*          +---+---+---+{0,16}",star));
-            content.AppendLine("****************************************");
-        }
+        
+        
     }
-} //" + Spielfeld.PlayerNames[0] + "
+}
