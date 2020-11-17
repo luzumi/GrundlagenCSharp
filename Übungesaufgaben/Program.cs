@@ -15,62 +15,73 @@ namespace Übungesaufgaben
         static void Main()
         {
             Timer fps = new Timer();
-            //do
-            //{
-                //Primzahlen.PrimeZahl(300);     //Primzahlenberechnung bis zu einem definierten Maximalwert
 
 
-                Console.CursorVisible = false;
-                counter++;
+            Console.CursorVisible = false;
+            counter++;
 
-                Gewinnschein = EuroJackpot(new List<int>(), new List<int>());
+            Gewinnschein = EuroJackpot(new List<int>(), new List<int>());
 
-                for (; DateTime.Now - dt <= TimeSpan.FromSeconds(10);)
-                {
-                    List<int> Liste1 = new List<int>();
-                    List<int> Liste2 = new List<int>();
+            ErstelleLottoScheine();
 
-                    LottoScheine.Add(EuroJackpot(Liste1, Liste2));
-                    Console.SetCursorPosition(40,1);
-                    Console.Write("Anzahl Lottoscheine: " + counter++);
-                }
+            Console.WriteLine(LottoScheine.Count);
 
-                Console.WriteLine(LottoScheine.Count);
+            Thread.Sleep(500);
 
-                Thread.Sleep(500);
+            //AusgabeAlleLottoscheine();
 
-                //AusgabeAlleLottoscheine();
+            SummeTrefferscheine();
 
-                SummeTrefferscheine();
-
-                Console.WriteLine("out");
+            Console.WriteLine("out");
 
 
-                fps.FpsChecker();
-            //} while (counter == 0);
-            //} while (!Console.KeyAvailable);
+            fps.FpsChecker();
 
 
             Console.ReadLine();
         }
 
+
+        /// <summary>
+        /// erstellt 10sek lang Lottoscheine
+        /// </summary>
+        private static void ErstelleLottoScheine()
+        {
+            for (; DateTime.Now - dt <= TimeSpan.FromSeconds(10);)
+            {
+                List<int> Liste1 = new List<int>();
+                List<int> Liste2 = new List<int>();
+
+                LottoScheine.Add(EuroJackpot(Liste1, Liste2));
+                Console.SetCursorPosition(40, 1);
+                Console.Write("Anzahl Lottoscheine: " + counter++);
+            }
+        }
+
+        /// <summary>
+        /// Ausgabe aller lottoscheine auf der Console
+        /// </summary>
         private static void AusgabeAlleLottoscheine()
         {
             foreach (var lottoschein in LottoScheine)
             {
                 string console = GewinnCheck(Gewinnschein, lottoschein) > 2
-                    ? AusgabeSchein(lottoschein) + " " + AusgabeTreffer(lottoschein) +
+                    ? AusgabeSchein(lottoschein) + " " + lottoschein[7] +
                       " Treffer und " + ZusatzzahlenCheck(Gewinnschein, lottoschein) +
                       " Zusatzzahlen"
-                    : AusgabeSchein(lottoschein) + " " + AusgabeTreffer(lottoschein) +
+                    : AusgabeSchein(lottoschein) + " " + lottoschein[7] +
                       " Treffer";
                 Console.WriteLine(console);
             }
         }
 
+
+        /// <summary>
+        /// Ermittelt die Anzahl der Treffer jedes Lottoscheins
+        /// </summary>
         private static void SummeTrefferscheine()
         {
-            int[] treffer = {0,0,0,0,0};
+            int[] treffer = {0, 0, 0, 0, 0, 0};
             foreach (var Treffer in LottoScheine)
             {
                 GewinnCheck(Gewinnschein, Treffer);
@@ -79,7 +90,7 @@ namespace Übungesaufgaben
                     case 0:
                         treffer[0]++;
                         break;
-                    case 1 :
+                    case 1:
                         treffer[1]++;
                         break;
                     case 2:
@@ -98,21 +109,24 @@ namespace Übungesaufgaben
                         break;
                 }
             }
-
+            //Ausgabe des Ergebnisses auf der Console
             for (int anzahlTreffer = 0; anzahlTreffer < treffer.Length; anzahlTreffer++)
             {
-                Console.WriteLine("Es gab insgesamt {0} Scheine mit {1} Treffer! ", treffer[anzahlTreffer], anzahlTreffer);
+                Console.WriteLine("Es gab insgesamt {0} Scheine mit {1} Treffer! ", treffer[anzahlTreffer],
+                    anzahlTreffer);
             }
         }
 
-        private static string AusgabeTreffer(List<int> lottoschein)
-        {
-            return " - " + GewinnCheck(Gewinnschein, lottoschein) + " Treffer";
-        }
 
-
+        /// <summary>
+        /// Zählt Treffer eines Scheins und Added Anzahl an Lottoschein 
+        /// </summary>
+        /// <param name="pGewinnschein"></param>
+        /// <param name="pLottoScheine"></param>
+        /// <returns></returns>
         private static int GewinnCheck(List<int> pGewinnschein, List<int> pLottoScheine)
         {
+            pLottoScheine.Add(0);
             int treffer = 0;
 
             for (int zahl = 0; zahl < 5; zahl++)
@@ -120,14 +134,20 @@ namespace Übungesaufgaben
                 if (pLottoScheine[zahl] == pGewinnschein[zahl])
                 {
                     treffer++;
-                    
                 }
             }
-            pLottoScheine.Add(treffer);
+
+            pLottoScheine[7] = treffer;
             return treffer;
         }
 
 
+        /// <summary>
+        /// Überprüft die Zusatzzahlen eines Scheins
+        /// </summary>
+        /// <param name="pGewinnschein"></param>
+        /// <param name="pLottoScheine"></param>
+        /// <returns>Anzahl getroffener Zusatzzahlen</returns>
         private static int ZusatzzahlenCheck(List<int> pGewinnschein, List<int> pLottoScheine)
         {
             int treffer = 0;
@@ -143,6 +163,12 @@ namespace Übungesaufgaben
             return treffer;
         }
 
+
+        /// <summary>
+        /// Gibt einzelnen Schein auf der Console aus
+        /// </summary>
+        /// <param name="pLottoschein"></param>
+        /// <returns>String der Lottozahlen</returns>
         private static string AusgabeSchein(List<int> pLottoschein)
         {
             string zahlen = "";
@@ -204,7 +230,7 @@ namespace Übungesaufgaben
                     Numbers.Add(newNumber);
                 }
             }
-
+            //Zusatzzahlen
             while (Numbers.Count < 7)
             {
                 int newNumber = rndGen.Next(1, 11);
