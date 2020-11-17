@@ -81,6 +81,7 @@ namespace TicTacToe
                             content.Clear();
                             Program.programmZustand = 2;
                             Spiel();
+                            //StartContent();
                             Program.ResetBoard2();
                         }
 
@@ -98,24 +99,25 @@ namespace TicTacToe
 
         public void StartContent()
         {
+            string star = "*";
             content.AppendLine("");
             content.AppendLine("****************************************");
             content.AppendLine("* TTT I  CC  TTT  A    CC  TTT OO  EEE *");
             content.AppendLine("*  T  I C     T  A A  C     T O  O EE  *");
             content.AppendLine("*  T  I  CC   T A   A  CC   T  OO  EEE *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
+            content.AppendLine(String.Format("*{0,39}",star));
             content.AppendLine("****************************************");
         }
 
@@ -195,20 +197,10 @@ namespace TicTacToe
 
         public void Spiel()
         {
-            string spieler1 = String.Format("*   Spieler 1: {0,-18}  ",
-                Spielfeld.PlayerNames[0].ToString());
+            string spieler1 = String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString());
+            string spieler2 = String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString());
 
-            string zeile = "*";
-
-            if (Spielfeld.PlayerNames[1] != null)
-            {
-                zeile += String.Format("   Spieler 2: {0,-18}  ",
-                    Spielfeld.PlayerNames[1].ToString());
-            }
-            else
-            {
-                zeile += "   Spieler 2:                         *";
-            }
+            string star = "-";
 
             content.AppendLine("");
             content.AppendLine("****************************************");
@@ -219,7 +211,7 @@ namespace TicTacToe
             content.AppendLine("*                                      *");
             content.AppendLine("*                                      *");
             content.AppendLine(spieler1);
-            content.AppendLine(zeile);
+            content.AppendLine(star);
             content.AppendLine("*                                      *");
             content.AppendLine("*          +---+---+---+               *");
             content.AppendLine("*          |   |   |   |               *");
@@ -227,7 +219,7 @@ namespace TicTacToe
             content.AppendLine("*          |   |   |   |               *");
             content.AppendLine("*          +---+---+---+               *");
             content.AppendLine("*          |   |   |   |               *");
-            content.AppendLine("*          +---+---+---+               *");
+            content.AppendLine(String.Format("*          +---+---+---+{0,16}",star));
             content.AppendLine("****************************************");
         }
     }

@@ -39,7 +39,7 @@ namespace TicTacToe
 
                 if (programmZustand == 2)
                 {
-                    ResetBoard2();
+                    ResetBoard2();      
                 }
 
                 //if (gameResult == TurnResult.Valid || gameResult == TurnResult.Invalid)
