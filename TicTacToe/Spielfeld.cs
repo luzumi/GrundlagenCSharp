@@ -1,4 +1,6 @@
-﻿namespace TicTacToe
+﻿using System.Threading;
+
+namespace TicTacToe
 {
     /// <summary>
     /// Ein TicTacToe Spielfeld 3x3
@@ -7,7 +9,7 @@
     {
         private FieldState[,] board = new FieldState[3, 3];
         private bool currentPlayerID;
-        public readonly string[] PlayerNames = new string[2];
+        public static string[] PlayerNames = new string[2];
         public static readonly Button[,] buttons = new Button[3, 3];
         private int round;
 
@@ -91,6 +93,7 @@
             //Letzte Runde (9) ergibt das Unentschieden
             if (round == 9)
             {
+                Program.programmZustand = 3;
                 return TurnResult.Tie;
             }
 
