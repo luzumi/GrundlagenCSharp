@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,15 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="ConsoleApp1.csproj" />
-    <None Include="TicTacToe.csproj" />
+    <ProjectReference Include="..\Objekte\Objekte.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Logo.txt">
+    <None Update="BeispielText.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Zeichen.txt">
+    <None Update="GespeicherterHund.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

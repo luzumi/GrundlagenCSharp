@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace TicTacToe
 {
@@ -16,6 +17,7 @@ namespace TicTacToe
         private static int vertikal = 19;
         private static List<TextBox> screenTextBoxes = new List<TextBox>();
         public static int programmZustand = 0;
+        public static Random rand = new Random();
 
 
         static void Main()
@@ -32,27 +34,30 @@ namespace TicTacToe
             TextBox tbStart = new TextBox(new Point(10, 10), ConsoleColor.DarkRed);
             tbStart.Spieler1Abfragen();
 
+            TextBox rahmen = new TextBox(new Point(0,0), SwitchForegroundColor(rand.Next(0,15)));
             
+
             do
             {
                 fpsCounter.FpsChecker();
                 tbStart.Draw();
+                rahmen.DrawRahmen();
 
                 if (programmZustand == 2)
                 {
                     ResetBoard2();
                 }
 
-
                 if (programmZustand == 3)
                 {
                     ResetBoard2();
                     OutputTie();
                 }
+
                 if (!Console.KeyAvailable) continue;
                 // code only processed when a key is down
 
-                key = Console.ReadKey(true).Key; //TODO Spielauswertung
+                key = Console.ReadKey(true).Key;
 
                 if (programmZustand == 2)
                 {
@@ -190,7 +195,7 @@ namespace TicTacToe
                     if (row == Lesekopf.X && column == Lesekopf.Y)
                     {
                         Console.SetCursorPosition((horizonzal + 1 + column * 4),
-                            ((vertikal + 1) + row * 2)); //TODO vertikal
+                            ((vertikal + 1) + row * 2));
                         Console.BackgroundColor = ConsoleColor.Blue;
                         OutputSign(column, row);
                     }
@@ -264,8 +269,10 @@ namespace TicTacToe
             Random r = new Random();
             string line1 = " U-N-E-N-T-S-C-H-I-E-D-E-N ";
             string ausgabe = "";
-            for (int zeichen = 0; zeichen < line1.Length; zeichen = r.Next(0,line1.Length))
+            for (int zeichen = 0; zeichen < line1.Length; zeichen = r.Next(0, line1.Length))
             {
+                zeichen++;
+
                 SwitchForegroundColor(r.Next(0, 100));
                 Console.CursorVisible = false;
                 Console.SetCursorPosition(horizonzal + zeichen, vertikal);
@@ -278,7 +285,11 @@ namespace TicTacToe
                         line1[zeichen].ToString().Replace('-', '~');
                     }
                 }
+                if (zeichen == line1.Length)
+                {
+                    break;
 
+                } 
                 Console.Write(line1[zeichen]);
             }
         }
@@ -306,7 +317,7 @@ namespace TicTacToe
         }
 
 
-        public static void SwitchForegroundColor(in int pRow)
+        public static ConsoleColor SwitchForegroundColor(in int pRow)
         {
             switch (pRow % 5)
             {
@@ -326,6 +337,25 @@ namespace TicTacToe
                     Console.ForegroundColor = ConsoleColor.White;
                     break;
             }
+
+            Console.ForegroundColor = (pRow % 12) switch
+            {
+                0 => ConsoleColor.Gray,
+                1 => ConsoleColor.DarkCyan,
+                2 => ConsoleColor.DarkMagenta,
+                3 => ConsoleColor.DarkGreen,
+                4 => ConsoleColor.White,
+                5 => ConsoleColor.Yellow,
+                6 => ConsoleColor.Magenta,
+                7 => ConsoleColor.DarkYellow,
+                8 => ConsoleColor.DarkBlue,
+                9 => ConsoleColor.Green,
+                10 => ConsoleColor.Red,
+                11 => ConsoleColor.Cyan,
+            };
+
+
+            return Console.ForegroundColor;
         }
 
 
@@ -365,7 +395,7 @@ namespace TicTacToe
                     OutputSign(column, row);
                 }
             }
-
+            
             Console.ResetColor();
         }
 
@@ -410,5 +440,7 @@ namespace TicTacToe
 
             Console.ResetColor();
         }
+
+
     }
 }
