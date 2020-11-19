@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Objekte
 {
-    enum EnumAutotuer
+    public enum EnumAutotuer
     {
         VornLinks = 0b_0000_0001,
         VornRechts = 0b_0000_0010,

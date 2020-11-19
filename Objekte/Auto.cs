@@ -9,7 +9,7 @@ namespace Objekte
     /// Basisklasse für alle Autos
     /// <c>erbt von Klasse "Object"</c>
     /// </summary>
-    class Auto
+    public class Auto
     {
         #region Einleitung Klassen
 
@@ -47,7 +47,7 @@ namespace Objekte
             AktivierbareTueren = 255;
         }
 
-        protected Auto(byte erlaubteTueren)
+        public Auto(byte erlaubteTueren)
         {
             AktivierbareTueren = erlaubteTueren;
         }
