@@ -12,13 +12,12 @@ namespace GameOfLife
         {
             Program.Scenes.Push(this);
 
-            logic ??= new Spielfeld((80, 30));
+            logic = new Spielfeld((80, 40));
         }
 
         public override void Update()
         {
-            logic.Update();
-            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(0, 3);
             bool[,] arrayToDraw = logic.Field;
 
             for (int row = 0; row < arrayToDraw.GetLength(1); row++)
@@ -30,8 +29,7 @@ namespace GameOfLife
 
                 Console.WriteLine();
             }
-
-            logic.FieldToRead = !logic.FieldToRead;
+            logic.Update();
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Channels;
 
 namespace GameOfLife
 {
@@ -19,20 +21,14 @@ namespace GameOfLife
         public bool[,] FieldFalse
         {
             get => _fieldFalse;
-            set => _fieldFalse = value;
         }
 
-        public bool FieldToRead
-        {
-            get => _fieldToRead;
-            set => _fieldToRead = value;
-        }
-
-
+        
         public Spielfeld((int x, int y) pSize)
         {
             _fieldTrue = new bool[pSize.x, pSize.y];
             _fieldFalse = new bool[pSize.x, pSize.y];
+            _fieldToRead = false;
             Reset();
         }
 
@@ -46,43 +42,240 @@ namespace GameOfLife
         {
             for (int row = 0; row < Field.GetLength(1); row++)
             {
-                for (int column = 0; column < 3; column++)
+                for (int column = 0; column < Field.GetLength(0); column++)
                 {
-                    Field[column, row] = false; //(rand.NextDouble() > 0.8);
-                    Field[1, 1] = true;
-                    Field[1, 2] = true;
-                    Field[1, 3] = true;
-                    Field[2, 1] = true;
-                    Field[1, 4] = true;
-                    Field[2, 4] = true;
-                    Field[5, 4] = true;
-                    Field[4, 4] = true;
+                    Field[column, row] = false;//(rand.NextDouble() > 0.9);
+
+                    #region FensterMuster-Vorlage
+
+                    Window();
+                    //GosperGliderGun();
+
+                    #endregion
                 }
             }
+        }
+
+        private void GosperGliderGun()
+        {
+            Field[25, 16] = true;
+            Field[25, 17] = true;
+            Field[35, 13] = true;
+            Field[35, 14] = true;
+            Field[36, 13] = true;
+            Field[36, 14] = true;
+            Field[22, 15] = true;
+            Field[23, 12] = true;
+            Field[23, 16] = true;
+            Field[25, 11] = true;
+            Field[25, 12] = true;
+            Field[21, 13] = true;
+            Field[21, 14] = true;
+            Field[21, 15] = true;
+            Field[22, 13] = true;
+            Field[22, 14] = true;
+            Field[1, 15] = true;
+            Field[2, 15] = true;
+            Field[1, 16] = true;
+            Field[2, 16] = true;
+            Field[11, 15] = true;
+            Field[11, 16] = true;
+            Field[11, 17] = true;
+            Field[12, 14] = true;
+            Field[13, 13] = true;
+            Field[14, 13] = true;
+            Field[12, 18] = true;
+            Field[13, 19] = true;
+            Field[14, 19] = true;
+            Field[15, 16] = true;
+            Field[16, 14] = true;
+            Field[17, 15] = true;
+            Field[17, 16] = true;
+            Field[17, 17] = true;
+            Field[18, 16] = true;
+            Field[16, 18] = true;
+        }
+
+        private void Window()
+        {
+            Field[15, 11] = true;
+
+            Field[15, 12] = true;
+
+            Field[15, 13] = true;
+
+            Field[15, 14] = true;
+
+            Field[15, 15] = true;
+
+            Field[15, 16] = true;
+
+            Field[15, 17] = true;
+
+            Field[15, 18] = true;
+
+            Field[15, 19] = true;
+
+            Field[15, 20] = true;
+
+            Field[15, 21] = true;
+
+            Field[15, 22] = true;
+
+            Field[15, 23] = true;
+
+            Field[20, 11] = true;
+
+            Field[20, 12] = true;
+
+            Field[20, 13] = true;
+
+            Field[20, 14] = true;
+
+            Field[20, 15] = true;
+
+            Field[20, 16] = true;
+
+            Field[20, 17] = true;
+
+            Field[20, 18] = true;
+
+            Field[20, 19] = true;
+
+            Field[20, 20] = true;
+
+            Field[20, 21] = true;
+
+            Field[20, 22] = true;
+
+            Field[20, 23] = true;
+
+            Field[25, 11] = true;
+
+            Field[25, 12] = true;
+
+            Field[25, 13] = true;
+
+            Field[25, 14] = true;
+
+            Field[25, 15] = true;
+
+            Field[25, 16] = true;
+
+            Field[25, 17] = true;
+
+            Field[25, 18] = true;
+
+            Field[25, 19] = true;
+
+            Field[25, 20] = true;
+
+            Field[25, 21] = true;
+
+            Field[25, 22] = true;
+
+            Field[25, 23] = true;
+
+            Field[16, 11] = true;
+
+            Field[17, 11] = true;
+
+            Field[18, 11] = true;
+
+            Field[19, 11] = true;
+
+            Field[20, 11] = true;
+
+            Field[21, 11] = true;
+
+            Field[22, 11] = true;
+
+            Field[23, 11] = true;
+
+            Field[24, 11] = true;
+
+            Field[25, 11] = true;
+
+            Field[25, 11] = true;
+
+            Field[16, 17] = true;
+
+            Field[17, 17] = true;
+
+            Field[18, 17] = true;
+
+            Field[19, 17] = true;
+
+            Field[20, 17] = true;
+
+            Field[21, 17] = true;
+
+            Field[22, 17] = true;
+
+            Field[23, 17] = true;
+
+            Field[24, 17] = true;
+
+            Field[25, 17] = true;
+
+            Field[16, 23] = true;
+
+            Field[17, 23] = true;
+
+            Field[18, 23] = true;
+
+            Field[19, 23] = true;
+
+            Field[20, 23] = true;
+
+            Field[21, 23] = true;
+
+            Field[22, 23] = true;
+
+            Field[23, 23] = true;
+
+            Field[24, 23] = true;
+
+            Field[25, 23] = true;
         }
 
 
         public void Update()
         {
-            bool[,] arrayToDraw = Field;
+            //Thread.Sleep(800);
+            bool[,] puffer = new bool[_fieldFalse.GetLength(0),_fieldFalse.GetLength(1)];
+
+            for (int row = 0; row < _fieldFalse.GetLength(1); row++)
+            {
+                for (int column = 0; column < _fieldFalse.GetLength(0); column++)
+                {
+                    puffer[column, row] = Field[column, row];
+                    if (CountNeighbours(column, row) < 2 ||
+                        CountNeighbours(column, row) > 3)
+                    {
+                        puffer[column, row] = false;
+                    }
+                    else if (CountNeighbours(column, row) == 3)
+                    {
+                        puffer[column, row] = true;
+                    }
+                    else
+                    {
+                        puffer[column, row] = Field[column, row];
+                    }
+                }
+            }
+
+            _fieldToRead = !_fieldToRead;
 
             for (int row = 0; row < Field.GetLength(1); row++)
             {
                 for (int column = 0; column < Field.GetLength(0); column++)
                 {
-                    if (CountNeighbours(column, row) < 2 ||
-                        CountNeighbours(column, row) > 3)
-                    {
-                        arrayToDraw[column, row] = false;
-                    }
-                    else if (CountNeighbours(column, row) == 3)
-                    {
-                        arrayToDraw[column, row] = true;
-                    }
+                    Field[column, row] = puffer[column, row];
                 }
             }
         }
-
 
         public bool LoadGame(string pFileName)
         {
@@ -154,8 +347,8 @@ namespace GameOfLife
             //Console.WriteLine(Field[CheckRow(column + 1), CheckColumn(row )]);
 
             if (Field[CheckRow(column + 1), CheckColumn(row + 1)] == true) { neighbours++; }
-            //Console.WriteLine(Field[CheckRow(column + 1), CheckColumn(row + 1)]);
 
+            //Console.WriteLine(Field[CheckRow(column + 1), CheckColumn(row + 1)]);
             return neighbours;
         }
     }
