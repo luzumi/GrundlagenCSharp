@@ -1,77 +1,130 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualBasic;
 
 namespace TicTacToe
 {
     class TextBox
     {
-        private StringBuilder content;
-        private readonly Point position;
-        private readonly ConsoleColor color;
-        private static int horizonzal = 18;
-        private static int vertikal = 19;
-        private static int offset = 0;
+        private readonly StringBuilder _CONTENT;
+        private readonly Point POSITION;
+        private readonly ConsoleColor COLOR;
+        private static readonly int HORIZONTAL = 18;
+        private static readonly int VERTICAL = 19;
+        private static int _offset;
 
         public string Content
         {
-            get { return content.ToString(); }
+            get { return _CONTENT.ToString(); }
         }
 
         public void Draw()
         {
-            Console.SetCursorPosition(position.X, position.Y);
-            Console.ForegroundColor = color;
+            Console.SetCursorPosition(POSITION.X, POSITION.Y);
+            Console.ForegroundColor = COLOR;
 
-            string[] zeilen = content.ToString().Split('\n');
+            string[] rows = _CONTENT.ToString().Split('\n');
 
-            for (int i = 0; i < zeilen.Length; i++)
+            for (int i = 0; i < rows.Length; i++)
             {
-                Console.Write(zeilen[i]);
-                Console.SetCursorPosition(position.X, position.Y + i);
+                Console.Write(rows[i]);
+                Console.SetCursorPosition(POSITION.X, POSITION.Y + i);
             }
 
-            if (Program.programmZustand == 2)
+            if (Program.programState == 2)
                 DrawSpielfeld();
         }
 
-        public void DrawRahmen()
+        public void DrawBoarder()
         {
             for (int row = 0; row < 30; row = Program.rand.Next(0, 45))
             {
-                ZeichenSetzen(row, 0, "Zeichen.txt");
-                ZeichenSetzen(row, 50, "Zeichen.txt");
+                SetSign(row, 0, "Zeichen.txt");
+                SetSign(row, 50, "Zeichen.txt");
             }
 
             for (int row = 0; row < 10; row = Program.rand.Next(0, 15))
             {
-                ZeichenSetzen(row, 10, "Zeichen.txt");
-                ZeichenSetzen(row, 20, "Zeichen.txt");
-                ZeichenSetzen(row, 30, "Zeichen.txt");
-                ZeichenSetzen(row, 40, "Zeichen.txt");
+                SetSign(row, 10, "Zeichen.txt");
+                SetSign(row, 20, "Zeichen.txt");
+                SetSign(row, 30, "Zeichen.txt");
+                SetSign(row, 40, "Zeichen.txt");
             }
 
             for (int row = 0; row < 2; row = Program.rand.Next(0, 3))
             {
-                ZeichenSetzen(row + 28, 10, "Zeichen.txt");
-                ZeichenSetzen(row + 28, 20, "Zeichen.txt");
-                ZeichenSetzen(row + 28, 30, "Zeichen.txt");
-                ZeichenSetzen(row + 28, 40, "Zeichen.txt");
+                SetSign(row + 28, 10, "Zeichen.txt");
+                SetSign(row + 28, 20, "Zeichen.txt");
+                SetSign(row + 28, 30, "Zeichen.txt");
+                SetSign(row + 28, 40, "Zeichen.txt");
             }
 
             DrawLogo();
         }
 
+
+        /// <summary>
+        /// Erstellt einen Lauftext mit Hilfe eines vorgefertigten Banners in einer Textdatei
+        /// </summary>
         public void DrawLogo()
         {
             List<string> logoLines = new List<string>();
-            string line;
 
+            GetRowsFromTxtFile(logoLines);
+
+            string[] output = new string[logoLines.Count];
+
+
+            CreateMovingBanner(logoLines, output);
+
+            PrintLines(logoLines, output);
+
+            if (_offset < logoLines[0].Length - 1)
+            {
+                _offset++;
+            }
+            else
+            {
+                _offset = 0;
+            }
+        }
+
+        private static void PrintLines(List<string> logoLines, string[] ausgabe)
+        {
+            for (int row = 0; row < logoLines.Count; row++)
+            {
+                Console.SetCursorPosition(0, row + 1);
+                Console.Write(ausgabe[row]);
+            }
+        }
+
+        private static void CreateMovingBanner(List<string> logoLines, string[] output)
+        {
+            for (int rowInLogo = 0; rowInLogo < logoLines.Count; rowInLogo++)
+            {
+                string newOutput;
+
+                output[rowInLogo] =
+                    logoLines[rowInLogo].Substring(_offset, logoLines[rowInLogo].Length - 1 - _offset);
+
+                if (output[rowInLogo].Length == 0)
+                {
+                    output[rowInLogo] = logoLines[rowInLogo];
+                }
+
+                newOutput = logoLines[rowInLogo].Substring(0, (_offset));
+
+                if (newOutput.Length > 7 && newOutput.Length < logoLines[rowInLogo].Length - 7)
+                {
+                    output[rowInLogo] += "      " + newOutput.Substring(0, newOutput.Length - 6);
+                }
+            }
+        }
+
+        private static void GetRowsFromTxtFile(List<string> logoLines)
+        {
+            string line;
             using (var reader = new StreamReader("Logo.txt"))
             {
                 while ((line = reader.ReadLine()) is not null)
@@ -79,52 +132,14 @@ namespace TicTacToe
                     logoLines.Add(line);
                 }
             }
-
-            string[] ausgabe = new string[logoLines.Count];
-
-
-            for (int zeileInLogo = 0; zeileInLogo < logoLines.Count; zeileInLogo++)
-            {
-                string neueAusgabe;
-
-                ausgabe[zeileInLogo] =
-                    logoLines[zeileInLogo].Substring(offset, logoLines[zeileInLogo].Length - 1 - offset);
-
-                if (ausgabe[zeileInLogo].Length == 0)
-                {
-                    ausgabe[zeileInLogo] = logoLines[zeileInLogo];
-                }
-
-                neueAusgabe = logoLines[zeileInLogo].Substring(0, (offset));
-
-                if (neueAusgabe.Length > 7 && neueAusgabe.Length < logoLines[zeileInLogo].Length-7)
-                {
-                    ausgabe[zeileInLogo] += "      " + neueAusgabe.Substring(0,neueAusgabe.Length-6);
-                }
-            }
-
-            for (int zeile = 0; zeile < logoLines.Count; zeile++)
-            {
-                Console.SetCursorPosition(0, zeile + 1);
-                Console.Write(ausgabe[zeile]);
-            }
-
-            if (offset < logoLines[0].Length-1)
-            {
-                offset++;
-            }
-            else
-            {
-                offset = 0;
-            }
         }
 
-        private static void ZeichenSetzen(int row, int count, string path)
+        private static void SetSign(int row, int count, string path)
         {
             using (var reader = new StreamReader(path))
             {
-                string zeichen;
-                while ((zeichen = reader.ReadLine()) is not null)
+                string sign;
+                while ((sign = reader.ReadLine()) is not null)
                 {
                     row = row switch
                     {
@@ -133,9 +148,9 @@ namespace TicTacToe
                     };
 
                     Console.SetCursorPosition(count, row);
-                    zeichen = Program.rand.Next(0, 2) % 2 == 0 ? " " : zeichen;
+                    sign = Program.rand.Next(0, 111) % 11 != 0 ? " " : ((Program.rand.Next(0, 2) % 2 == 0) && (sign != " ")) ? "X" : "O";
                     Program.SwitchForegroundColor(Program.rand.Next(0, 13));
-                    Console.Write(zeichen);
+                    Console.Write(sign);
                     count++;
                 }
             }
@@ -149,202 +164,255 @@ namespace TicTacToe
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    Console.SetCursorPosition(horizonzal + 3 + i * 4, vertikal + 2 + j * 2);
+                    Console.SetCursorPosition(HORIZONTAL + 3 + i * 4, VERTICAL + 2 + j * 2);
                     Console.Write("|");
                 }
             }
 
             for (int i = 0; i < 4; i++)
             {
-                Console.SetCursorPosition(horizonzal + 3, (vertikal + 1 + i * 2));
+                Console.SetCursorPosition(HORIZONTAL + 3, (VERTICAL + 1 + i * 2));
 
                 Console.Write("+---+---+---+");
             }
 
             for (int i = 0; i < 7; i++)
             {
-                Console.SetCursorPosition(horizonzal + 31, vertikal + 1 + i);
-                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.SetCursorPosition(HORIZONTAL + 31, VERTICAL + 1 + i);
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("*");
             }
 
-            if (Program.programmZustand == 3)
+            if (Program.programState == 3)
             {
-                Program.OutputTie();
+                OutputTie();
             }
         }
 
         public TextBox(Point Position, ConsoleColor TextColor)
         {
-            position = Position;
-            color = TextColor;
-            content = new StringBuilder();
+            POSITION = Position;
+            COLOR = TextColor;
+            _CONTENT = new StringBuilder();
         }
 
+
+        private void GameBoarder()
+        {
+            const string star = "*";
+
+            _CONTENT.AppendLine("");
+            _CONTENT.AppendLine("****************************************");
+            _CONTENT.AppendLine("* TTT I  CC  TTT  A    CC  TTT OO  EEE *");
+            _CONTENT.AppendLine("*  T  I C     T  A A  C     T O  O EE  *");
+            _CONTENT.AppendLine("*  T  I  CC   T A   A  CC   T  OO  EEE *");
+            _CONTENT.AppendLine(String.Format("*{0,39}", star));
+            _CONTENT.AppendLine(String.Format("*{0,39}", star));
+            _CONTENT.AppendLine(String.Format("*{0,39}", star));
+            _CONTENT.AppendLine(String.Format("*   Spieler 1: {0,-18}  ", GameLogic.PlayerNames[0]));
+            _CONTENT.AppendLine(String.Format("*   Spieler 1: {0,-18}  ", GameLogic.PlayerNames[1]));
+            _CONTENT.AppendLine("*");
+            _CONTENT.AppendLine("*");
+            _CONTENT.AppendLine("*");
+            _CONTENT.AppendLine("*");
+            _CONTENT.AppendLine("*");
+            _CONTENT.AppendLine("*");
+            _CONTENT.AppendLine("*");
+            _CONTENT.AppendLine("*");
+            _CONTENT.AppendLine("****************************************");
+        }
 
         /// <summary>
         /// eingegebene Taste wird behandelt
         /// </summary>
         /// <param name="KeyInformation"></param>
         /// <param name="s"></param>
-        public void ProcessKey(ConsoleKey KeyInformation, Spielfeld s)
+        public void ProcessKey(ConsoleKey KeyInformation, GameLogic s)
         {
             if (KeyInformation == ConsoleKey.Delete)
             {
-                content.Clear();
-                Console.SetCursorPosition(position.X, position.Y);
+                _CONTENT.Clear();
+                Console.SetCursorPosition(POSITION.X, POSITION.Y);
                 Console.Write("                                ");
             }
 
-            if ((int)KeyInformation > 63 && (int)KeyInformation < 91 || (int)KeyInformation == 13)
+            if ((int)KeyInformation > 63 && (int)KeyInformation < 91 || KeyInformation == ConsoleKey.Enter || KeyInformation == ConsoleKey.Backspace)
             {
-                switch (Program.programmZustand)
+                switch (Program.programState)
                 {
                     case 0:
-                        if (KeyInformation != ConsoleKey.Enter)
+                        if (KeyInformation == ConsoleKey.Backspace)
                         {
-                            Spielfeld.PlayerNames[0] += (char)KeyInformation;
-                            content.Clear();
-                            Spieler1Abfragen();
+                            if (GameLogic.PlayerNames[0] != null && GameLogic.PlayerNames[0].Length > 0 )
+                            {
+                                GameLogic.PlayerNames[0] = GameLogic.PlayerNames[0]
+                                    .Substring(0, GameLogic.PlayerNames[0].Length - 1);
+                                _CONTENT.Clear();
+                                GetNamePlayerOne();
+                            }
+                        }
+                        else if (KeyInformation != ConsoleKey.Enter)
+                        {
+                            GameLogic.PlayerNames[0] += (char)KeyInformation;
+                            _CONTENT.Clear();
+                            GetNamePlayerOne();
                         }
                         else
                         {
-                            Program.programmZustand = 1;
-                            content.Clear();
-                            Spieler2Abfragen();
+                            Program.programState = 1;
+                            _CONTENT.Clear();
+                            GetNamePlayerTwo();
                         }
-
                         break;
-                    case 1:
-                        if (KeyInformation != ConsoleKey.Enter)
-                        {
-                            Spielfeld.PlayerNames[1] += (char)KeyInformation;
-                            content.Clear();
-                            Spieler2Abfragen();
-                        }
 
+                    case 1:
+                        if (KeyInformation == ConsoleKey.Backspace)
+                        {
+                            if (GameLogic.PlayerNames[1] != null && GameLogic.PlayerNames[1].Length > 0 )
+                            {
+                                GameLogic.PlayerNames[1] = GameLogic.PlayerNames[1]
+                                    .Substring(0, GameLogic.PlayerNames[1].Length - 1);
+                                _CONTENT.Clear();
+                                GetNamePlayerTwo();
+                            }
+                        }
+                        else if (KeyInformation != ConsoleKey.Enter)
+                        {
+                            GameLogic.PlayerNames[1] += (char)KeyInformation;
+                            _CONTENT.Clear();
+                            GetNamePlayerTwo();
+                        }
                         else
                         {
-                            content.Clear();
-                            Program.programmZustand = 2;
-                            Spiel();
+                            _CONTENT.Clear();
+                            Program.programState = 2;
+                            GameBoarder();
                             Program.ResetBoard2();
                         }
-
                         break;
+
                     case 2:
-                        content.Clear();
-                        Spiel();
+                        _CONTENT.Clear();
+                        GameBoarder();
                         break;
-                    case 3:
-                        Program.OutputTie();
 
+                    case 3:
+                        OutputTie();
                         break;
+
                     default:
-                        content.Append(KeyInformation);
+                        _CONTENT.Append(KeyInformation);
                         break;
                 }
             }
         }
 
-        public void Spiel()
+
+        public void GetNamePlayerOne()
         {
-            string spieler1 = String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString());
-            string spieler2 = String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString());
-            string star = "*";
-
-            content.AppendLine("");
-            content.AppendLine("****************************************");
-            content.AppendLine("* TTT I  CC  TTT  A    CC  TTT OO  EEE *");
-            content.AppendLine("*  T  I C     T  A A  C     T O  O EE  *");
-            content.AppendLine("*  T  I  CC   T A   A  CC   T  OO  EEE *");
-            content.AppendLine(String.Format("*{0,39}", star));
-            content.AppendLine(String.Format("*{0,39}", star));
-            content.AppendLine(String.Format("*{0,39}", star));
-            content.AppendLine(String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[0].ToString()));
-            content.AppendLine(String.Format("*   Spieler 1: {0,-18}  ", Spielfeld.PlayerNames[1].ToString()));
-            content.AppendLine("*");
-            content.AppendLine("*");
-            content.AppendLine("*");
-            content.AppendLine("*");
-            content.AppendLine("*");
-            content.AppendLine("*");
-            content.AppendLine("*");
-            content.AppendLine("*");
-            content.AppendLine("****************************************");
-        }
-
-
-        public void Spieler1Abfragen()
-        {
-            string zeile = "*";
-            if (Spielfeld.PlayerNames[0] != null)
+            string row = "*";
+            if (GameLogic.PlayerNames[0] != null)
             {
-                zeile += String.Format("   Spieler 1: {0,-18}  ",
-                    Spielfeld.PlayerNames[0].ToString());
+                row += String.Format("   Spieler 1: {0,-18}  ",
+                    GameLogic.PlayerNames[0]);
             }
             else
             {
-                zeile += "   Spieler 1:                         *";
+                row += "   Spieler 1:                         *";
             }
 
-            content.AppendLine("");
-            content.AppendLine("****************************************");
-            content.AppendLine("* TTT I  CC  TTT  A    CC  TTT OO  EEE *");
-            content.AppendLine("*  T  I C     T  A A  C     T O  O EE  *");
-            content.AppendLine("*  T  I  CC   T A   A  CC   T  OO  EEE *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*   Bitte geben Sie Ihren Namen ein:   *");
-            content.AppendLine("*                                      *");
-            content.AppendLine(zeile);
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("****************************************");
+            _CONTENT.AppendLine("");
+            _CONTENT.AppendLine("****************************************");
+            _CONTENT.AppendLine("* TTT I  CC  TTT  A    CC  TTT OO  EEE *");
+            _CONTENT.AppendLine("*  T  I C     T  A A  C     T O  O EE  *");
+            _CONTENT.AppendLine("*  T  I  CC   T A   A  CC   T  OO  EEE *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*   Bitte geben Sie Ihren Namen ein:   *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine(row);
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("****************************************");
         }
 
-        public void Spieler2Abfragen()
+        public void GetNamePlayerTwo()
         {
-            string spieler1 = String.Format("*   Spieler 1: {0,-18}  ",
-                Spielfeld.PlayerNames[0].ToString());
+            string player1 = String.Format("*   Spieler 1: {0,-18}  ",
+                GameLogic.PlayerNames[0]);
 
-            string zeile = "*";
+            string row = "*";
 
-            if (Spielfeld.PlayerNames[1] != null)
+            if (GameLogic.PlayerNames[1] != null)
             {
-                zeile += String.Format("   Spieler 2: {0,-18}  ",
-                    Spielfeld.PlayerNames[1].ToString());
+                row += String.Format("   Spieler 2: {0,-18}  ",
+                    GameLogic.PlayerNames[1]);
             }
             else
             {
-                zeile += "   Spieler 2:                         *";
+                row += "   Spieler 2:                         *";
             }
 
-            content.AppendLine("");
-            content.AppendLine("****************************************");
-            content.AppendLine("* TTT I  CC  TTT  A    CC  TTT OO  EEE *");
-            content.AppendLine("*  T  I C     T  A A  C     T O  O EE  *");
-            content.AppendLine("*  T  I  CC   T A   A  CC   T  OO  EEE *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*   Bitte geben Sie Ihren Namen ein:   *");
-            content.AppendLine("*                                      *");
-            content.AppendLine(spieler1);
-            content.AppendLine(zeile);
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("*                                      *");
-            content.AppendLine("****************************************");
+            _CONTENT.AppendLine("");
+            _CONTENT.AppendLine("****************************************");
+            _CONTENT.AppendLine("* TTT I  CC  TTT  A    CC  TTT OO  EEE *");
+            _CONTENT.AppendLine("*  T  I C     T  A A  C     T O  O EE  *");
+            _CONTENT.AppendLine("*  T  I  CC   T A   A  CC   T  OO  EEE *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*   Bitte geben Sie Ihren Namen ein:   *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine(player1);
+            _CONTENT.AppendLine(row);
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("*                                      *");
+            _CONTENT.AppendLine("****************************************");
+        }
+
+        public static void OutputTie()
+        {
+            Random r = new Random();
+            string line1 = " U-N-E-N-T-S-C-H-I-E-D-E-N ";
+            string replace = line1;
+            for (int character = 0; character < line1.Length; character = r.Next(0, line1.Length))
+            {
+                character++;
+
+                Program.SwitchForegroundColor(r.Next(0, 100));
+                Console.CursorVisible = false;
+                Console.SetCursorPosition(HORIZONTAL + character, VERTICAL);
+                if (character % 3 == 0)
+                {
+                    replace = line1.Replace('-', '*');
+
+                    if (character % 3 == 1)
+                    {
+                        replace = line1.Replace('*', '~');
+                    }
+                    if (character % 3 == 2)
+                    {
+                        replace = line1.Replace('~', '_');
+                    }
+                }
+                if (character == line1.Length)
+                {
+                    break;
+
+                } 
+                System.Diagnostics.Debug.WriteLine(replace);    //zum überprüfen in das Ausgabefenster schreiben
+                Console.Write(replace[character]);
+            }
         }
     }
 }
