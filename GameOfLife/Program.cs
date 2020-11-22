@@ -13,8 +13,8 @@ namespace GameOfLife
 
         static void Main()
         {
-            //Scene intro = new Intro();
-            Scene game = new Game();
+            Scenes.Push( new Intro());
+            //Scene game = new Game();
 
             Console.CursorVisible = !running;
             do
@@ -22,13 +22,23 @@ namespace GameOfLife
                 Scenes.Peek().Update();
                 //Thread.Sleep(300);
 
-                if (Console.KeyAvailable && Console.ReadKey().Key == ConsoleKey.Escape)
-                {
-                    running = false;
-                    Console.Clear();
-                    Console.WriteLine(running);
-                }
             } while (running);
+        }
+
+
+
+        public static string Logo()
+        {
+            return "     ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████    █████▒    ██▓     ██▓  █████▒▓█████ \n" +
+                   "   ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██   ▒    ▓██▒    ▓██▒▓██   ▒ ▓█   ▀ \n" +
+                   "  ▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███      ▒██░  ██▒▒████ ░    ▒██░    ▒██▒▒████ ░ ▒███   \n" +
+                   "  ░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒██   ██░░▓█▒  ░    ▒██░    ░██░░▓█▒  ░ ▒▓█  ▄ \n" +
+                   "  ░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒   ░ ████▓▒░░▒█░       ░██████▒░██░░▒█░    ░▒████▒\n" +
+                   "   ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░   ░ ▒░▒░▒░  ▒ ░       ░ ▒░▓  ░░▓   ▒ ░    ░░ ▒░ ░\n" +
+                   "    ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░     ░ ▒ ▒░  ░         ░ ░ ▒  ░ ▒ ░ ░       ░ ░  ░\n" +
+                   "  ░ ░   ░   ░   ▒   ░      ░      ░      ░ ░ ░ ▒   ░ ░         ░ ░    ▒ ░ ░ ░       ░   \n" +
+                   "        ░       ░  ░       ░      ░  ░       ░ ░                 ░  ░ ░             ░  ░\n" +
+                   "                                                                                        ";
         }
     }
 }

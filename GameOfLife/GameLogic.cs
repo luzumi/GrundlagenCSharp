@@ -6,12 +6,12 @@ using System.Threading.Channels;
 
 namespace GameOfLife
 {
-    class Spielfeld
+    class GameLogic
     {
         private bool[,] _fieldTrue;
         private bool[,] _fieldFalse;
         private bool _fieldToRead;
-        Random rand = new Random();
+        public Random rand = new Random();
 
         public bool[,] Field
         {
@@ -24,7 +24,7 @@ namespace GameOfLife
         }
 
         
-        public Spielfeld((int x, int y) pSize)
+        public GameLogic((int x, int y) pSize)
         {
             _fieldTrue = new bool[pSize.x, pSize.y];
             _fieldFalse = new bool[pSize.x, pSize.y];
@@ -48,8 +48,8 @@ namespace GameOfLife
 
                     #region FensterMuster-Vorlage
 
-                    Window();
-                    //GosperGliderGun();
+                    //Window();
+                    GosperGliderGun();
 
                     #endregion
                 }
@@ -242,7 +242,6 @@ namespace GameOfLife
 
         public void Update()
         {
-            //Thread.Sleep(800);
             bool[,] puffer = new bool[_fieldFalse.GetLength(0),_fieldFalse.GetLength(1)];
 
             for (int row = 0; row < _fieldFalse.GetLength(1); row++)

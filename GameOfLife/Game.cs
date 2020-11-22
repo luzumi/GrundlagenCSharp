@@ -6,13 +6,11 @@ namespace GameOfLife
 {
     class Game : Scene
     {
-        readonly Spielfeld logic;
+        readonly GameLogic logic;
 
         public Game()
         {
-            Program.Scenes.Push(this);
-
-            logic = new Spielfeld((80, 40));
+            logic = new GameLogic((Intro.size));
         }
 
         public override void Update()

@@ -6,56 +6,60 @@ namespace GameOfLife
 {
     class Intro : Scene
     {
-        public static (int x, int y) size = (20,20);
+        public static (int x, int y) size;
 
         public override void Update()
         {
-
             Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.CursorVisible = false;
 
-            Console.SetCursorPosition(20, 5);
-            Console.WriteLine("Game of Life");
+            Console.SetCursorPosition(0, 3);
+            Console.WriteLine(Program.Logo());
 
-            Console.SetCursorPosition(20, 10);
+            Console.SetCursorPosition(33, 28);
             Console.WriteLine("Press 'ESC' to abort the Program");
 
-            Console.SetCursorPosition(20, 12);
+            Console.SetCursorPosition(27, 15);
             Console.WriteLine("Wie Gross soll das Spielfeld denn sein?");
-            
-            ////ArrayGröße abfragen
-            //if (Console.KeyAvailable)
-            //{
 
-                //Console.SetCursorPosition(28, size.x == 0? 13 : 14);
-                
-                //int number = (int)Console.ReadKey().Key;
-                
-                //if ((int)Console.ReadKey().Key >= 30 && (int)Console.ReadKey().Key <= 39)
-                //{
-                    //if (size.x == 0)
-                    //{
-                        //size.x = number;
-                    //}
-                    //else if (size.y == 0)
-                    //{
-                        //size.y = number;
-                    //}
-                //}
-            //}
+            Console.SetCursorPosition(size.x == 0 ? 31 : 51,  17);
+            Console.Write(size.x == 0 ? "Horizontal: " : "Vertikal: ");
 
-            Console.SetCursorPosition(20, 17);
-            Console.WriteLine("Press Spacebar to Continue");
-
-            //TODO: animations
-
-            if (Console.KeyAvailable && Console.ReadKey().Key == ConsoleKey.Spacebar)
+            //ArrayGröße abfragen
+            if (Console.KeyAvailable && size.y == 0)
             {
-                Program.Scenes.Pop();
-                Program.Scenes.Push(new MainMenue());
-                Console.WriteLine("intro");
+                if (size.x == 0)
+                {
+                    Int32.TryParse(Console.ReadLine(), out int resultx);
+                    {
+                        size.x = resultx;
+                    }
+                }
+                else
+                {
+                    Int32.TryParse(Console.ReadLine(), out int resulty);
+                    {
+                        size.y = resulty;
+
+                        Console.SetCursorPosition(37, 23);
+                        Console.WriteLine("Press [Enter] to Continue");
+                    }
+                }
             }
 
-            
+            if (Console.KeyAvailable && size.y != 0)
+            {
+                if (Console.ReadKey().Key == ConsoleKey.Enter)
+                {
+                    Program.Scenes.Pop();
+                    Program.Scenes.Push(new MainMenue());
+                    //Program.Scenes.Push(new Game());
+                    Console.Clear();
+                }
+            }
+            //TODO: animations
+
         }
+
     }
 }
