@@ -4,19 +4,10 @@ using System.Text;
 
 namespace GameOfLife
 {
-    class Scene
+    abstract class Scene
     {
-        protected static (int x, int y) size;
+        public abstract void Update();
 
-        protected Scene()
-        {
-            Program.Scenes.Push(this);
-        }
-
-
-        public virtual void Update()
-        {
-
-        }
+        public abstract void Activate();
     }
 }

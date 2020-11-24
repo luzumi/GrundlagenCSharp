@@ -5,6 +5,10 @@
         Selected,
         Available,
         Inactive,
+        Living,
+        Dead,
+        MarkAndLiving,
+        MarkAndDead,
         Hidden
     }
 }

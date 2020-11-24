@@ -11,7 +11,9 @@ namespace GameOfLife
     class MainMenue : Scene
     {
         public List<string> LogoLines { get; set; }
+        readonly List<Label> labels;
         readonly List<IDrawable> needsRedraw;
+        readonly List<Button> inactiveButtons;
         private sbyte activeButton;
 
         List<Button> menuButtons;
@@ -25,7 +27,7 @@ namespace GameOfLife
         {
             Console.ResetColor();
             Console.Clear();
-            LogoLines = new List<string>();
+            
             menuButtons = new List<Button>
             {
                 new Button(10, true, "Random Game"),
@@ -37,6 +39,7 @@ namespace GameOfLife
             menuButtons[2].State = ButtonStates.Inactive;
 
             needsRedraw = new List<IDrawable>(menuButtons);
+            labels = new List<Label>();
 
             Console.SetCursorPosition(0, 2);
 
@@ -50,12 +53,13 @@ namespace GameOfLife
             Console.SetCursorPosition(0, 2);
             using (StreamReader reader = new StreamReader("LogoSmall.txt"))
             {
+                LogoLines = new List<string>();
                 string newLine;
                 while ((newLine = reader.ReadLine()) != null)
                 {
                     LogoLines.Add(newLine + "\n");
                 }
-
+                labels.Add(new Label(1, true, LogoLines));
             }
         }
 
@@ -97,6 +101,15 @@ namespace GameOfLife
                         break;
                 }
             }
+        }
+
+        public override void Activate()
+        {
+            Console.ResetColor();
+            Console.Clear();
+            needsRedraw.AddRange(inactiveButtons);
+            needsRedraw.AddRange(menuButtons);
+            needsRedraw.AddRange(labels);
         }
 
         public static void drawButtons(byte IdActiveButton, List<MenuButton> buttons)

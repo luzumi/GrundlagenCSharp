@@ -34,6 +34,11 @@ namespace GameOfLife
             if (Console.KeyAvailable) GetInput(Console.ReadKey(true).Key);
         }
 
+        public override void Activate()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public void GetInput(ConsoleKey pConsoleKey)
         {

@@ -34,5 +34,10 @@ namespace GameOfLife
             }
             logic.Update();
         }
+
+        public override void Activate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

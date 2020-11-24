@@ -63,6 +63,11 @@ namespace GameOfLife
 
         }
 
+        public override void Activate()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public List<string> PrintLogo()
         {
