@@ -13,6 +13,11 @@ namespace GameOfLife
             logic = new GameLogic((Intro.size));
         }
 
+        public Game(GameLogic pLogic)
+        {
+            logic = pLogic;
+        }
+
         public override void Update()
         {
             Console.SetCursorPosition(0, 3);

@@ -8,7 +8,7 @@ namespace GameOfLife
     {
         protected static (int x, int y) size;
 
-        public Scene()
+        protected Scene()
         {
             Program.Scenes.Push(this);
         }

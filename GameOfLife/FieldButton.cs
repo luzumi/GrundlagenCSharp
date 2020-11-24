@@ -9,12 +9,11 @@ namespace GameOfLife
 {
     class FieldButton
     {
-        public menuButtonNames MenuButtonNames;
-        public string MenueText { get; }       
-        
-        public FieldButton(string pMenueText)
+        protected readonly (int column, int row) Mark;
+
+        public FieldButton((int column, int row) pMark)
         {
-            MenueText = pMenueText;
+            Mark = pMark;
         }
     }
 }

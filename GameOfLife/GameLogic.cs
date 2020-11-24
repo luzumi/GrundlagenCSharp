@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Channels;
+using System.Xml.Serialization;
 
 namespace GameOfLife
 {
@@ -12,6 +17,8 @@ namespace GameOfLife
         private bool[,] _fieldFalse;
         private bool _fieldToRead;
         public Random rand = new Random();
+        bool[,] puffer;
+        public List<SaveGame> savegames;
 
         public bool[,] Field
         {
@@ -21,6 +28,7 @@ namespace GameOfLife
         public bool[,] FieldFalse
         {
             get => _fieldFalse;
+            set => _fieldFalse = value;
         }
 
         
@@ -29,6 +37,8 @@ namespace GameOfLife
             _fieldTrue = new bool[pSize.x, pSize.y];
             _fieldFalse = new bool[pSize.x, pSize.y];
             _fieldToRead = false;
+            puffer = new bool[_fieldFalse.GetLength(0),_fieldFalse.GetLength(1)];
+            savegames = new List<SaveGame>();
             Reset();
         }
 
@@ -49,7 +59,7 @@ namespace GameOfLife
                     #region FensterMuster-Vorlage
 
                     //Window();
-                    GosperGliderGun();
+                    //GosperGliderGun();
 
                     #endregion
                 }
@@ -242,8 +252,6 @@ namespace GameOfLife
 
         public void Update()
         {
-            bool[,] puffer = new bool[_fieldFalse.GetLength(0),_fieldFalse.GetLength(1)];
-
             for (int row = 0; row < _fieldFalse.GetLength(1); row++)
             {
                 for (int column = 0; column < _fieldFalse.GetLength(0); column++)
@@ -276,15 +284,34 @@ namespace GameOfLife
             }
         }
 
-        public bool LoadGame(string pFileName)
-        {
-            return false;
-        }
-
-
+        
         public bool SaveGame(string pFileName)
         {
-            return false;
+            List<List<bool>> convertedField = new List<List<bool>>();
+            SaveGame sg = new SaveGame();
+
+            for (int row = 0; row < Field.GetLength(0); row++)
+            {
+                convertedField.Add(new List<bool>(Field.GetLength(0)));
+
+                for (int column = 0; column < Field.GetLength(1); column++)
+                {
+                    convertedField[row].Add(Field[row, column]);
+                } 
+            }
+
+            sg.Field = convertedField;
+            sg.fileName = pFileName + DateTime.Now.ToShortDateString() + ".xml";
+
+            XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));
+
+            using (Stream file = new FileStream(pFileName, FileMode.Create, FileAccess.Write))
+            {
+                serializer.Serialize(file, sg);
+                savegames.Add(sg);
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -323,31 +350,22 @@ namespace GameOfLife
         private int CountNeighbours(int column, int row)
         {
             int neighbours = 0;
-            //Console.WriteLine(Field[column,row]);
             if (Field[CheckRow(column - 1), CheckColumn(row - 1)] == true) { neighbours++; }
-            //Console.WriteLine(Field[CheckRow(column - 1), CheckColumn(row - 1)]);
 
             if (Field[CheckRow(column - 1), CheckColumn(row)] == true) { neighbours++; }
-            //Console.WriteLine(Field[CheckRow(column - 1), CheckColumn(row)]);
 
             if (Field[CheckRow(column - 1), CheckColumn(row + 1)] == true) { neighbours++; }
-            //Console.WriteLine(Field[CheckRow(column - 1), CheckColumn(row + 1)]);
 
             if (Field[CheckRow(column), CheckColumn(row - 1)] == true) { neighbours++; }
-            //Console.WriteLine(Field[CheckRow(column), CheckColumn(row - 1)]);
 
             if (Field[CheckRow(column), CheckColumn(row + 1)] == true) { neighbours++; }
-            //Console.WriteLine(Field[CheckRow(column ), CheckColumn(row + 1)]);
 
             if (Field[CheckRow(column + 1), CheckColumn(row - 1)] == true) { neighbours++; }
-            //Console.WriteLine(Field[CheckRow(column + 1), CheckColumn(row - 1)]);
 
             if (Field[CheckRow(column + 1), CheckColumn(row)] == true) { neighbours++; }
-            //Console.WriteLine(Field[CheckRow(column + 1), CheckColumn(row )]);
 
             if (Field[CheckRow(column + 1), CheckColumn(row + 1)] == true) { neighbours++; }
 
-            //Console.WriteLine(Field[CheckRow(column + 1), CheckColumn(row + 1)]);
             return neighbours;
         }
     }

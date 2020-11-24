@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Threading;
+using System.Xml.Serialization;
 
 namespace GameOfLife
 {
-    class SaveGame
+    public class SaveGame
     {
-        public bool[,] Field;
+        public List<List<bool>> Field;
+        public string fileName;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace GameOfLife
@@ -7,14 +8,15 @@ namespace GameOfLife
     class Intro : Scene
     {
         public static (int x, int y) size;
+        private List<string> LogoLines { get; set; }
 
         public override void Update()
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.CursorVisible = false;
 
-            Console.SetCursorPosition(0, 3);
-            Console.WriteLine(Program.Logo());
+            LogoLines = new List<string>();
+            LogoLines = PrintLogo();
 
             Console.SetCursorPosition(33, 28);
             Console.WriteLine("Press 'ESC' to abort the Program");
@@ -61,5 +63,25 @@ namespace GameOfLife
 
         }
 
+
+        public List<string> PrintLogo()
+        {
+            Console.SetCursorPosition(0, 2);
+            using (StreamReader reader = new StreamReader("LogoSmall.txt"))
+            {
+                string newLine;
+                while ((newLine = reader.ReadLine()) != null)
+                {
+                    LogoLines.Add(newLine + "\n");
+                }
+                for (int row = 0; row < LogoLines.Count; row++)
+                {
+                    Console.SetCursorPosition(Console.WindowWidth / 2 - LogoLines[row].Length / 2, 2 + row);
+                    Console.Write(LogoLines[row]);
+                }
+            }
+
+            return LogoLines;
+        }
     }
 }

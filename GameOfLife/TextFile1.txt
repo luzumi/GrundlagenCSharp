@@ -1,0 +1,39 @@
+﻿private void GosperGliderGun()
+        {
+            Field[25, 16] = true;
+            Field[25, 17] = true;
+            Field[35, 13] = true;
+            Field[35, 14] = true;
+            Field[36, 13] = true;
+            Field[36, 14] = true;
+            Field[22, 15] = true;
+            Field[23, 12] = true;
+            Field[23, 16] = true;
+            Field[25, 11] = true;
+            Field[25, 12] = true;
+            Field[21, 13] = true;
+            Field[21, 14] = true;
+            Field[21, 15] = true;
+            Field[22, 13] = true;
+            Field[22, 14] = true;
+            Field[1, 15] = true;
+            Field[2, 15] = true;
+            Field[1, 16] = true;
+            Field[2, 16] = true;
+            Field[11, 15] = true;
+            Field[11, 16] = true;
+            Field[11, 17] = true;
+            Field[12, 14] = true;
+            Field[13, 13] = true;
+            Field[14, 13] = true;
+            Field[12, 18] = true;
+            Field[13, 19] = true;
+            Field[14, 19] = true;
+            Field[15, 16] = true;
+            Field[16, 14] = true;
+            Field[17, 15] = true;
+            Field[17, 16] = true;
+            Field[17, 17] = true;
+            Field[18, 16] = true;
+            Field[16, 18] = true;
+        }

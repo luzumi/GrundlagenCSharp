@@ -13,8 +13,8 @@ namespace GameOfLife
 
         static void Main()
         {
+            Console.CursorVisible = false;
             Scenes.Push( new Intro());
-            //Scene game = new Game();
 
             Console.CursorVisible = !running;
             do
