@@ -13,6 +13,7 @@ namespace GameOfLife
 {
     class GameLogic
     {
+        public static (int x, int y) size;
         private bool[,] _fieldTrue;
         private bool[,] _fieldFalse;
         private bool _fieldToRead;

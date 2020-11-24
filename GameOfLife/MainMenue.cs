@@ -27,7 +27,7 @@ namespace GameOfLife
         {
             Console.ResetColor();
             Console.Clear();
-            
+
             menuButtons = new List<Button>
             {
                 new Button(10, true, "Random Game"),
@@ -59,6 +59,7 @@ namespace GameOfLife
                 {
                     LogoLines.Add(newLine + "\n");
                 }
+
                 labels.Add(new Label(1, true, LogoLines));
             }
         }
@@ -96,12 +97,28 @@ namespace GameOfLife
                         break;
                     case ConsoleKey.Enter:
                         ClearScreen();
-                        Program.Scenes.Push(new Game());
+                        switch (ActiveButtonID)
+                        {
+                            case 0:
+                                Program.Scenes.Push(new Game());
+                                break;
+                            case 1:
+                                Program.Scenes.Push(new Editor());
+                                break;
+                            case 2:
+                                Program.Scenes.Push(new LoadGame());
+                                break;
+                            case 3:
+                                Program.Scenes.Pop();
+                                Program.running = false;
+                                break;
+                        }
+
                         // Todo: switch for buttonID to react to user choice
                         break;
                 }
             }
-        }
+        } 
 
         public override void Activate()
         {
@@ -190,7 +207,7 @@ namespace GameOfLife
             while (!ready)
             {
                 string temp = "";
-                for (int row = 0; row < LogoLines[0].Length*LogoLines.Count; row += rand.Next(0, 3))
+                for (int row = 0; row < LogoLines[0].Length * LogoLines.Count; row += rand.Next(0, 3))
                 {
                     if (backup[row] != ' ' && backup[row] != '\n')
                     {
@@ -201,7 +218,7 @@ namespace GameOfLife
                 for (int j = 0; j < LogoLines.Count; j++)
                 {
                     temp = backup.ToString().Substring(89 * j, 89);
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - LogoLines[0].Length / 2, 2+j);
+                    Console.SetCursorPosition(Console.WindowWidth / 2 - LogoLines[0].Length / 2, 2 + j);
                     Console.Write(temp);
                 }
 

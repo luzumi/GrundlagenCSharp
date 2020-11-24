@@ -14,6 +14,7 @@ namespace GameOfLife
         ConsoleColor currentForeground;
         ConsoleColor currentBackground;
         readonly bool center;
+        private readonly Action method;
 
         private ButtonStates states;
 
@@ -59,6 +60,19 @@ namespace GameOfLife
             colorInactive = ConsoleColor.DarkGreen;
             center = Centered;
             states = ButtonStates.Available;
+        }
+
+        public Button(in byte pRow, bool pCentered, string pButtonText, Action pAction)
+        {
+            posY = pRow;
+            buttonText = pButtonText;
+            colorSelected = ConsoleColor.Gray;
+            colorUnSelected = ConsoleColor.Black;
+            colorActive = ConsoleColor.Green;
+            colorInactive = ConsoleColor.DarkGreen;
+            center = pCentered;
+            states = ButtonStates.Available;
+            method = pAction;
         }
     }
 }

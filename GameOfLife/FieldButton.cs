@@ -5,9 +5,9 @@ namespace GameOfLife
 {
     class FieldButton : IDrawable
     {
-        readonly ConsoleColor colorSelected;
-        readonly ConsoleColor colorUnSelected;
-        readonly ConsoleColor markAndSelected;
+        readonly ConsoleColor living;
+        readonly ConsoleColor dead;
+        readonly ConsoleColor markAndLiving;
         readonly ConsoleColor markAndDead;
         ConsoleColor currentForeground;
         ConsoleColor currentBackground;
@@ -17,10 +17,10 @@ namespace GameOfLife
         public FieldButton((int column, int row) pMark)
         {
             mark = pMark;
-            colorSelected = ConsoleColor.DarkGray;
-            colorUnSelected = ConsoleColor.Black;
-            markAndSelected = ConsoleColor.Yellow;
-            markAndDead = ConsoleColor.DarkYellow;
+            living = ConsoleColor.Yellow;
+            dead = ConsoleColor.Black;
+            markAndLiving = ConsoleColor.DarkYellow;
+            markAndDead = ConsoleColor.DarkGray;
         }
 
 
@@ -33,13 +33,13 @@ namespace GameOfLife
                 switch (states)
                 {
                     case ButtonStates.Dead:
-                        currentBackground = colorSelected;
+                        currentBackground = dead;
                         break;
                     case ButtonStates.Living:
-                        currentBackground = colorUnSelected;
+                        currentBackground = living;
                         break;
                     case ButtonStates.MarkAndLiving:
-                        currentBackground = markAndSelected;
+                        currentBackground = markAndLiving;
                         break;
                     case ButtonStates.MarkAndDead:
                         currentBackground = markAndDead;

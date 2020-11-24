@@ -7,7 +7,7 @@ namespace GameOfLife
 {
     class Intro : Scene
     {
-        public static (int x, int y) size;
+        
         private List<string> LogoLines { get; set; }
 
         public override void Update()
@@ -24,24 +24,24 @@ namespace GameOfLife
             Console.SetCursorPosition(27, 15);
             Console.WriteLine("Wie Gross soll das Spielfeld denn sein?");
 
-            Console.SetCursorPosition(size.x == 0 ? 31 : 51,  17);
-            Console.Write(size.x == 0 ? "Horizontal: " : "Vertikal: ");
+            Console.SetCursorPosition(GameLogic.size.x == 0 ? 31 : 51,  17);
+            Console.Write(GameLogic.size.x == 0 ? "Horizontal: " : "Vertikal: ");
 
             //ArrayGröße abfragen
-            if (Console.KeyAvailable && size.y == 0)
+            if (Console.KeyAvailable && GameLogic.size.y == 0)
             {
-                if (size.x == 0)
+                if (GameLogic.size.x == 0)
                 {
                     Int32.TryParse(Console.ReadLine(), out int resultx);
                     {
-                        size.x = resultx;
+                        GameLogic.size.x = resultx;
                     }
                 }
                 else
                 {
                     Int32.TryParse(Console.ReadLine(), out int resulty);
                     {
-                        size.y = resulty;
+                        GameLogic.size.y = resulty;
 
                         Console.SetCursorPosition(37, 23);
                         Console.WriteLine("Press [Enter] to Continue");
@@ -49,13 +49,13 @@ namespace GameOfLife
                 }
             }
 
-            if (Console.KeyAvailable && size.y != 0)
+            if (Console.KeyAvailable && GameLogic.size.y != 0)
             {
                 if (Console.ReadKey().Key == ConsoleKey.Enter)
                 {
                     Program.Scenes.Pop();
                     Program.Scenes.Push(new MainMenue());
-                    //Program.Scenes.Push(new Game());
+                    
                     Console.Clear();
                 }
             }

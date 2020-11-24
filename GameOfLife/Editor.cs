@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace GameOfLife
 {
@@ -11,23 +11,27 @@ namespace GameOfLife
         private FieldButton[,] fieldButtons;
         private (byte x, byte y) selectedField;
         readonly List<IDrawable> needsRedraw;
-        readonly List<FieldButton> inactiveButtons;
-        private sbyte activeButton;
+
 
         public Editor()
         {
-            saveGameLogic = new GameLogic(Intro.size);
-            fieldButtons = new FieldButton[Intro.size.x, Intro.size.y];
+            saveGameLogic = new GameLogic(GameLogic.size);
+            fieldButtons = new FieldButton[GameLogic.size.x, GameLogic.size.y];
+            needsRedraw = new List<IDrawable>();
 
-            for (int row = 0; row < Intro.size.y; row++)
+            for (int row = 0; row < GameLogic.size.y; row++)
             {
-                for (int column = 0; column < Intro.size.x; column++)
+                for (int column = 0; column < GameLogic.size.x; column++)
                 {
                     fieldButtons[column, row] = new FieldButton((column, row));
+                    fieldButtons[column, row].State = ButtonStates.Dead;
                 }
             }
         }
 
+        /// <summary>
+        /// Zeichnet Spielfeld
+        /// </summary>
         public override void Update()
         {
             if (needsRedraw.Count > 0)
@@ -41,7 +45,7 @@ namespace GameOfLife
 
             if (Console.KeyAvailable)
             {
-                GetInput(Console.ReadKey().Key);
+                GetInput(Console.ReadKey(true).Key);
             }
         }
 
@@ -49,27 +53,22 @@ namespace GameOfLife
         {
             Console.ResetColor();
             Console.Clear();
-            needsRedraw.AddRange(inactiveButtons);
-            needsRedraw.AddRange(fieldButtons.Cast<FieldButton>().ToList());
+            foreach (FieldButton button in fieldButtons)
+            {
+                needsRedraw.Add(button);
+            }
         }
 
         private void Draw()
         {
-            for (int row = 0; row < fieldButtons.GetLength(1); row++)
-            {
-                for (int column = 0; column < fieldButtons.GetLength(0); column++)
-                {
-                    if (saveGameLogic.Field[column, row])
-                    {
-                        fieldButtons[column, row].Draw();
-                    }
-                }
-
-                Console.WriteLine();
-            }
+            Console.Write(" ");
         }
 
-
+        /// <summary>
+        /// [Pfeiltasten], [S], [Enter]
+        /// werden verabreitet
+        /// </summary>
+        /// <param name="pConsoleKey"></param>
         public void GetInput(ConsoleKey pConsoleKey)
         {
             switch (pConsoleKey)
@@ -77,41 +76,37 @@ namespace GameOfLife
                 case ConsoleKey.UpArrow:
                     if (selectedField.y > 0)
                     {
-                        MarkField();
+                        FieldDeMarkOld();
                         selectedField.y--;
-                        MarkField();
+                        FieldMark();
                     }
-
                     break;
 
                 case ConsoleKey.DownArrow:
-                    if (selectedField.y < (Intro.size.y) - 1)
+                    if (selectedField.y < GameLogic.size.y - 1)
                     {
-                        MarkField();
+                        FieldDeMarkOld();
                         selectedField.y++;
-                        MarkField();
+                        FieldMark();
                     }
-
                     break;
 
                 case ConsoleKey.LeftArrow:
-                    if (selectedField.x < (Intro.size.x) - 1)
+                    if (selectedField.x > 0)
                     {
-                        MarkField();
+                        FieldDeMarkOld();
                         selectedField.x--;
-                        MarkField();
+                        FieldMark();
                     }
-
                     break;
 
                 case ConsoleKey.RightArrow:
-                    if (selectedField.x < (Intro.size.x) - 1)
+                    if (selectedField.x < GameLogic.size.x - 1)
                     {
-                        MarkField();
+                        FieldDeMarkOld();
                         selectedField.x++;
-                        MarkField();
+                        FieldMark();
                     }
-
                     break;
 
                 case ConsoleKey.Enter:
@@ -125,9 +120,13 @@ namespace GameOfLife
                             ButtonStates.MarkAndLiving => fieldButtons[selectedField.x, selectedField.y].State =
                                 ButtonStates.MarkAndDead,
                             ButtonStates.MarkAndDead => fieldButtons[selectedField.x, selectedField.y].State =
-                                ButtonStates.MarkAndLiving
+                                ButtonStates.MarkAndLiving,
+                            _ => fieldButtons[selectedField.x, selectedField.y].State =
+                                ButtonStates.Hidden
                         };
                     needsRedraw.Add(fieldButtons[selectedField.x, selectedField.y]);
+                    saveGameLogic.FieldFalse[selectedField.x, selectedField.y] =
+                        !saveGameLogic.FieldFalse[selectedField.x, selectedField.y];
                     break;
 
                 case ConsoleKey.S:
@@ -144,7 +143,26 @@ namespace GameOfLife
             Console.ResetColor();
         }
 
-        private void MarkField()
+        /// <summary>
+        /// Setzt Ausgangsfeld auf unmarkierten Zustand zurück
+        /// </summary>
+        private void FieldDeMarkOld()
+        {
+            if (fieldButtons[selectedField.x, selectedField.y].State == ButtonStates.MarkAndLiving)
+            {
+                fieldButtons[selectedField.x, selectedField.y].State = ButtonStates.Living;
+            }
+            else if (fieldButtons[selectedField.x, selectedField.y].State == ButtonStates.MarkAndDead)
+            {
+                fieldButtons[selectedField.x, selectedField.y].State = ButtonStates.Dead;
+            }
+            needsRedraw.Add(fieldButtons[selectedField.x, selectedField.y]);
+        }
+
+        /// <summary>
+        /// Setzt gewähltes Feld auf markierten Zustand
+        /// </summary>
+        private void FieldMark()
         {
             if (fieldButtons[selectedField.x, selectedField.y].State == ButtonStates.Living)
             {
@@ -153,14 +171,6 @@ namespace GameOfLife
             else if (fieldButtons[selectedField.x, selectedField.y].State == ButtonStates.Dead)
             {
                 fieldButtons[selectedField.x, selectedField.y].State = ButtonStates.MarkAndDead;
-            }
-            else if (fieldButtons[selectedField.x, selectedField.y].State == ButtonStates.MarkAndLiving)
-            {
-                fieldButtons[selectedField.x, selectedField.y].State = ButtonStates.Living;
-            }
-            else if (fieldButtons[selectedField.x, selectedField.y].State == ButtonStates.MarkAndDead)
-            {
-                fieldButtons[selectedField.x, selectedField.y].State = ButtonStates.Dead;
             }
 
             needsRedraw.Add(fieldButtons[selectedField.x, selectedField.y]);

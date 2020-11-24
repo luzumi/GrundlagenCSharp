@@ -7,15 +7,21 @@ namespace GameOfLife
     class Game : Scene
     {
         readonly GameLogic logic;
+        private string item;
 
         public Game()
         {
-            logic = new GameLogic((Intro.size));
+            logic = new GameLogic((GameLogic.size));
         }
 
         public Game(GameLogic pLogic)
         {
             logic = pLogic;
+        }
+
+        public Game(string item)
+        {
+            this.item = item;
         }
 
         public override void Update()
