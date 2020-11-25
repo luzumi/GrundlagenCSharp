@@ -7,86 +7,107 @@ namespace GameOfLife
 {
     class Intro : Scene
     {
-        
+        bool needsRedraw = true;
         private List<string> LogoLines { get; set; }
 
-        public override void Update()
+        public Intro()
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.CursorVisible = false;
-
             LogoLines = new List<string>();
-            LogoLines = PrintLogo();
-
-            Console.SetCursorPosition(33, 28);
-            Console.WriteLine("Press 'ESC' to abort the Program");
-
-            Console.SetCursorPosition(27, 15);
-            Console.WriteLine("Wie Gross soll das Spielfeld denn sein?");
-
-            Console.SetCursorPosition(GameLogic.size.x == 0 ? 31 : 51,  17);
-            Console.Write(GameLogic.size.x == 0 ? "Horizontal: " : "Vertikal: ");
-
-            //ArrayGröße abfragen
-            if (Console.KeyAvailable && GameLogic.size.y == 0)
-            {
-                if (GameLogic.size.x == 0)
-                {
-                    Int32.TryParse(Console.ReadLine(), out int resultx);
-                    {
-                        GameLogic.size.x = resultx;
-                    }
-                }
-                else
-                {
-                    Int32.TryParse(Console.ReadLine(), out int resulty);
-                    {
-                        GameLogic.size.y = resulty;
-
-                        Console.SetCursorPosition(37, 23);
-                        Console.WriteLine("Press [Enter] to Continue");
-                    }
-                }
-            }
-
-            if (Console.KeyAvailable && GameLogic.size.y != 0)
-            {
-                if (Console.ReadKey().Key == ConsoleKey.Enter)
-                {
-                    Program.Scenes.Pop();
-                    Program.Scenes.Push(new MainMenue());
-                    
-                    Console.Clear();
-                }
-            }
-            //TODO: animations
-
-        }
-
-        public override void Activate()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public List<string> PrintLogo()
-        {
-            Console.SetCursorPosition(0, 2);
             using (StreamReader reader = new StreamReader("LogoSmall.txt"))
             {
                 string newLine;
                 while ((newLine = reader.ReadLine()) != null)
                 {
-                    LogoLines.Add(newLine + "\n");
+                    LogoLines.Add(newLine);
                 }
-                for (int row = 0; row < LogoLines.Count; row++)
+            }
+        }
+
+
+        public override void Update()
+        {
+            if (needsRedraw)
+            {
+                int row = 0;
+                for (; row < LogoLines.Count; row++)
                 {
                     Console.SetCursorPosition(Console.WindowWidth / 2 - LogoLines[row].Length / 2, 2 + row);
                     Console.Write(LogoLines[row]);
                 }
+
+                string anyKey = "< press any key >";
+                row += 2;
+                Console.SetCursorPosition(Console.WindowWidth / 2 - anyKey.Length / 2, 2 + row);
+                Console.Write(anyKey);
+
+                needsRedraw = false;
             }
 
-            return LogoLines;
+            if (Console.KeyAvailable) // prüft nur ob eine taste gerade unten ist, diese wird nicht aus liste der gedrückten tasten entfernt.
+            {
+                Console.ReadKey(true); // ohne readkey bleibt die gedrückte taste erhalten und das Hauptmenu reagiert bereits darauf.
+                Program.SceneRemove();
+                Program.SceneAdd(new MainMenue());
+            }
         }
+
+
+        public override void Activate()
+        {
+            Console.Clear();
+            needsRedraw = true;
+        }
+       
+        
+        //public override void Update()
+        //{
+        //    Console.ForegroundColor = ConsoleColor.DarkYellow;
+        //    Console.CursorVisible = false;
+
+        //    LogoLines = new List<string>();
+        //    LogoLines = PrintLogo();
+
+        //    Console.SetCursorPosition(33, 28);
+        //    Console.WriteLine("Press 'ESC' to abort the Program");
+
+        //    Console.SetCursorPosition(27, 15);
+        //    Console.WriteLine("Wie Gross soll das Spielfeld denn sein?");
+
+        //    Console.SetCursorPosition(GameLogic.size.x == 0 ? 31 : 51,  17);
+        //    Console.Write(GameLogic.size.x == 0 ? "Horizontal: " : "Vertikal: ");
+
+        //    //ArrayGröße abfragen
+        //    if (Console.KeyAvailable && GameLogic.size.y == 0)
+        //    {
+        //        if (GameLogic.size.x == 0)
+        //        {
+        //            Int32.TryParse(Console.ReadLine(), out int resultx);
+        //            {
+        //                GameLogic.size.x = resultx;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Int32.TryParse(Console.ReadLine(), out int resulty);
+        //            {
+        //                GameLogic.size.y = resulty;
+
+        //                Console.SetCursorPosition(37, 23);
+        //                Console.WriteLine("Press [Enter] to Continue");
+        //            }
+        //        }
+        //    }
+
+        //    if (Console.KeyAvailable && GameLogic.size.y != 0)
+        //    {
+        //        if (Console.ReadKey().Key == ConsoleKey.Enter)
+        //        {
+        //            Program.SceneRemove();
+        //            Program.SceneAdd(new MainMenue());
+        //        }
+        //    }
+        //    //TODO: animations
+
+        //}
     }
 }

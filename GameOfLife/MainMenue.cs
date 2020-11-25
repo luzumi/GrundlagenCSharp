@@ -12,11 +12,12 @@ namespace GameOfLife
     {
         public List<string> LogoLines { get; set; }
         readonly List<Label> labels;
-        readonly List<IDrawable> needsRedraw;
-        readonly List<Button> inactiveButtons;
-        private sbyte activeButton;
 
-        List<Button> menuButtons;
+        void EventNewGame()
+        {
+            Program.SceneAdd(new Game());
+        }
+
 
         byte activeButtonID = 0;
 
@@ -25,27 +26,20 @@ namespace GameOfLife
 
         public MainMenue()
         {
-            Console.ResetColor();
-            Console.Clear();
-
-            menuButtons = new List<Button>
+        
+            byte row = 12;
+            buttons = new List<Button>
             {
-                new Button(10, true, "Random Game"),
-                new Button(12, true, "Predefined Game"),
-                new Button(14, true, "Load Game"),
-                new Button(16, true, "Quit Game")
+                new Button(row, true, "Random Game", () => Program.SceneAdd(new Game())),
+                new Button(row += 2, true, "Create a Game", () => Program.SceneAdd(new Editor())),
+                new Button(row += 2, true, "Load Game", () => Program.SceneAdd(new LoadGame())),
+                new Button(row += 2, true, "Quit Game", () => Program.running = false)
             };
 
-            menuButtons[2].State = ButtonStates.Inactive;
-
-            needsRedraw = new List<IDrawable>(menuButtons);
             labels = new List<Label>();
 
-            Console.SetCursorPosition(0, 2);
-
             PrintLogo();
-
-            ActiveButtonID = 0;
+            this.Activate();
         }
 
         public void PrintLogo()
@@ -57,7 +51,7 @@ namespace GameOfLife
                 string newLine;
                 while ((newLine = reader.ReadLine()) != null)
                 {
-                    LogoLines.Add(newLine + "\n");
+                    LogoLines.Add(newLine);
                 }
 
                 labels.Add(new Label(1, true, LogoLines));
@@ -67,21 +61,6 @@ namespace GameOfLife
 
         public override void Update()
         {
-            foreach (var item in needsRedraw)
-            {
-                item.Draw();
-            }
-
-            needsRedraw.Clear();
-
-            int row = 0;
-            Console.ResetColor();
-            for (; row < LogoLines.Count; row++)
-            {
-                Console.SetCursorPosition(Console.WindowWidth / 2 - LogoLines[row].Length / 2, 2 + row);
-                Console.Write(LogoLines[row]);
-            }
-
             if (Console.KeyAvailable)
             {
                 switch (Console.ReadKey(true).Key)
@@ -93,81 +72,78 @@ namespace GameOfLife
                         ActiveButtonID++;
                         break;
                     case ConsoleKey.Escape:
-                        Program.Scenes.Pop();
+                        Program.SceneRemove();
                         break;
                     case ConsoleKey.Enter:
-                        ClearScreen();
-                        switch (ActiveButtonID)
-                        {
-                            case 0:
-                                Program.Scenes.Push(new Game());
-                                break;
-                            case 1:
-                                Program.Scenes.Push(new Editor());
-                                break;
-                            case 2:
-                                Program.Scenes.Push(new LoadGame());
-                                break;
-                            case 3:
-                                Program.Scenes.Pop();
-                                Program.running = false;
-                                break;
-                        }
-
-                        // Todo: switch for buttonID to react to user choice
+                        buttons[ActiveButtonID].Execute();
+                        // Todo: switch for buttonID to react to user choice or delegate!
                         break;
                 }
             }
-        } 
+        }
+
+
+        //public void UpdateAlt()
+        //{
+        //    foreach (var item in needsRedraw)
+        //    {
+        //        item.Draw();
+        //    }
+
+        //    needsRedraw.Clear();
+
+        //    int row = 0;
+        //    Console.ResetColor();
+        //    for (; row < LogoLines.Count; row++)
+        //    {
+        //        Console.SetCursorPosition(Console.WindowWidth / 2 - LogoLines[row].Length / 2, 2 + row);
+        //        Console.Write(LogoLines[row]);
+        //    }
+
+        //    if (Console.KeyAvailable)
+        //    {
+        //        switch (Console.ReadKey(true).Key)
+        //        {
+        //            case ConsoleKey.UpArrow:
+        //                ActiveButtonID--;
+        //                break;
+        //            case ConsoleKey.DownArrow:
+        //                ActiveButtonID++;
+        //                break;
+        //            case ConsoleKey.Escape:
+        //                Program.Scenes.Pop();
+        //                break;
+        //            case ConsoleKey.Enter:
+        //                ClearScreen();
+        //                switch (ActiveButtonID)
+        //                {
+        //                    case 0:
+        //                        Program.Scenes.Push(new Game());
+        //                        break;
+        //                    case 1:
+        //                        Program.Scenes.Push(new Editor());
+        //                        break;
+        //                    case 2:
+        //                        Program.Scenes.Push(new LoadGame());
+        //                        break;
+        //                    case 3:
+        //                        Program.Scenes.Pop();
+        //                        Program.running = false;
+        //                        break;
+        //                }
+        //                break;
+        //        }
+        //    }
+        //}
 
         public override void Activate()
         {
             Console.ResetColor();
             Console.Clear();
-            needsRedraw.AddRange(inactiveButtons);
-            needsRedraw.AddRange(menuButtons);
-            needsRedraw.AddRange(labels);
+            Program.NeedsRedraw.AddRange(buttons);
+            Program.NeedsRedraw.AddRange(labels);
         }
 
-        public static void drawButtons(byte IdActiveButton, List<MenuButton> buttons)
-        {
-            for (int counter = 0; counter < buttons.Count; counter++)
-            {
-                Console.SetCursorPosition(37, 16 + 2 * counter);
-
-                if (counter == IdActiveButton)
-                {
-                    // ausgewählter button
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.Write(" -> " + buttons[counter].MenueText);
-                    Console.ResetColor();
-                }
-                else
-                {
-                    // nicht ausgewählt
-                    Console.Write("    " + buttons[counter].MenueText);
-                }
-            }
-        }
-
-        public void GetInput(ConsoleKey pConsoleKey)
-        {
-            switch (pConsoleKey)
-            {
-                case ConsoleKey.UpArrow:
-                    if (activeButtonID > 0)
-                        activeButtonID--;
-                    break;
-                case ConsoleKey.DownArrow:
-                    if (activeButtonID < menuButtons.Count - 1)
-                        activeButtonID++;
-                    break;
-                case ConsoleKey.Enter:
-                    SelectScene();
-                    break;
-            }
-        }
 
         private void SelectScene()
         {
@@ -194,6 +170,7 @@ namespace GameOfLife
                     break;
             }
         }
+
 
         private void ClearScreen()
         {
@@ -241,29 +218,6 @@ namespace GameOfLife
             }
 
             Console.Clear();
-        }
-
-
-        public sbyte ActiveButtonID
-        {
-            get { return activeButton; }
-            set
-            {
-                menuButtons[activeButton].State = ButtonStates.Available;
-                needsRedraw.Add(menuButtons[activeButton]);
-                activeButton = value;
-                if (activeButton < 0)
-                {
-                    activeButton = (sbyte)(menuButtons.Count - 1);
-                }
-                else if (activeButton == menuButtons.Count)
-                {
-                    activeButton = 0;
-                }
-
-                menuButtons[activeButton].State = ButtonStates.Selected;
-                needsRedraw.Add(menuButtons[activeButton]);
-            }
         }
     }
 }

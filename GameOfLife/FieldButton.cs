@@ -52,7 +52,7 @@ namespace GameOfLife
         {
             Console.SetCursorPosition(mark.column, mark.row);
             Console.BackgroundColor = currentBackground;
-            Console.ForegroundColor = currentForeground;
+            Console.ForegroundColor = currentForeground = ConsoleColor.DarkCyan;
             Console.Write(" ");
         }
     }

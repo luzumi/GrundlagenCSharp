@@ -6,12 +6,17 @@ namespace GameOfLife
     class Button : IDrawable
     {
         readonly string buttonText;
+        readonly byte posX = 2;
         readonly byte posY;
-        readonly ConsoleColor colorSelected;
-        readonly ConsoleColor colorUnSelected;
-        readonly ConsoleColor colorActive;
-        readonly ConsoleColor colorInactive;
-        ConsoleColor currentForeground;
+        ConsoleColor colorSelected;
+        ConsoleColor colorUnSelected;
+        ConsoleColor colorActive;
+        ConsoleColor colorInactive;
+        ConsoleColor living;
+        ConsoleColor dead;
+        ConsoleColor markAndLiving;
+        ConsoleColor markAndDead;
+        ConsoleColor currentForeground = ConsoleColor.DarkYellow;
         ConsoleColor currentBackground;
         readonly bool center;
         private readonly Action method;
@@ -38,41 +43,81 @@ namespace GameOfLife
                         currentBackground = colorUnSelected;
                         currentForeground = colorInactive;
                         break;
+                    case ButtonStates.Dead:
+                        currentBackground = dead;
+                        break;
+                    case ButtonStates.Living:
+                        currentBackground = living;
+                        break;
+                    case ButtonStates.MarkAndLiving:
+                        currentBackground = markAndLiving;
+                        break;
+                    case ButtonStates.MarkAndDead:
+                        currentBackground = markAndDead;
+                        break;
                 }
             }
         }
 
+
         public void Draw()
         {
-            Console.SetCursorPosition((center? Console.WindowWidth / 2 - buttonText.Length / 2: 2), 2 + posY);
+            Console.SetCursorPosition((center? Console.WindowWidth / 2 - buttonText.Length / 2: posX), 2 + posY);
             Console.BackgroundColor = currentBackground;
             Console.ForegroundColor = currentForeground;
-            Console.Write(buttonText);
+            Console.Write(" {0} ", buttonText);
         }
 
-        public Button(byte Row, bool Centered, string ButtonText)
-        {
-            posY = Row;
-            buttonText = ButtonText;
-            colorSelected = ConsoleColor.Gray;
-            colorUnSelected = ConsoleColor.Black;
-            colorActive = ConsoleColor.Green;
-            colorInactive = ConsoleColor.DarkGreen;
-            center = Centered;
-            states = ButtonStates.Available;
-        }
 
-        public Button(in byte pRow, bool pCentered, string pButtonText, Action pAction)
+        public Button(byte pRow, bool pCentered, string pButtonText)
         {
             posY = pRow;
             buttonText = pButtonText;
-            colorSelected = ConsoleColor.Gray;
-            colorUnSelected = ConsoleColor.Black;
-            colorActive = ConsoleColor.Green;
-            colorInactive = ConsoleColor.DarkGreen;
+            SetColors();
             center = pCentered;
             states = ButtonStates.Available;
-            method = pAction;
+
+        }
+
+
+        public Button(byte pColumn, byte pRow, bool pCentered, string pButtonText)
+        {
+            posX = pColumn;
+            posY = pRow;
+            buttonText = pButtonText;
+            SetColors();
+            center = pCentered;
+            states = ButtonStates.Available;
+        }
+
+
+        public Button(in byte pRow, bool pCentered, string pButtonText, Action pMethodToExecute)
+        {
+            posY = pRow;
+            buttonText = pButtonText;
+            SetColors();
+            center = pCentered;
+            states = ButtonStates.Available;
+            method = pMethodToExecute;
+        }
+
+
+        private void SetColors()
+        {
+            colorSelected = ConsoleColor.Gray;
+            colorUnSelected = ConsoleColor.Blue;
+            colorActive = ConsoleColor.Green;
+            colorInactive = ConsoleColor.DarkGreen;
+            living = ConsoleColor.Yellow;
+            dead = ConsoleColor.DarkRed;
+            markAndLiving = ConsoleColor.DarkYellow;
+            markAndDead = ConsoleColor.DarkGray;
+        }
+
+
+        public void Execute()
+        {
+            method();
         }
     }
 }

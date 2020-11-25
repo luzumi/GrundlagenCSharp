@@ -1,41 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace GameOfLife
 {
     class LoadGame : Scene
     {
-        private List<Button> buttons;
 
         public LoadGame()
         {
             string[] fileNames = Directory.GetFiles(@".\", "*.xml");
             buttons = new List<Button>();
             byte row = 4;
-            foreach (var item in fileNames)
+
+            foreach (var fileName in fileNames)
             {
-                new Button(row, false, item, () =>
-                {
-                    Program.RemoveScene();
-                    Program.AddScene(new Game(item));
-                };
+                buttons.Add(new Button(row += 2, false, fileName, () => { Program.SceneRemove(); Program.SceneAdd(new Game(fileName)); }));
             }
+
+            buttons.Add(new Button(row += 2, false, "Back", () => Program.SceneRemove()));
         }
 
         public override void Update()
         {
-            
+            if (Console.KeyAvailable)
+            {
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Escape:
+                        Program.SceneRemove();
+                        break;
+                    case ConsoleKey.Enter:
+                        buttons[ActiveButtonID].Execute();
+                        break;
+                    case ConsoleKey.UpArrow:
+                        ActiveButtonID--;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        ActiveButtonID++;
+                        break;
+                }
+            }
         }
 
         public override void Activate()
         {
-            Console.Clear();
             Console.ResetColor();
+            Console.Clear();
             Program.NeedsRedraw.AddRange(buttons);
         }
     }

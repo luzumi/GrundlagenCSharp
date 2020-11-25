@@ -8,19 +8,25 @@ namespace GameOfLife
 {
     class Label : IDrawable
     {
-        private byte row;
+        readonly byte posY;
         private bool centered;
         private List<string> text;
 
         public Label(byte Row, bool Centered, List<string> Text)
         {
-            row = Row;
+            posY = Row;
             centered = Centered;
             text = Text;
         }
 
         public void Draw()
         {
+            Console.ResetColor();
+            for (int row = 0; row < text.Count; row++)
+            {
+                Console.SetCursorPosition( (centered? Console.WindowWidth / 2 - text[row].Length / 2 : 2), posY + row);
+                Console.Write(text[row]);
+            }
         }
     }
 }

@@ -7,43 +7,110 @@ namespace GameOfLife
     class Game : Scene
     {
         readonly GameLogic logic;
-        private string item;
+        DateTime lastLogicUpdate;
+        readonly BoardLabel[,] boardLabels;
 
         public Game()
         {
-            logic = new GameLogic((GameLogic.size));
+            lastLogicUpdate = DateTime.Now;
+            logic = new GameLogic(GameLogic.size);
+
+            boardLabels = new BoardLabel[GameLogic.size.x, GameLogic.size.y];
+
+            int offset = Console.WindowWidth / 2 - boardLabels.GetLength(1);
+
+            for (int row = 0; row < boardLabels.GetLength(0); row++)
+            {
+                for (int col = 0; col < boardLabels.GetLength(1); col++)
+                {
+                    boardLabels[row, col] = new BoardLabel(row, offset + col * 2);
+                }
+            }
         }
 
         public Game(GameLogic pLogic)
         {
+            lastLogicUpdate = DateTime.Now;
             logic = pLogic;
+            boardLabels = new BoardLabel[GameLogic.size.x, GameLogic.size.y];
+            int offset = Console.WindowWidth / 2 - boardLabels.GetLength(1);
+
+            for (int row = 0; row < boardLabels.GetLength(0); row++)
+            {
+                for (int col = 0; col < boardLabels.GetLength(1); col++)
+                {
+                    boardLabels[row, col] = new BoardLabel(row, offset + col * 2);
+                }
+            }
         }
 
-        public Game(string item)
+        public Game(string pFileName)
         {
-            this.item = item;
+            lastLogicUpdate = DateTime.Now;
+            
+            logic = new GameLogic(GameLogic.size);
+
+            logic.LoadGame(pFileName);
+
+            boardLabels = new BoardLabel[GameLogic.size.x, GameLogic.size.y];
+
+            int offset = Console.WindowWidth / 2 - boardLabels.GetLength(1);
+
+            for (int row = 0; row < boardLabels.GetLength(0); row++)
+            {
+                for (int col = 0; col < boardLabels.GetLength(1); col++)
+                {
+                    boardLabels[row, col] = new BoardLabel(row, offset + col * 2);
+                }
+            }
         }
+
+        
 
         public override void Update()
         {
             Console.SetCursorPosition(0, 3);
             bool[,] arrayToDraw = logic.Field;
 
-            for (int row = 0; row < arrayToDraw.GetLength(1); row++)
+            for (int row = 0; row < arrayToDraw.GetLength(0); row++)
             {
-                for (int column = 0; column < arrayToDraw.GetLength(0); column++)
+                for (int column = 0; column < arrayToDraw.GetLength(1); column++)
                 {
-                    Console.Write("{0}", (arrayToDraw[column, row] ? "▒" : " "));
+                    boardLabels[row, column].Alive = arrayToDraw[row, column];
                 }
-
-                Console.WriteLine();
             }
-            logic.Update();
+
+            if (Console.KeyAvailable)
+            {
+                {
+                    switch (Console.ReadKey(true).Key)
+                    {
+                        case ConsoleKey.Escape:
+                            Program.SceneRemove();
+                            return;
+                        case ConsoleKey.S: // spiel speichern
+                            logic.SaveGame("GameA.xml");
+                            break;
+                    }
+                }
+            }
+
+            if ((DateTime.Now - lastLogicUpdate).TotalMilliseconds > 500)
+            {
+                lastLogicUpdate = DateTime.Now;
+                logic.Update();
+            }
         }
 
         public override void Activate()
         {
-            throw new NotImplementedException();
+            Console.ResetColor();
+            Console.Clear();
+            Console.Clear();
+            foreach (var item in boardLabels)
+            {
+                Program.NeedsRedraw.Add(item);
+            }
         }
     }
 }
