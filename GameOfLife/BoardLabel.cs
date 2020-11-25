@@ -6,7 +6,7 @@ namespace GameOfLife
     {
         readonly int Y;
         readonly int X;
-        public BoardLabel(int Row, int Col)
+        public BoardLabel(int Col, int Row)
         {
             Y = Row;
             X = Col;

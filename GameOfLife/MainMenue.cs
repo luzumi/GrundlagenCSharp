@@ -39,7 +39,7 @@ namespace GameOfLife
             labels = new List<Label>();
 
             PrintLogo();
-            this.Activate();
+            Activate();
         }
 
         public void PrintLogo()

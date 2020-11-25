@@ -15,15 +15,15 @@ namespace GameOfLife
             lastLogicUpdate = DateTime.Now;
             logic = new GameLogic(GameLogic.size);
 
-            boardLabels = new BoardLabel[GameLogic.size.x, GameLogic.size.y];
+            boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
 
-            int offset = Console.WindowWidth / 2 - boardLabels.GetLength(1);
+            
 
             for (int row = 0; row < boardLabels.GetLength(0); row++)
             {
                 for (int col = 0; col < boardLabels.GetLength(1); col++)
                 {
-                    boardLabels[row, col] = new BoardLabel(row, offset + col * 2);
+                    boardLabels[row, col] = new BoardLabel(row + 2, col );
                 }
             }
         }
@@ -32,14 +32,13 @@ namespace GameOfLife
         {
             lastLogicUpdate = DateTime.Now;
             logic = pLogic;
-            boardLabels = new BoardLabel[GameLogic.size.x, GameLogic.size.y];
-            int offset = Console.WindowWidth / 2 - boardLabels.GetLength(1);
+            boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
 
             for (int row = 0; row < boardLabels.GetLength(0); row++)
             {
                 for (int col = 0; col < boardLabels.GetLength(1); col++)
                 {
-                    boardLabels[row, col] = new BoardLabel(row, offset + col * 2);
+                    boardLabels[row, col] = new BoardLabel(row, col );
                 }
             }
         }
@@ -52,15 +51,14 @@ namespace GameOfLife
 
             logic.LoadGame(pFileName);
 
-            boardLabels = new BoardLabel[GameLogic.size.x, GameLogic.size.y];
+            boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
 
-            int offset = Console.WindowWidth / 2 - boardLabels.GetLength(1);
 
             for (int row = 0; row < boardLabels.GetLength(0); row++)
             {
                 for (int col = 0; col < boardLabels.GetLength(1); col++)
                 {
-                    boardLabels[row, col] = new BoardLabel(row, offset + col * 2);
+                    boardLabels[row, col] = new BoardLabel(row, col );
                 }
             }
         }
@@ -69,14 +67,13 @@ namespace GameOfLife
 
         public override void Update()
         {
-            Console.SetCursorPosition(0, 3);
             bool[,] arrayToDraw = logic.Field;
 
             for (int row = 0; row < arrayToDraw.GetLength(0); row++)
             {
-                for (int column = 0; column < arrayToDraw.GetLength(1); column++)
+                for (int col = 0; col < arrayToDraw.GetLength(1); col++)
                 {
-                    boardLabels[row, column].Alive = arrayToDraw[row, column];
+                    boardLabels[row, col].Alive = arrayToDraw[row, col];
                 }
             }
 
@@ -105,7 +102,6 @@ namespace GameOfLife
         public override void Activate()
         {
             Console.ResetColor();
-            Console.Clear();
             Console.Clear();
             foreach (var item in boardLabels)
             {

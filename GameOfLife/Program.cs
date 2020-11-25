@@ -43,18 +43,18 @@ namespace GameOfLife
             NewScene.Activate(); // Neue Szene aktivieren
         }
 
-        public static Scene SceneRemove()
+        public static void SceneRemove()
         {
             Scene temp = Scenes.Pop(); // Szene vom Szenenstapel entfernen
-            if (Scenes.Count > 0) // Nachschauen ob noch Szenen vorhanden sind
-                if (Scenes.Count > 0) // Nachschauen ob noch Szenen vorhanden sind
-                {
-                    {
-                        Scenes.Peek().Activate(); // falls noch eine Szene vorhanden ist diese Aktivieren.
-                    }
-                }
 
-            return temp;
+            if (Scenes.Count > 0) // Nachschauen ob noch Szenen vorhanden sind
+            {
+                {
+                    Scenes.Peek().Activate(); // falls noch eine Szene vorhanden ist diese Aktivieren.
+                }
+            }
+            Console.ResetColor();
+            Console.Clear();
         }
     }
 }

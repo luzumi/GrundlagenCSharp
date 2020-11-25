@@ -9,7 +9,6 @@ namespace GameOfLife
         readonly ConsoleColor dead;
         readonly ConsoleColor markAndLiving;
         readonly ConsoleColor markAndDead;
-        ConsoleColor currentForeground;
         ConsoleColor currentBackground;
         private ButtonStates states;
         protected (int column, int row) mark;
@@ -52,8 +51,8 @@ namespace GameOfLife
         {
             Console.SetCursorPosition(mark.column, mark.row);
             Console.BackgroundColor = currentBackground;
-            Console.ForegroundColor = currentForeground = ConsoleColor.DarkCyan;
-            Console.Write(" ");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("  ");
         }
     }
 }

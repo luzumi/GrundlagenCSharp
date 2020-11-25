@@ -8,6 +8,7 @@ namespace GameOfLife
     {
         protected List<Button> buttons;
         protected sbyte activeButton;
+        int offset = Console.WindowWidth / 2 - GameLogic.size.row;
 
         public sbyte ActiveButtonID
         {

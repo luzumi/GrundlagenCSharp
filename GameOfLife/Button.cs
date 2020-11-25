@@ -65,7 +65,7 @@ namespace GameOfLife
             Console.SetCursorPosition((center? Console.WindowWidth / 2 - buttonText.Length / 2: posX), 2 + posY);
             Console.BackgroundColor = currentBackground;
             Console.ForegroundColor = currentForeground;
-            Console.Write(" {0} ", buttonText);
+            Console.Write("{0}", buttonText);
         }
 
 
@@ -80,7 +80,7 @@ namespace GameOfLife
         }
 
 
-        public Button(byte pColumn, byte pRow, bool pCentered, string pButtonText)
+        public Button(byte pRow, byte pColumn, bool pCentered, string pButtonText)
         {
             posX = pColumn;
             posY = pRow;
@@ -91,7 +91,7 @@ namespace GameOfLife
         }
 
 
-        public Button(in byte pRow, bool pCentered, string pButtonText, Action pMethodToExecute)
+        public Button(byte pRow, bool pCentered, string pButtonText, Action pMethodToExecute)
         {
             posY = pRow;
             buttonText = pButtonText;
