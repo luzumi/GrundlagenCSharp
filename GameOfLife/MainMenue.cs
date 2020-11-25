@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -15,7 +13,7 @@ namespace GameOfLife
 
         void EventNewGame()
         {
-            Program.SceneAdd(new Game());
+            Program.SceneAdd(new Game(0));
         }
 
 
@@ -30,7 +28,7 @@ namespace GameOfLife
             byte row = 12;
             buttons = new List<Button>
             {
-                new Button(row, true, "Random Game", () => Program.SceneAdd(new Game())),
+                new Button(row, true, "Random Game", () => Program.SceneAdd(new Game(rand.Next(1,3)))),
                 new Button(row += 2, true, "Create a Game", () => Program.SceneAdd(new Editor())),
                 new Button(row += 2, true, "Load Game", () => Program.SceneAdd(new LoadGame())),
                 new Button(row += 2, true, "Quit Game", () => Program.running = false)
@@ -151,7 +149,7 @@ namespace GameOfLife
             {
                 case 0:
                     ClearScreen();
-                    Program.Scenes.Push(new Game());
+                    Program.Scenes.Push(new Game(0));
                     Program.Scenes.Peek().Update();
                     Thread.Sleep(300); //TODO: sleep ersetzen
                     break;
@@ -183,7 +181,6 @@ namespace GameOfLife
 
             while (!ready)
             {
-                string temp = "";
                 for (int row = 0; row < LogoLines[0].Length * LogoLines.Count; row += rand.Next(0, 3))
                 {
                     if (backup[row] != ' ' && backup[row] != '\n')
@@ -194,9 +191,8 @@ namespace GameOfLife
 
                 for (int j = 0; j < LogoLines.Count; j++)
                 {
-                    temp = backup.ToString().Substring(89 * j, 89);
                     Console.SetCursorPosition(Console.WindowWidth / 2 - LogoLines[0].Length / 2, 2 + j);
-                    Console.Write(temp);
+                    Console.Write(backup.ToString().Substring(89 * j, 89));
                 }
 
                 Thread.Sleep(100); //TODO: Sleep ersetzen

@@ -13,7 +13,7 @@ namespace GameOfLife
 {
     class GameLogic
     {
-        public static (int col, int row) size = (70, 40);
+        public static (int col, int row) size = (70, 37);
         private bool[,] _fieldTrue;
         private bool[,] _fieldFalse;
         private bool _fieldToRead;
@@ -32,14 +32,7 @@ namespace GameOfLife
         }
 
 
-        public GameLogic((int col, int row) pSize)
-        {
-            _fieldTrue = new bool[pSize.row, pSize.col];
-            _fieldFalse = new bool[pSize.row, pSize.col];
-            _fieldToRead = false;
-            puffer = new bool[_fieldFalse.GetLength(0), _fieldFalse.GetLength(1)];
-            Reset(0);
-        }
+        
 
         public GameLogic(int template)
         {
@@ -63,53 +56,22 @@ namespace GameOfLife
                 for (int col = 0; col < Field.GetLength(1); col++)
                 {
                     Field[row, col] = false; //(rand.NextDouble() > 0.9);
+                    
                 }
             }
 
-            GosperGliderGun();
+            if (pChoice == 1)
+            {
+                GosperGliderGun();
+            }
+
+            if (pChoice == 2)
+            {
+                Window();
+            }
         }
 
         #region FensterMuster-Vorlage
-
-        public void GosperGliderGun(bool[,] pField)
-        {
-            pField[25, 16] = true;
-            pField[25, 17] = true;
-            pField[35, 13] = true;
-            pField[35, 14] = true;
-            pField[36, 13] = true;
-            pField[36, 14] = true;
-            pField[22, 15] = true;
-            pField[23, 12] = true;
-            pField[23, 16] = true;
-            pField[25, 11] = true;
-            pField[25, 12] = true;
-            pField[21, 13] = true;
-            pField[21, 14] = true;
-            pField[21, 15] = true;
-            pField[22, 13] = true;
-            pField[22, 14] = true;
-            pField[1, 15] = true;
-            pField[2, 15] = true;
-            pField[1, 16] = true;
-            pField[2, 16] = true;
-            pField[11, 15] = true;
-            pField[11, 16] = true;
-            pField[11, 17] = true;
-            pField[12, 14] = true;
-            pField[13, 13] = true;
-            pField[14, 13] = true;
-            pField[12, 18] = true;
-            pField[13, 19] = true;
-            pField[14, 19] = true;
-            pField[15, 16] = true;
-            pField[16, 14] = true;
-            pField[17, 15] = true;
-            pField[17, 16] = true;
-            pField[17, 17] = true;
-            pField[18, 16] = true;
-            pField[16, 18] = true;
-        }
 
         public void GosperGliderGun()
         {
@@ -151,147 +113,147 @@ namespace GameOfLife
             Field[16, 18] = true;
         }
 
-        public void Window(bool[,] pField)
+        public void Window()
         {
-            pField[15, 11] = true;
+            Field[15, 11] = true;
 
-            pField[15, 12] = true;
+            Field[15, 12] = true;
 
-            pField[15, 13] = true;
+            Field[15, 13] = true;
 
-            pField[15, 14] = true;
+            Field[15, 14] = true;
 
-            pField[15, 15] = true;
+            Field[15, 15] = true;
 
-            pField[15, 16] = true;
+            Field[15, 16] = true;
 
-            pField[15, 17] = true;
+            Field[15, 17] = true;
 
-            pField[15, 18] = true;
+            Field[15, 18] = true;
 
-            pField[15, 19] = true;
+            Field[15, 19] = true;
 
-            pField[15, 20] = true;
+            Field[15, 20] = true;
 
-            pField[15, 21] = true;
+            Field[15, 21] = true;
 
-            pField[15, 22] = true;
+            Field[15, 22] = true;
 
-            pField[15, 23] = true;
+            Field[15, 23] = true;
 
-            pField[20, 11] = true;
+            Field[20, 11] = true;
 
-            pField[20, 12] = true;
+            Field[20, 12] = true;
 
-            pField[20, 13] = true;
+            Field[20, 13] = true;
 
-            pField[20, 14] = true;
+            Field[20, 14] = true;
 
-            pField[20, 15] = true;
+            Field[20, 15] = true;
 
-            pField[20, 16] = true;
+            Field[20, 16] = true;
 
-            pField[20, 17] = true;
+            Field[20, 17] = true;
 
-            pField[20, 18] = true;
+            Field[20, 18] = true;
 
-            pField[20, 19] = true;
+            Field[20, 19] = true;
 
-            pField[20, 20] = true;
+            Field[20, 20] = true;
 
-            pField[20, 21] = true;
+            Field[20, 21] = true;
 
-            pField[20, 22] = true;
+            Field[20, 22] = true;
 
-            pField[20, 23] = true;
+            Field[20, 23] = true;
 
-            pField[25, 11] = true;
+            Field[25, 11] = true;
 
-            pField[25, 12] = true;
+            Field[25, 12] = true;
 
-            pField[25, 13] = true;
+            Field[25, 13] = true;
 
-            pField[25, 14] = true;
+            Field[25, 14] = true;
 
-            pField[25, 15] = true;
+            Field[25, 15] = true;
 
-            pField[25, 16] = true;
+            Field[25, 16] = true;
 
-            pField[25, 17] = true;
+            Field[25, 17] = true;
 
-            pField[25, 18] = true;
+            Field[25, 18] = true;
 
-            pField[25, 19] = true;
+            Field[25, 19] = true;
 
-            pField[25, 20] = true;
+            Field[25, 20] = true;
 
-            pField[25, 21] = true;
+            Field[25, 21] = true;
 
-            pField[25, 22] = true;
+            Field[25, 22] = true;
 
-            pField[25, 23] = true;
+            Field[25, 23] = true;
 
-            pField[16, 11] = true;
+            Field[16, 11] = true;
 
-            pField[17, 11] = true;
+            Field[17, 11] = true;
 
-            pField[18, 11] = true;
+            Field[18, 11] = true;
 
-            pField[19, 11] = true;
+            Field[19, 11] = true;
 
-            pField[20, 11] = true;
+            Field[20, 11] = true;
 
-            pField[21, 11] = true;
+            Field[21, 11] = true;
 
-            pField[22, 11] = true;
+            Field[22, 11] = true;
 
-            pField[23, 11] = true;
+            Field[23, 11] = true;
 
-            pField[24, 11] = true;
+            Field[24, 11] = true;
 
-            pField[25, 11] = true;
+            Field[25, 11] = true;
 
-            pField[25, 11] = true;
+            Field[25, 11] = true;
 
-            pField[16, 17] = true;
+            Field[16, 17] = true;
 
-            pField[17, 17] = true;
+            Field[17, 17] = true;
 
-            pField[18, 17] = true;
+            Field[18, 17] = true;
 
-            pField[19, 17] = true;
+            Field[19, 17] = true;
 
-            pField[20, 17] = true;
+            Field[20, 17] = true;
 
-            pField[21, 17] = true;
+            Field[21, 17] = true;
 
-            pField[22, 17] = true;
+            Field[22, 17] = true;
 
-            pField[23, 17] = true;
+            Field[23, 17] = true;
 
-            pField[24, 17] = true;
+            Field[24, 17] = true;
 
-            pField[25, 17] = true;
+            Field[25, 17] = true;
 
-            pField[16, 23] = true;
+            Field[16, 23] = true;
 
-            pField[17, 23] = true;
+            Field[17, 23] = true;
 
-            pField[18, 23] = true;
+            Field[18, 23] = true;
 
-            pField[19, 23] = true;
+            Field[19, 23] = true;
 
-            pField[20, 23] = true;
+            Field[20, 23] = true;
 
-            pField[21, 23] = true;
+            Field[21, 23] = true;
 
-            pField[22, 23] = true;
+            Field[22, 23] = true;
 
-            pField[23, 23] = true;
+            Field[23, 23] = true;
 
-            pField[24, 23] = true;
+            Field[24, 23] = true;
 
-            pField[25, 23] = true;
+            Field[25, 23] = true;
         }
 
         #endregion
@@ -347,13 +309,13 @@ namespace GameOfLife
             }
 
             sg.Field = convertedField;
-            sg.fileName = pFileName + DateTime.Now.ToString();
+            sg.fileName = (pFileName + DateTime.Now).Replace('.', '_').Replace(':', '-');
 
             XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));
 
-            using (Stream file = new FileStream(pFileName, FileMode.Create, FileAccess.Write))
+            using (Stream file = new FileStream(sg.fileName  + ".xml", FileMode.Create, FileAccess.Write))
             {
-                serializer.Serialize(file, sg);
+                serializer.Serialize(file , sg);
                 
             }
 

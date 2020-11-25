@@ -23,52 +23,7 @@ namespace GameOfLife
 
         private ButtonStates states;
 
-        public ButtonStates State
-        {
-            get { return states; }
-            set
-            {
-                states = value;
-                switch (states)
-                {
-                    case ButtonStates.Selected:
-                        currentBackground = colorSelected;
-                        currentForeground = colorActive;
-                        break;
-                    case ButtonStates.Available:
-                        currentBackground = colorUnSelected;
-                        currentForeground = colorActive;
-                        break;
-                    case ButtonStates.Inactive:
-                        currentBackground = colorUnSelected;
-                        currentForeground = colorInactive;
-                        break;
-                    case ButtonStates.Dead:
-                        currentBackground = dead;
-                        break;
-                    case ButtonStates.Living:
-                        currentBackground = living;
-                        break;
-                    case ButtonStates.MarkAndLiving:
-                        currentBackground = markAndLiving;
-                        break;
-                    case ButtonStates.MarkAndDead:
-                        currentBackground = markAndDead;
-                        break;
-                }
-            }
-        }
-
-
-        public void Draw()
-        {
-            Console.SetCursorPosition((center? Console.WindowWidth / 2 - buttonText.Length / 2: posX), 2 + posY);
-            Console.BackgroundColor = currentBackground;
-            Console.ForegroundColor = currentForeground;
-            Console.Write("{0}", buttonText);
-        }
-
-
+        
         public Button(byte pRow, bool pCentered, string pButtonText)
         {
             posY = pRow;
@@ -117,7 +72,54 @@ namespace GameOfLife
 
         public void Execute()
         {
+            Console.Clear();
             method();
+        }
+
+
+        public ButtonStates State
+        {
+            get { return states; }
+            set
+            {
+                states = value;
+                switch (states)
+                {
+                    case ButtonStates.Selected:
+                        currentBackground = colorSelected;
+                        currentForeground = colorActive;
+                        break;
+                    case ButtonStates.Available:
+                        currentBackground = colorUnSelected;
+                        currentForeground = colorActive;
+                        break;
+                    case ButtonStates.Inactive:
+                        currentBackground = colorUnSelected;
+                        currentForeground = colorInactive;
+                        break;
+                    case ButtonStates.Dead:
+                        currentBackground = dead;
+                        break;
+                    case ButtonStates.Living:
+                        currentBackground = living;
+                        break;
+                    case ButtonStates.MarkAndLiving:
+                        currentBackground = markAndLiving;
+                        break;
+                    case ButtonStates.MarkAndDead:
+                        currentBackground = markAndDead;
+                        break;
+                }
+            }
+        }
+
+
+        public void Draw()
+        {
+            Console.SetCursorPosition((center? Console.WindowWidth / 2 - buttonText.Length / 2: posX), posY);
+            Console.BackgroundColor = currentBackground;
+            Console.ForegroundColor = currentForeground;
+            Console.Write("{0}", buttonText);
         }
     }
 }

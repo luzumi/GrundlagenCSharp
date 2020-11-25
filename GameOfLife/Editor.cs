@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace GameOfLife
 {
@@ -8,22 +7,21 @@ namespace GameOfLife
         private readonly GameLogic _saveGameLogic;
         private readonly Button[,] _fieldButtons;
         private (byte x, byte y) _selectedField;
-        readonly List<IDrawable> _needsRedraw;
 
 
         public Editor()
         {
-            _saveGameLogic = new GameLogic(GameLogic.size);
+            _saveGameLogic = new GameLogic(0);
             _fieldButtons = new Button[GameLogic.size.row, GameLogic.size.col];
-            _needsRedraw = new List<IDrawable>();
+            
 
             for (int row = 0; row < GameLogic.size.row; row++)
             {
                 for (int col = 0; col < GameLogic.size.col; col++)
                 {
                     _fieldButtons[row, col] =
-                        new Button((byte)row, (byte)col, false, "  ") {State = ButtonStates.Dead};
-                    _needsRedraw.Add(_fieldButtons[row, col]);
+                        new Button((byte)row, (byte)(offset + col), false, "  ") {State = ButtonStates.Dead};
+                    Program.NeedsRedraw.Add(_fieldButtons[row, col]);
                 }
             }
         }
@@ -33,14 +31,14 @@ namespace GameOfLife
         /// </summary>
         public override void Update()
         {
-            if (_needsRedraw.Count > 0)
+            if (Program.NeedsRedraw.Count > 0)
             {
-                foreach (var item in _needsRedraw)
+                foreach (var item in Program.NeedsRedraw)
                 {
                     item.Draw();
                 }
 
-                _needsRedraw.Clear();
+                Program.NeedsRedraw.Clear();
             }
 
             if (Console.KeyAvailable)
@@ -55,7 +53,7 @@ namespace GameOfLife
             Console.Clear();
             foreach (Button button in _fieldButtons)
             {
-                _needsRedraw.Add(button);
+                Program.NeedsRedraw.Add(button);
             }
         }
 
@@ -84,7 +82,7 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.DownArrow:
-                    if (_selectedField.y < GameLogic.size.row - 1)
+                    if (_selectedField.y < GameLogic.size.row - 2)
                     {
                         FieldDeMarkOld();
                         _selectedField.y++;
@@ -97,17 +95,17 @@ namespace GameOfLife
                     if (_selectedField.x > 0)
                     {
                         FieldDeMarkOld();
-                        _selectedField.x--;
+                        _selectedField.x-=2;
                         FieldMark();
                     }
 
                     break;
 
                 case ConsoleKey.RightArrow:
-                    if (_selectedField.x < GameLogic.size.col - 1)
+                    if (_selectedField.x < GameLogic.size.col - 2)
                     {
                         FieldDeMarkOld();
-                        _selectedField.x++;
+                        _selectedField.x+=2;
                         FieldMark();
                     }
 
@@ -118,13 +116,13 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.S:
-                    _saveGameLogic.SaveGame("SaveGame_.xml");
-                    Program.Scenes.Pop();
-                    Program.Scenes.Push(new Game(_saveGameLogic));
+                    _saveGameLogic.SaveGame("SaveGame_");
+                    Program.SceneRemove();
+                    Program.SceneAdd(new Game(_saveGameLogic));
                     break;
 
                 case ConsoleKey.Escape:
-                    Program.Scenes.Pop();
+                    Program.SceneRemove();
                     break;
             }
 
@@ -147,7 +145,7 @@ namespace GameOfLife
                     _ => _fieldButtons[_selectedField.y, _selectedField.x].State =
                         ButtonStates.Hidden
                 };
-            _needsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
+            Program.NeedsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
             _saveGameLogic.FieldFalse[_selectedField.y, _selectedField.x] =
                 !_saveGameLogic.FieldFalse[_selectedField.y, _selectedField.y];
         }
@@ -166,7 +164,7 @@ namespace GameOfLife
                 _fieldButtons[_selectedField.y, _selectedField.x].State = ButtonStates.Dead;
             }
 
-            _needsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
+            Program.NeedsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
         }
 
         /// <summary>
@@ -183,7 +181,7 @@ namespace GameOfLife
                 _fieldButtons[_selectedField.y, _selectedField.x].State = ButtonStates.MarkAndDead;
             }
 
-            _needsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
+            Program.NeedsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
         }
     }
 }

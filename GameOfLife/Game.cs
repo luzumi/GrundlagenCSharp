@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GameOfLife
 {
@@ -10,60 +8,53 @@ namespace GameOfLife
         DateTime lastLogicUpdate;
         readonly BoardLabel[,] boardLabels;
 
-        public Game()
+        public Game(int template)
         {
             lastLogicUpdate = DateTime.Now;
-            logic = new GameLogic(GameLogic.size);
+
+            logic = new GameLogic(template);
 
             boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
-
             
-
-            for (int row = 0; row < boardLabels.GetLength(0); row++)
-            {
-                for (int col = 0; col < boardLabels.GetLength(1); col++)
-                {
-                    boardLabels[row, col] = new BoardLabel(row + 2, col );
-                }
-            }
+            BoardLabelsFill();
         }
+
 
         public Game(GameLogic pLogic)
         {
             lastLogicUpdate = DateTime.Now;
+
             logic = pLogic;
+
             boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
 
-            for (int row = 0; row < boardLabels.GetLength(0); row++)
-            {
-                for (int col = 0; col < boardLabels.GetLength(1); col++)
-                {
-                    boardLabels[row, col] = new BoardLabel(row, col );
-                }
-            }
+            BoardLabelsFill();
         }
 
         public Game(string pFileName)
         {
             lastLogicUpdate = DateTime.Now;
             
-            logic = new GameLogic(GameLogic.size);
+            logic = new GameLogic(0);
 
             logic.LoadGame(pFileName);
 
             boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
+            
+            BoardLabelsFill();
+        }
 
-
+        
+        private void BoardLabelsFill()
+        {
             for (int row = 0; row < boardLabels.GetLength(0); row++)
             {
                 for (int col = 0; col < boardLabels.GetLength(1); col++)
                 {
-                    boardLabels[row, col] = new BoardLabel(row, col );
+                    boardLabels[row, col] = new BoardLabel( row, offset + col * 2);
                 }
             }
         }
-
-        
 
         public override void Update()
         {
@@ -86,7 +77,7 @@ namespace GameOfLife
                             Program.SceneRemove();
                             return;
                         case ConsoleKey.S: // spiel speichern
-                            logic.SaveGame("GameA.xml");
+                            logic.SaveGame("Snapshot" + DateTime.Now.ToShortTimeString());
                             break;
                     }
                 }

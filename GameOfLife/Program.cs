@@ -43,7 +43,7 @@ namespace GameOfLife
             NewScene.Activate(); // Neue Szene aktivieren
         }
 
-        public static void SceneRemove()
+        public static Scene SceneRemove()
         {
             Scene temp = Scenes.Pop(); // Szene vom Szenenstapel entfernen
 
@@ -53,8 +53,11 @@ namespace GameOfLife
                     Scenes.Peek().Activate(); // falls noch eine Szene vorhanden ist diese Aktivieren.
                 }
             }
+            
             Console.ResetColor();
             Console.Clear();
+
+            return temp;
         }
     }
 }
