@@ -14,11 +14,15 @@ namespace GameOfLife
         static void Main()
         {
             Console.CursorVisible = false;
+            
             SceneAdd(new Intro());
 
             Console.CursorVisible = !running;
             do
             {
+                Console.WindowWidth = GameLogic.size.col * 2;
+                Console.WindowHeight = GameLogic.size.row;
+
                 if (NeedsRedraw.Count > 0)
                 {
                     foreach (var item in NeedsRedraw)
@@ -39,7 +43,6 @@ namespace GameOfLife
 
         public static void SceneAdd(Scene NewScene)
         {
-            NeedsRedraw.Clear();
             Scenes.Push(NewScene); // Neue Szene auf den Stapel an Szenen legen
             NewScene.Activate(); // Neue Szene aktivieren
         }

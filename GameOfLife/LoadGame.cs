@@ -9,7 +9,7 @@ namespace GameOfLife
 
         public LoadGame()
         {
-            string[] fileNames = Directory.GetFiles(@".\", "*.xml");
+            string[] fileNames = Directory.GetFiles(@".\", "*.gol");
             uiElements = new List<UiElement>();
             byte row = 4;
 

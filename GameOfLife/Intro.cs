@@ -12,6 +12,7 @@ namespace GameOfLife
 
         public Intro()
         {
+
             LogoLines = new List<string>();
             using (StreamReader reader = new StreamReader("LogoSmall.txt"))
             {
@@ -54,6 +55,7 @@ namespace GameOfLife
 
         public override void Activate()
         {
+            Console.ResetColor();
             Console.Clear();
             needsRedraw = true;
         }

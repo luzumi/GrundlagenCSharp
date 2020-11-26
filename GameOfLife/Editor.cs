@@ -24,6 +24,7 @@ namespace GameOfLife
                     Program.NeedsRedraw.Add(_fieldButtons[row, col]);
                 }
             }
+
         }
 
         /// <summary>
@@ -53,6 +54,7 @@ namespace GameOfLife
             Console.Clear();
             foreach (Button button in _fieldButtons)
             {
+                button.StateChanged();
                 Program.NeedsRedraw.Add(button);
             }
         }
@@ -116,7 +118,7 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.S:
-                    _saveGameLogic.SaveGame("SaveGame_");
+                    _saveGameLogic.SaveGame("SaveGame_"+DateTime.Now.ToString("hh-mm-ss"));
                     Program.SceneRemove();
                     Program.SceneAdd(new Game(_saveGameLogic));
                     break;
@@ -163,6 +165,7 @@ namespace GameOfLife
             {
                 _fieldButtons[_selectedField.y, _selectedField.x].State = ButtonStates.Dead;
             }
+            _fieldButtons[_selectedField.y, _selectedField.x].StateChanged();
 
             Program.NeedsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
         }
@@ -180,6 +183,8 @@ namespace GameOfLife
             {
                 _fieldButtons[_selectedField.y, _selectedField.x].State = ButtonStates.MarkAndDead;
             }
+            _fieldButtons[_selectedField.y, _selectedField.x].StateChanged();
+
 
             Program.NeedsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
         }

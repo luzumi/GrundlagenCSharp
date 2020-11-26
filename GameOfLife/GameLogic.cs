@@ -333,22 +333,21 @@ namespace GameOfLife
                 }
             }
 
-            using (StreamWriter file = new StreamWriter(pFileName + ".txt"))
+            using (StreamWriter file = new StreamWriter(pFileName + ".gol"))
             {
-                sg.fileText = "GOLT\n" + (pFileName + DateTime.Now).Replace('.', '_').Replace(':', '-') + "\n" +
-                              (((size.row / 10) > 0) ? size.row.ToString() : "0" + size.row) + 
-                              (((size.col / 10) > 0) ? size.col.ToString() : "0" + size.col) + "\n";
+                sg.fileText = (((size.row / 10) > 0) ? size.row.ToString() : "0" + size.row) + 
+                              (((size.col / 10) > 0) ? size.col.ToString() : "0" + size.col) ;
 
-                for (int row = 0; row < convertedField[1].Count; row++)
+                for (int row = 0; row < convertedField.Count; row++)
                 {
-                    for (int col = 0; col < convertedField[0].Count; col++)
+                    for (int col = 0; col < convertedField[1].Count; col++)
                     {
                         sg.fileText += (convertedField[row][col] ? "1" : "0");
                     }
                 }
 
-                sg.fileText += "\n";
-
+                sg.fileText += "GOLT" + (pFileName + DateTime.Now).Replace('.', '_').Replace(':', '-') + "\n";
+                               
                 file.WriteLine(sg.fileText);
             }
 
@@ -364,12 +363,58 @@ namespace GameOfLife
                 return false;
             }
 
+            var convertedField = LoadTxt(pFileName);
+
+            FieldFalse = convertedField;
+
+            return true;
+        }
+
+        private static bool[,] LoadTxt(string pFileName)
+        {
+            string text;
+
+            using (var file = new StreamReader(pFileName))
+            {
+                text = file.ReadLine();
+            }
+
+            bool[,] convertedField = new bool[Int32.Parse(text.Substring(0, 2)), Int32.Parse(text.Substring(2, 2))];
+
+            for (int row = 0; row < convertedField.GetLength(0); row++)
+            {
+                for (int col = 4; col < convertedField.GetLength(1); col++)
+                {
+                    convertedField[row, col] = text[col + row * convertedField.GetLength(1)] == '1';
+                }
+            }
+
+            return convertedField;
+        }
+
+
+        public bool LoadGameXml(string pFileName)
+        {
+            if (!File.Exists(pFileName))
+            {
+                return false;
+            }
+
+            var convertedField = LoadXml(pFileName);
+
+            FieldFalse = convertedField;
+
+            return true;
+        }
+
+        private static bool[,] LoadXml(string pFileName)
+        {
             XmlSerializer formXML = new XmlSerializer(typeof(SaveGame));
             SaveGame sg;
 
             using (var file = new StreamReader(pFileName))
             {
-                sg = (SaveGame)formXML.Deserialize(file);
+                sg = (SaveGame) formXML.Deserialize(file);
             }
 
             bool[,] convertedField = new bool[sg.Field.Count, sg.Field[0].Count];
@@ -382,9 +427,7 @@ namespace GameOfLife
                 }
             }
 
-            FieldFalse = convertedField;
-
-            return true;
+            return convertedField;
         }
 
         /// <summary>

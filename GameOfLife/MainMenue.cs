@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 
@@ -10,6 +11,12 @@ namespace GameOfLife
     {
         public List<string> LogoLines { get; set; }
         readonly List<Label> labels;
+        List<(int y, int x)> ClearCoordinates = new List<(int y, int x)>();
+        private DateTime AnimationStart;
+        private int _MaxFillCoordinates;
+        private Random rand = new Random();
+        private bool animationRunning;
+        
 
         void EventNewGame()
         {
@@ -19,19 +26,28 @@ namespace GameOfLife
 
         byte activeButtonID = 0;
 
-        //private StringBuilder logo = new StringBuilder(Program.Logo());
-        private Random rand = new Random();
 
         public MainMenue()
         {
-        
             byte row = 12;
             uiElements = new List<UiElement>
             {
-                new Button(row, true, "Random Game", () => Program.SceneAdd(new Game(rand.Next(1,3)))){State = ButtonStates.Available},
-                new Button(row += 2, true, "Create a Game", () => Program.SceneAdd(new Editor())){State = ButtonStates.Available},
-                new Button(row += 2, true, "Load Game", () => Program.SceneAdd(new LoadGame())){State = ButtonStates.Available},
-                new Button(row += 2, true, "Quit Game", () => Program.running = false){State = ButtonStates.Available}
+                new Button(row, true, "Random Game", () => Program.SceneAdd(new Game(rand.Next(1, 3))))
+                {
+                    State = ButtonStates.Available
+                },
+                new Button(row += 2, true, "Create a Game", () => Program.SceneAdd(new Editor()))
+                {
+                    State = ButtonStates.Available
+                },
+                new Button(row += 2, true, "Load Game", () => Program.SceneAdd(new LoadGame()))
+                {
+                    State = ButtonStates.Available
+                },
+                new Button(row += 2, true, "Quit Game", () => Program.running = false)
+                {
+                    State = ButtonStates.Available
+                }
             };
 
             labels = new List<Label>();
@@ -42,7 +58,6 @@ namespace GameOfLife
 
         public void PrintLogo()
         {
-            Console.SetCursorPosition(0, 2);
             using (StreamReader reader = new StreamReader("LogoSmall.txt"))
             {
                 LogoLines = new List<string>();
@@ -59,6 +74,12 @@ namespace GameOfLife
 
         public override void Update()
         {
+            if (animationRunning)
+            {
+                ClearScreen();
+                return;
+            }
+
             if (Console.KeyAvailable)
             {
                 ConsoleKeyInfo key = Console.ReadKey(true);
@@ -75,7 +96,8 @@ namespace GameOfLife
                         Program.SceneRemove();
                         break;
                     case ConsoleKey.Enter:
-                        uiElements[ActiveButtonID].ProcessKey(key);
+                        animationRunning = true;
+                        AnimationStart = DateTime.Now;
                         // Todo: switch for buttonID to react to user choice or delegate!
                         break;
                 }
@@ -142,80 +164,53 @@ namespace GameOfLife
             Console.Clear();
             Program.NeedsRedraw.AddRange(uiElements);
             Program.NeedsRedraw.AddRange(labels);
+            animationRunning = false;
+            FillClearCoordiantes();
         }
 
-
-        private void SelectScene()
+        private void FillClearCoordiantes()
         {
-            switch (activeButtonID)
+
+            for ( int row = 0; row < LogoLines.Count; row++)
             {
-                case 0:
-                    ClearScreen();
-                    Program.Scenes.Push(new Game(0));
-                    Program.Scenes.Peek().Update();
-                    Thread.Sleep(300); //TODO: sleep ersetzen
-                    break;
-                case 1: //Editor
-                    ClearScreen();
-                    Program.Scenes.Push(new Editor());
-                    break;
-                case 2:
-                    ClearScreen();
-                    Console.ResetColor();
-                    Program.Scenes.Push(new LoadGame());
-                    Console.WriteLine("Load Game");
-                    break;
-                case 3:
-                    Console.WriteLine("exit");
-                    break;
+                for (int col = 0; col < LogoLines[0].Length; col++)
+                {
+                    ClearCoordinates.Add((row + 1, col + Console.WindowWidth / 2 - LogoLines[0].Length/2));
+                }
             }
+
+            _MaxFillCoordinates = ClearCoordinates.Count;
         }
 
 
         private void ClearScreen()
         {
-            bool ready = false;
-            StringBuilder backup = new StringBuilder();
-            foreach (string line in LogoLines)
+            double percentToFinish = 1/3000d * (DateTime.Now - AnimationStart).TotalMilliseconds;
+
+            percentToFinish = (percentToFinish > 1 ? 1 : percentToFinish);
+
+            int numberToFinish =  (int)(_MaxFillCoordinates * percentToFinish)- 
+                                 (_MaxFillCoordinates - ClearCoordinates.Count);
+
+
+            for (int i = 0; i < numberToFinish; i++)
             {
-                backup.Append(line);
+                int elementToDelete = rand.Next(ClearCoordinates.Count);
+
+                Console.SetCursorPosition(ClearCoordinates[elementToDelete].x, ClearCoordinates[elementToDelete].y);
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.Write(" ");
+                ClearCoordinates.RemoveAt(elementToDelete);
             }
 
-            while (!ready)
+            if (ClearCoordinates.Count == 0)
             {
-                for (int row = 0; row < LogoLines[0].Length * LogoLines.Count; row += rand.Next(0, 3))
-                {
-                    if (backup[row] != ' ' && backup[row] != '\n')
-                    {
-                        backup[row] = ' ';
-                    }
-                }
+                animationRunning = false;
 
-                for (int j = 0; j < LogoLines.Count; j++)
-                {
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - LogoLines[0].Length / 2, 2 + j);
-                    Console.Write(backup.ToString().Substring(89 * j, 89));
-                }
-
-                Thread.Sleep(100); //TODO: Sleep ersetzen
-
-                for (int i = 0; i < backup.Length; i++)
-                {
-                    if (backup[i] == ' ' || backup[i] == '\n')
-                    {
-                        ready = true;
-                    }
-                    else
-                    {
-                        ready = false;
-                        break;
-                    }
-                }
-
-                Thread.Sleep(100); //TODO: Sleep ersetzen
+                ConsoleKeyInfo enter = new ConsoleKeyInfo( ' ', ConsoleKey.Enter, false, false, false);
+                
+                uiElements[ActiveButtonID].ProcessKey(enter);
             }
-
-            Console.Clear();
         }
     }
 }

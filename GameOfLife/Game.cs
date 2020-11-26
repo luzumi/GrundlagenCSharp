@@ -77,7 +77,7 @@ namespace GameOfLife
                             Program.SceneRemove();
                             return;
                         case ConsoleKey.S: // spiel speichern
-                            logic.SaveGame("Snapshot" + DateTime.Now.ToShortTimeString());
+                            logic.SaveGame("Snapshot"+DateTime.Now.ToString("hh-mm-ss"));
                             break;
                     }
                 }

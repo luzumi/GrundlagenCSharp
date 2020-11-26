@@ -6,7 +6,7 @@ namespace GameOfLife
     class Button : UiElement
     {
         readonly string buttonText;
-        readonly byte colX = 2;
+        readonly byte col = 2;
         ConsoleColor colorSelected;
         ConsoleColor colorUnSelected;
         ConsoleColor colorActive;
@@ -31,7 +31,7 @@ namespace GameOfLife
 
         public Button(byte pRow, byte pColumn, bool pCentered, string pButtonText) : base(pRow, pCentered)
         {
-            colX = pColumn;
+            col = pColumn;
             row = pRow;
             buttonText = pButtonText;
             SetColors();
@@ -90,7 +90,7 @@ namespace GameOfLife
         }
 
 
-        void StateChanged()
+        public void StateChanged()
         {
             switch (states)
             {
@@ -124,10 +124,10 @@ namespace GameOfLife
 
         public override void Draw()
         {
-            Console.SetCursorPosition(center ? Console.WindowWidth / 2 - buttonText.Length / 2 : colX, row);
+            Console.SetCursorPosition(center ? Console.WindowWidth / 2 - buttonText.Length / 2 : col, row);
             Console.BackgroundColor = currentBackground;
             Console.ForegroundColor = currentForeground;
-            Console.Write("{0}", buttonText);
+            Console.Write(buttonText);
         }
     }
 }

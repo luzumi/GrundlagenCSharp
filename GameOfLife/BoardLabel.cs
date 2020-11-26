@@ -4,12 +4,12 @@ namespace GameOfLife
 {
     class BoardLabel : IDrawable
     {
-        readonly int Y;
-        readonly int X;
+        readonly int row;
+        readonly int col;
         public BoardLabel(int pRow, int pCol)
         {
-            Y = pRow;
-            X = pCol;
+            row = pRow;
+            col = pCol;
         }
 
         private bool alive;
@@ -29,7 +29,7 @@ namespace GameOfLife
 
         public void Draw()
         {
-            Console.SetCursorPosition((X % 2 == 0 ? X / 2 : X / 2 + 1), Y);
+            Console.SetCursorPosition(col, row);
             Console.BackgroundColor = (alive ? ConsoleColor.DarkBlue : ConsoleColor.DarkRed);
             Console.Write("  ");
         }

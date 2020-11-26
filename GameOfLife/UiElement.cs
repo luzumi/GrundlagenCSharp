@@ -23,12 +23,12 @@ namespace GameOfLife
         
         public ButtonStates State
         {
-            get { return ButtonStates.Dead; }
+            get { return states; }
             set 
                 {
                 states = value;
-                OnStateChanged();
-            }
+                OnStateChanged?.Invoke();
+                }
         }
 
         public virtual void ProcessKey(ConsoleKeyInfo pKeyInfo) { }
