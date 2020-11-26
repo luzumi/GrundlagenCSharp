@@ -10,6 +10,6 @@ namespace GameOfLife
     public class SaveGame
     {
         public List<List<bool>> Field;
-        public string fileName;
+        public string fileText;
     }
 }

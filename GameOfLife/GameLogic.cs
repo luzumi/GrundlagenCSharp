@@ -32,8 +32,6 @@ namespace GameOfLife
         }
 
 
-        
-
         public GameLogic(int template)
         {
             _fieldFalse = new bool[size.row, size.col];
@@ -56,7 +54,6 @@ namespace GameOfLife
                 for (int col = 0; col < Field.GetLength(1); col++)
                 {
                     Field[row, col] = false; //(rand.NextDouble() > 0.9);
-                    
                 }
             }
 
@@ -293,7 +290,7 @@ namespace GameOfLife
         }
 
 
-        public bool SaveGame(string pFileName)
+        public bool SaveGameXml(string pFileName)
         {
             SaveGame sg = new SaveGame();
             List<List<bool>> convertedField = new List<List<bool>>();
@@ -309,18 +306,56 @@ namespace GameOfLife
             }
 
             sg.Field = convertedField;
-            sg.fileName = (pFileName + DateTime.Now).Replace('.', '_').Replace(':', '-');
+            sg.fileText = (pFileName + DateTime.Now).Replace('.', '_').Replace(':', '-');
 
             XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));
 
-            using (Stream file = new FileStream(sg.fileName  + ".xml", FileMode.Create, FileAccess.Write))
+            using (Stream file = new FileStream(sg.fileText + ".xml", FileMode.Create, FileAccess.Write))
             {
-                serializer.Serialize(file , sg);
-                
+                serializer.Serialize(file, sg);
             }
 
             return true;
         }
+
+        public bool SaveGame(string pFileName)
+        {
+            List<List<bool>> convertedField = new List<List<bool>>();
+            SaveGame sg = new SaveGame();
+
+            for (int row = 0; row < Field.GetLength(0); row++)
+            {
+                convertedField.Add(new List<bool>(Field.GetLength(1)));
+
+                for (int col = 0; col < Field.GetLength(1); col++)
+                {
+                    convertedField[row].Add(Field[row, col]);
+                }
+            }
+
+            using (StreamWriter file = new StreamWriter(pFileName + ".txt"))
+            {
+                sg.fileText = "GOLT\n" + (pFileName + DateTime.Now).Replace('.', '_').Replace(':', '-') + "\n" +
+                              (((size.row / 10) > 0) ? size.row.ToString() : "0" + size.row) + 
+                              (((size.col / 10) > 0) ? size.col.ToString() : "0" + size.col) + "\n";
+
+                for (int row = 0; row < convertedField[1].Count; row++)
+                {
+                    for (int col = 0; col < convertedField[0].Count; col++)
+                    {
+                        sg.fileText += (convertedField[row][col] ? "1" : "0");
+                    }
+                }
+
+                sg.fileText += "\n";
+
+                file.WriteLine(sg.fileText);
+            }
+
+            return true;
+        }
+
+        
 
         public bool LoadGame(string pFileName)
         {
@@ -388,21 +423,21 @@ namespace GameOfLife
         private int CountNeighbours(int column, int row)
         {
             int neighbours = 0;
-            if( Field[CheckRow(column - 1), CheckColumn(row - 1)] ) { neighbours++; }
-                
-            if( Field[CheckRow(column - 1), CheckColumn(row)] ) { neighbours++; }
-                
-            if( Field[CheckRow(column - 1), CheckColumn(row + 1)] ) { neighbours++; }
-                
-            if( Field[CheckRow(column), CheckColumn(row - 1)] ) { neighbours++; }
-                
-            if( Field[CheckRow(column), CheckColumn(row + 1)] ) { neighbours++; }
-                
-            if( Field[CheckRow(column + 1), CheckColumn(row - 1)] ) { neighbours++; }
-                
-            if( Field[CheckRow(column + 1), CheckColumn(row)] ) { neighbours++; }
-                
-            if( Field[CheckRow(column + 1), CheckColumn(row + 1)] ) { neighbours++; }
+            if (Field[CheckRow(column - 1), CheckColumn(row - 1)]) { neighbours++; }
+
+            if (Field[CheckRow(column - 1), CheckColumn(row)]) { neighbours++; }
+
+            if (Field[CheckRow(column - 1), CheckColumn(row + 1)]) { neighbours++; }
+
+            if (Field[CheckRow(column), CheckColumn(row - 1)]) { neighbours++; }
+
+            if (Field[CheckRow(column), CheckColumn(row + 1)]) { neighbours++; }
+
+            if (Field[CheckRow(column + 1), CheckColumn(row - 1)]) { neighbours++; }
+
+            if (Field[CheckRow(column + 1), CheckColumn(row)]) { neighbours++; }
+
+            if (Field[CheckRow(column + 1), CheckColumn(row + 1)]) { neighbours++; }
 
             return neighbours;
         }

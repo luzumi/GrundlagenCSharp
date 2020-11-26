@@ -39,12 +39,15 @@ namespace GameOfLife
 
         public static void SceneAdd(Scene NewScene)
         {
+            NeedsRedraw.Clear();
             Scenes.Push(NewScene); // Neue Szene auf den Stapel an Szenen legen
             NewScene.Activate(); // Neue Szene aktivieren
         }
 
-        public static Scene SceneRemove()
+        public static void SceneRemove()
         {
+            NeedsRedraw.Clear();
+
             Scene temp = Scenes.Pop(); // Szene vom Szenenstapel entfernen
 
             if (Scenes.Count > 0) // Nachschauen ob noch Szenen vorhanden sind
@@ -56,8 +59,6 @@ namespace GameOfLife
             
             Console.ResetColor();
             Console.Clear();
-
-            return temp;
         }
     }
 }

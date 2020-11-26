@@ -26,12 +26,12 @@ namespace GameOfLife
         {
         
             byte row = 12;
-            buttons = new List<Button>
+            uiElements = new List<UiElement>
             {
-                new Button(row, true, "Random Game", () => Program.SceneAdd(new Game(rand.Next(1,3)))),
-                new Button(row += 2, true, "Create a Game", () => Program.SceneAdd(new Editor())),
-                new Button(row += 2, true, "Load Game", () => Program.SceneAdd(new LoadGame())),
-                new Button(row += 2, true, "Quit Game", () => Program.running = false)
+                new Button(row, true, "Random Game", () => Program.SceneAdd(new Game(rand.Next(1,3)))){State = ButtonStates.Available},
+                new Button(row += 2, true, "Create a Game", () => Program.SceneAdd(new Editor())){State = ButtonStates.Available},
+                new Button(row += 2, true, "Load Game", () => Program.SceneAdd(new LoadGame())){State = ButtonStates.Available},
+                new Button(row += 2, true, "Quit Game", () => Program.running = false){State = ButtonStates.Available}
             };
 
             labels = new List<Label>();
@@ -61,7 +61,9 @@ namespace GameOfLife
         {
             if (Console.KeyAvailable)
             {
-                switch (Console.ReadKey(true).Key)
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                switch (key.Key)
                 {
                     case ConsoleKey.UpArrow:
                         ActiveButtonID--;
@@ -73,7 +75,7 @@ namespace GameOfLife
                         Program.SceneRemove();
                         break;
                     case ConsoleKey.Enter:
-                        buttons[ActiveButtonID].Execute();
+                        uiElements[ActiveButtonID].ProcessKey(key);
                         // Todo: switch for buttonID to react to user choice or delegate!
                         break;
                 }
@@ -138,7 +140,7 @@ namespace GameOfLife
         {
             Console.ResetColor();
             Console.Clear();
-            Program.NeedsRedraw.AddRange(buttons);
+            Program.NeedsRedraw.AddRange(uiElements);
             Program.NeedsRedraw.AddRange(labels);
         }
 

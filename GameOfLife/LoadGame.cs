@@ -10,28 +10,31 @@ namespace GameOfLife
         public LoadGame()
         {
             string[] fileNames = Directory.GetFiles(@".\", "*.xml");
-            buttons = new List<Button>();
+            uiElements = new List<UiElement>();
             byte row = 4;
 
             foreach (var fileName in fileNames)
             {
-                buttons.Add(new Button(row += 2, false, fileName, () => { Program.SceneRemove(); Program.SceneAdd(new Game(fileName)); }));
+                uiElements.Add(new Button(row += 2, false, fileName, () => { Program.SceneRemove(); Program.SceneAdd(new Game(fileName)); }));
             }
 
-            buttons.Add(new Button(row += 2, false, "Back", () => Program.SceneRemove()));
+            uiElements.Add(new Button(row += 2, false, "Back", () => Program.SceneRemove()));
         }
 
         public override void Update()
         {
+            
             if (Console.KeyAvailable)
             {
-                switch (Console.ReadKey(true).Key)
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                switch (key.Key)
                 {
                     case ConsoleKey.Escape:
                         Program.SceneRemove();
                         break;
                     case ConsoleKey.Enter:
-                        buttons[ActiveButtonID].Execute();
+                        uiElements[ActiveButtonID].ProcessKey(key);
                         break;
                     case ConsoleKey.UpArrow:
                         ActiveButtonID--;
@@ -47,7 +50,7 @@ namespace GameOfLife
         {
             Console.ResetColor();
             Console.Clear();
-            Program.NeedsRedraw.AddRange(buttons);
+            Program.NeedsRedraw.AddRange(uiElements);
         }
     }
 }
