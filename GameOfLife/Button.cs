@@ -92,7 +92,7 @@ namespace GameOfLife
 
         void StateChanged()
         {
-            switch (State)
+            switch (states)
             {
                 case ButtonStates.Selected:
                     currentBackground = colorSelected;
