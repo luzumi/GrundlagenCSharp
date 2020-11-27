@@ -14,6 +14,10 @@ namespace GameOfLife
 
             logic = new GameLogic(template);
 
+            Console.WindowWidth = logic.FieldFalse.GetLength(1) * 2;
+
+            Console.WindowHeight = logic.FieldFalse.GetLength(0);
+
             boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
             
             BoardLabelsFill();
@@ -26,6 +30,10 @@ namespace GameOfLife
 
             logic = pLogic;
 
+            Console.WindowWidth = logic.FieldFalse.GetLength(1) * 2;
+
+            Console.WindowHeight = logic.FieldFalse.GetLength(0);
+
             boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
 
             BoardLabelsFill();
@@ -37,24 +45,29 @@ namespace GameOfLife
             
             logic = new GameLogic(0);
 
-            logic.LoadGame(pFileName);
+            logic.LoadGame(pFileName, SaveGameVariante.Text);
+
+            Console.WindowWidth = logic.FieldFalse.GetLength(1) * 2;
+
+            Console.WindowHeight = logic.FieldFalse.GetLength(0);
 
             boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
             
             BoardLabelsFill();
         }
 
-        
+
         private void BoardLabelsFill()
         {
             for (int row = 0; row < boardLabels.GetLength(0); row++)
             {
                 for (int col = 0; col < boardLabels.GetLength(1); col++)
                 {
-                    boardLabels[row, col] = new BoardLabel( row, offset + col * 2);
+                    boardLabels[row, col] = new BoardLabel(row, offset + col * 2);
                 }
             }
         }
+    
 
         public override void Update()
         {
@@ -77,7 +90,7 @@ namespace GameOfLife
                             Program.SceneRemove();
                             return;
                         case ConsoleKey.S: // spiel speichern
-                            logic.SaveGame("Snapshot"+DateTime.Now.ToString("hh-mm-ss"));
+                            logic.SaveGameTxt("Snapshot"+DateTime.Now.ToString("hh-mm-ss"));
                             break;
                     }
                 }

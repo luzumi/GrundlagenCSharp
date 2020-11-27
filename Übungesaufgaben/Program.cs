@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace Übungesaufgaben
 {
-    class Program
+    static class Program
     {
         static DateTime dt = DateTime.Now;
         private static int counter = 0;
