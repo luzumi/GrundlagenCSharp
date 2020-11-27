@@ -118,7 +118,7 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.S:
-                    _saveGameLogic.SaveGame("SaveGame_"+DateTime.Now.ToString("hh-mm-ss"));
+                    _saveGameLogic.SaveGameTxt("SaveGame_"+DateTime.Now.ToString("hh-mm-ss"));
                     Program.SceneRemove();
                     Program.SceneAdd(new Game(_saveGameLogic));
                     break;
