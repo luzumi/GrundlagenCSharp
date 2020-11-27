@@ -59,6 +59,8 @@ namespace GameOfLife
 
         private void BoardLabelsFill()
         {
+            offset = Console.WindowWidth / 2 - GameLogic.size.col;
+
             for (int row = 0; row < boardLabels.GetLength(0); row++)
             {
                 for (int col = 0; col < boardLabels.GetLength(1); col++)

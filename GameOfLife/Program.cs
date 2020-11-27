@@ -20,8 +20,6 @@ namespace GameOfLife
             if (pFilenames.Length > 0)
             {
                 Environment.CurrentDirectory = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName;
-                Console.WriteLine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName);
-                Console.ReadLine();
                 SceneAdd(new MainMenue());
                 SceneAdd(new Game(pFilenames[0]));
                 SceneAdd(new Intro());
