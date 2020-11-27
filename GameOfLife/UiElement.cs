@@ -9,8 +9,8 @@ namespace GameOfLife
 {
     abstract class UiElement : IDrawable
     {
-        protected private int row;
-        protected private bool center;
+        private protected int row;
+        private protected bool center;
         protected Action OnStateChanged;
         protected ButtonStates states;
         
@@ -31,8 +31,16 @@ namespace GameOfLife
                 }
         }
 
+        /// <summary>
+        /// verarbteitet Usereingaben
+        /// </summary>
+        /// <param name="pKeyInfo">gedrückte Taste</param>
         public virtual void ProcessKey(ConsoleKeyInfo pKeyInfo) { }
 
+
+        /// <summary>
+        /// zeichnet aktuelle Scene
+        /// </summary>
         public abstract void Draw();
     }
 }

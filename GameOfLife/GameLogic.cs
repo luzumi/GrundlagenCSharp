@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
@@ -28,26 +29,25 @@ namespace GameOfLife
         public bool[,] FieldFalse
         {
             get => _fieldFalse;
-            set => _fieldFalse = value;
+            private set => _fieldFalse = value;
         }
 
 
-        public GameLogic(int template)
+        public GameLogic(int pTemplate)
         {
             _fieldFalse = new bool[size.row, size.col];
             _fieldTrue = new bool[size.row, size.col];
             _fieldToRead = false;
             puffer = new bool[_fieldFalse.GetLength(0), _fieldFalse.GetLength(1)];
-            Reset(template);
+            Reset(pTemplate);
         }
 
-        public bool GetActiveField()
-        {
-            return _fieldToRead;
-        }
-
-
-        public void Reset(int pChoice)
+        /// <summary>
+        /// Setzt Spielfeld zurück, alle Felder werden auf tod gesetzt
+        /// Ein Auswahl vordefinierter Spielfeld ist möglich
+        /// </summary>
+        /// <param name="pChoice">Nummer zum auswählen eines vordefinierten Spielfelds</param>
+        private void Reset(int pChoice)
         {
             for (int row = 0; row < Field.GetLength(0); row++)
             {
@@ -70,6 +70,9 @@ namespace GameOfLife
 
         #region FensterMuster-Vorlage
 
+        /// <summary>
+        /// vordefiniertes Spielfeld, ein Glider
+        /// </summary>
         public void GosperGliderGun()
         {
             Field[25, 16] = true;
@@ -110,6 +113,9 @@ namespace GameOfLife
             Field[16, 18] = true;
         }
 
+        /// <summary>
+        /// vordefiniertes Spielfeld, ein Fenster
+        /// </summary>
         public void Window()
         {
             Field[15, 11] = true;
@@ -290,6 +296,11 @@ namespace GameOfLife
         }
 
 
+        /// <summary>
+        /// Speichert aktuelles Spielfeld als .gol datei im XML-Format 
+        /// </summary>
+        /// <param name="pFileName"></param>
+        /// <returns></returns>
         public bool SaveGameXml(string pFileName)
         {
             SaveGame sg = new SaveGame();
@@ -318,7 +329,13 @@ namespace GameOfLife
             return true;
         }
 
-        public bool SaveGame(string pFileName)
+
+        /// <summary>
+        /// Speichert aktuelles Spielfeld als .gol datei im Ascii-Format
+        /// </summary>
+        /// <param name="pFileName"></param>
+        /// <returns>ErfolgsStatus</returns>
+        public bool SaveGameTxt(string pFileName)
         {
             List<List<bool>> convertedField = new List<List<bool>>();
             SaveGame sg = new SaveGame();
@@ -333,10 +350,25 @@ namespace GameOfLife
                 }
             }
 
+            WriteTextToFile(pFileName, sg, convertedField);
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// schreibt aktuelles Spielfeld im AsciiFormat in eine .gol datei
+        /// </summary>
+        /// <param name="pFileName"></param>
+        /// <param name="sg"></param>
+        /// <param name="convertedField"></param>
+        private static void WriteTextToFile(string pFileName, SaveGame sg, List<List<bool>> convertedField)
+        {
             using (StreamWriter file = new StreamWriter(pFileName + ".gol"))
             {
-                sg.fileText = (((size.row / 10) > 0) ? size.row.ToString() : "0" + size.row) + 
-                              (((size.col / 10) > 0) ? size.col.ToString() : "0" + size.col) ;
+                sg.fileText = "GOLA" +
+                              (((size.row / 10) > 0) ? size.row.ToString() : "0" + size.row) +
+                              (((size.col / 10) > 0) ? size.col.ToString() : "0" + size.col);
 
                 for (int row = 0; row < convertedField.Count; row++)
                 {
@@ -346,53 +378,117 @@ namespace GameOfLife
                     }
                 }
 
-                sg.fileText += "GOLT" + (pFileName + DateTime.Now).Replace('.', '_').Replace(':', '-') + "\n";
-                               
+                sg.fileText += (pFileName + DateTime.Now.ToString("D-M-HH-mm-ss")) + "\n";
+
                 file.WriteLine(sg.fileText);
             }
-
-            return true;
         }
 
-        
-
-        public bool LoadGame(string pFileName)
+        //TODO: switch für verschiedene Dateitypen einbauen
+        /// <summary>
+        /// Lädt SaveGameTxt in Spielfeld ein
+        /// </summary>
+        /// <param name="pFileName"></param>
+        /// <returns>ErfolgsStatus</returns>
+        public bool LoadGame(string pFileName, Enum pSaveGameVariante)
         {
             if (!File.Exists(pFileName))
             {
                 return false;
             }
 
-            var convertedField = LoadTxt(pFileName);
-
-            FieldFalse = convertedField;
+            switch (pSaveGameVariante)
+            {
+                case SaveGameVariante.Text:
+                    ReadSaveGameFromTxtFile(pFileName);
+                    break;
+                case SaveGameVariante.Xml:
+                    LoadGameXml(pFileName);
+                    break;
+            }
 
             return true;
         }
 
-        private static bool[,] LoadTxt(string pFileName)
+        /// <summary>
+        /// Einlesen der Daten aus dem SavGameFile
+        /// </summary>
+        /// <param name="pFileName"></param>
+        /// <returns>ErfolgsStatus</returns>
+        private bool ReadSaveGameFromTxtFile(string pFileName)
         {
             string text;
 
-            using (var file = new StreamReader(pFileName))
+            using (var reader = new StreamReader(pFileName))
             {
-                text = file.ReadLine();
-            }
+                text = reader.ReadLine();
 
-            bool[,] convertedField = new bool[Int32.Parse(text.Substring(0, 2)), Int32.Parse(text.Substring(2, 2))];
-
-            for (int row = 0; row < convertedField.GetLength(0); row++)
-            {
-                for (int col = 4; col < convertedField.GetLength(1); col++)
+                if (!CheckForValidTxtFileOutput(text))
                 {
-                    convertedField[row, col] = text[col + row * convertedField.GetLength(1)] == '1';
+                    Console.WriteLine("Error: DateiFehler.");
+                    return false;
                 }
             }
 
-            return convertedField;
+            if (!WriteTxtSaveGameBoard(text))
+            {
+                Console.WriteLine("Error: Spielstand konnte nicht geladen werden");
+                return false;
+            }
+
+            return true;
         }
 
 
+        /// <summary>
+        /// beschreibt SPielfeld mit Werten aus dem SaveGameTxt
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private bool WriteTxtSaveGameBoard(string text)
+        {
+            //liest jede Zahl und wandelt in true/false um und schreibt das in FieldFalse
+            for (int row = 0; row < FieldFalse.GetLength(0); row++)
+            {
+                for (int col = 8; col < FieldFalse.GetLength(1); col++)
+                {
+                    if (!byte.TryParse(text.Substring(col + row * FieldFalse.GetLength(1), 1), out byte positionInText))
+                        return false;
+
+                    FieldFalse[row, col] = text[col + row * FieldFalse.GetLength(1)] == '1';
+                }
+            }
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Prüft Inhalt der Datei auf gültige Einträge
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns>Erfolgsstatus</returns>
+        private bool CheckForValidTxtFileOutput(string text)
+        {
+            if (text.Substring(0, 4) != "GOLA")
+            {
+                return false;
+            }
+
+            if (!byte.TryParse(text.Substring(4, 2), out byte y)) return false;
+            if (!byte.TryParse(text.Substring(6, 2), out byte x)) return false;
+
+            FieldFalse = new bool[y, x];
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Lädt ein SaveGameTxt aus einer xml Datei
+        /// </summary>
+        /// <param name="pFileName"></param>
+        /// <returns>Erfolgsstatus</returns>
         public bool LoadGameXml(string pFileName)
         {
             if (!File.Exists(pFileName))
@@ -400,21 +496,27 @@ namespace GameOfLife
                 return false;
             }
 
-            var convertedField = LoadXml(pFileName);
+            var convertedField = ReadXmlFromFile(pFileName);
 
             FieldFalse = convertedField;
 
             return true;
         }
 
-        private static bool[,] LoadXml(string pFileName)
+
+        /// <summary>
+        /// liest xml SaveGameTxt ein und überträgt dieses in das Spielfeld
+        /// </summary>
+        /// <param name="pFileName"></param>
+        /// <returns>eingelesener Spielstand</returns>
+        private static bool[,] ReadXmlFromFile(string pFileName)
         {
             XmlSerializer formXML = new XmlSerializer(typeof(SaveGame));
             SaveGame sg;
 
             using (var file = new StreamReader(pFileName))
             {
-                sg = (SaveGame) formXML.Deserialize(file);
+                sg = (SaveGame)formXML.Deserialize(file);
             }
 
             bool[,] convertedField = new bool[sg.Field.Count, sg.Field[0].Count];
@@ -430,57 +532,49 @@ namespace GameOfLife
             return convertedField;
         }
 
-        /// <summary>
-        /// Überlaufschutz,
-        /// wenn 0 dann setzte auf max,
-        /// wenn max dann setzte auf 0
-        /// </summary>
-        /// <param name="pRow"></param>
-        /// <returns></returns>
-        private int CheckRow(int pRow)
-        {
-            if (pRow < 0) { return Field.GetLength(0) - 1; }
-
-            if (pRow > Field.GetLength(0) - 1) { return 0; }
-
-            return pRow;
-        }
-
 
         /// <summary>
         /// Überlaufschutz,
         /// wenn 0 dann setzte auf max,
         /// wenn max dann setzte auf 0
         /// </summary>
-        /// <param name="pColumn"></param>
-        /// <returns></returns>
-        private int CheckColumn(int pColumn)
+        /// <param name="pToCheckedNumber"></param>
+        /// <param name="pDimension">row = 0, col = 1</param>
+        /// <returns>gültige Zahl für Zählschleife</returns>
+        private int CheckNumber(int pToCheckedNumber, int pDimension)
         {
-            if (pColumn < 0) { return Field.GetLength(1) - 1; }
+            if (pToCheckedNumber < 0) { return Field.GetLength(pDimension) - 1; }
 
-            if (pColumn > Field.GetLength(1) - 1) { return 0; }
+            if (pToCheckedNumber > Field.GetLength(pDimension) - 1) { return 0; }
 
-            return pColumn;
+            return pToCheckedNumber;
         }
 
+
+        /// <summary>
+        /// überprüft umliegende Felder auf true und zählt diese
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         private int CountNeighbours(int column, int row)
         {
             int neighbours = 0;
-            if (Field[CheckRow(column - 1), CheckColumn(row - 1)]) { neighbours++; }
+            if (Field[CheckNumber(column - 1, 0), CheckNumber(row - 1, 1)]) { neighbours++; }
 
-            if (Field[CheckRow(column - 1), CheckColumn(row)]) { neighbours++; }
+            if (Field[CheckNumber(column - 1, 0), CheckNumber(row, 1)]) { neighbours++; }
 
-            if (Field[CheckRow(column - 1), CheckColumn(row + 1)]) { neighbours++; }
+            if (Field[CheckNumber(column - 1, 0), CheckNumber(row + 1, 1)]) { neighbours++; }
 
-            if (Field[CheckRow(column), CheckColumn(row - 1)]) { neighbours++; }
+            if (Field[CheckNumber(column, 0), CheckNumber(row - 1, 1)]) { neighbours++; }
 
-            if (Field[CheckRow(column), CheckColumn(row + 1)]) { neighbours++; }
+            if (Field[CheckNumber(column, 0), CheckNumber(row + 1, 1)]) { neighbours++; }
 
-            if (Field[CheckRow(column + 1), CheckColumn(row - 1)]) { neighbours++; }
+            if (Field[CheckNumber(column + 1, 0), CheckNumber(row - 1, 1)]) { neighbours++; }
 
-            if (Field[CheckRow(column + 1), CheckColumn(row)]) { neighbours++; }
+            if (Field[CheckNumber(column + 1, 0), CheckNumber(row, 1)]) { neighbours++; }
 
-            if (Field[CheckRow(column + 1), CheckColumn(row + 1)]) { neighbours++; }
+            if (Field[CheckNumber(column + 1, 0), CheckNumber(row + 1, 1)]) { neighbours++; }
 
             return neighbours;
         }

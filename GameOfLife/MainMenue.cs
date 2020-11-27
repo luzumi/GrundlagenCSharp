@@ -18,15 +18,6 @@ namespace GameOfLife
         private bool animationRunning;
         
 
-        void EventNewGame()
-        {
-            Program.SceneAdd(new Game(0));
-        }
-
-
-        byte activeButtonID = 0;
-
-
         public MainMenue()
         {
             byte row = 12;
@@ -44,6 +35,7 @@ namespace GameOfLife
                 {
                     State = ButtonStates.Available
                 },
+                // ReSharper disable once RedundantAssignment
                 new Button(row += 2, true, "Quit Game", () => Program.running = false)
                 {
                     State = ButtonStates.Available
@@ -56,6 +48,10 @@ namespace GameOfLife
             Activate();
         }
 
+
+        /// <summary>
+        /// liest Logo Aus txt-Datei ein und erzeugt je zeile einen Eintrag in die LabelListe
+        /// </summary>
         public void PrintLogo()
         {
             using (StreamReader reader = new StreamReader("LogoSmall.txt"))
@@ -71,7 +67,9 @@ namespace GameOfLife
             }
         }
 
-
+        /// <summary>
+        /// fängt Usereingaben ab und verarbeitet sie 
+        /// </summary>
         public override void Update()
         {
             if (animationRunning)
@@ -185,7 +183,7 @@ namespace GameOfLife
 
         private void ClearScreen()
         {
-            double percentToFinish = 1/3000d * (DateTime.Now - AnimationStart).TotalMilliseconds;
+            double percentToFinish = 1/1000d * (DateTime.Now - AnimationStart).TotalMilliseconds;
 
             percentToFinish = (percentToFinish > 1 ? 1 : percentToFinish);
 
