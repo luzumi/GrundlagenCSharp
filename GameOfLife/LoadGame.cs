@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+// ReSharper disable RedundantAssignment
 
 namespace GameOfLife
 {
@@ -18,7 +19,7 @@ namespace GameOfLife
                 uiElements.Add(new Button(row += 2, false, fileName, () => { Program.SceneRemove(); Program.SceneAdd(new Game(fileName)); }));
             }
 
-            uiElements.Add(new Button(row += 2, false, "Back", () => Program.SceneRemove()));
+            uiElements.Add(new Button(row += 2, false, "Back", Program.SceneRemove));
         }
 
         public override void Update()

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GameOfLife": {
+      "commandName": "Project",
+      "commandLineArgs": "E:\\VisualStudio-workspace\\AnwendungsentwicklungTeil1\\Kontrollstrukturen\\GameOfLife\\bin\\Debug\\net5.0\\SaveGame_02-54-06.gol"
+    }
+  }
+}

@@ -8,6 +8,7 @@ namespace GameOfLife
 {
     enum SaveGameVariante
     {
-        Text
+        Text,
+        Xml
     }
 }

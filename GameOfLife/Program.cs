@@ -1,27 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace GameOfLife
 {
-    class Program
+    static class Program
     {
         public static Stack<Scene> Scenes = new Stack<Scene>(4);
-        static public readonly List<IDrawable> NeedsRedraw = new List<IDrawable>();
+        public static readonly List<IDrawable> NeedsRedraw = new List<IDrawable>();
         public static bool running = true;
 
-        static void Main()
+        static void Main(string[] pFilenames)
         {
-            Console.CursorVisible = false;
-            
-            SceneAdd(new Intro());
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+
+            if (pFilenames.Length > 0)
+            {
+                Environment.CurrentDirectory = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName;
+                Console.WriteLine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName);
+                Console.ReadLine();
+                SceneAdd(new MainMenue());
+                SceneAdd(new Game(pFilenames[0]));
+                SceneAdd(new Intro());
+            }
+            else
+            {
+                Environment.CurrentDirectory = Directory.GetParent(Environment.CommandLine).FullName;
+                SceneAdd(new MainMenue());
+                SceneAdd(new Intro());
+            }
 
             Console.CursorVisible = !running;
             do
             {
-                Console.WindowWidth = GameLogic.size.col * 2;
-                Console.WindowHeight = GameLogic.size.row;
+                //Console.WindowWidth = GameLogic.size.col * 2;
+                //Console.WindowHeight = GameLogic.size.row;
 
                 if (NeedsRedraw.Count > 0)
                 {
@@ -40,13 +56,20 @@ namespace GameOfLife
             Console.Clear();
         }
 
-
+        /// <summary>
+        /// Fügt neue Scene dem Stack hinzu
+        /// </summary>
+        /// <param name="NewScene"></param>
         public static void SceneAdd(Scene NewScene)
         {
             Scenes.Push(NewScene); // Neue Szene auf den Stapel an Szenen legen
             NewScene.Activate(); // Neue Szene aktivieren
         }
 
+
+        /// <summary>
+        /// Nimmt aktuélle Scene vom Stack und aktiviert, wenn vorhanden, die letzte davor auf dem Stack gelegte
+        /// </summary>
         public static void SceneRemove()
         {
             NeedsRedraw.Clear();
@@ -59,7 +82,7 @@ namespace GameOfLife
                     Scenes.Peek().Activate(); // falls noch eine Szene vorhanden ist diese Aktivieren.
                 }
             }
-            
+
             Console.ResetColor();
             Console.Clear();
         }
