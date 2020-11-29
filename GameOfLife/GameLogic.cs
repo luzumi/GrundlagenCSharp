@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -384,6 +385,7 @@ namespace GameOfLife
             }
         }
 
+
         //TODO: switch für verschiedene Dateitypen einbauen
         /// <summary>
         /// Lädt SaveGameTxt in Spielfeld ein
@@ -394,17 +396,14 @@ namespace GameOfLife
         {
             if (!File.Exists(pFileName))
             {
+                Console.WriteLine("error 398");
                 return false;
             }
 
-            switch (pSaveGameVariante)
+            if( !ReadSaveGameFromFile(pFileName) )
             {
-                case SaveGameVariante.Text:
-                    ReadSaveGameFromTxtFile(pFileName);
-                    break;
-                case SaveGameVariante.Xml:
-                    LoadGameXml(pFileName);
-                    break;
+                Console.WriteLine("error 404");
+                return false;
             }
 
             return true;
@@ -415,25 +414,32 @@ namespace GameOfLife
         /// </summary>
         /// <param name="pFileName"></param>
         /// <returns>ErfolgsStatus</returns>
-        private bool ReadSaveGameFromTxtFile(string pFileName)
+        private bool ReadSaveGameFromFile(string pFileName)
         {
             string text;
 
             using (var reader = new StreamReader(pFileName))
             {
                 text = reader.ReadLine();
-
-                if (!CheckForValidTxtFileOutput(text))
+                
+                switch (text.Substring(0, 4))
                 {
-                    Console.WriteLine("Error: DateiFehler.");
-                    return false;
+                    case "GOLA":
+                        if (!CheckForValidTxtFileOutput(text))
+                        {
+                            Console.WriteLine("Error: DateiFehler.");
+                            return false;
+                        }
+                        if (!FillTxtSaveToGameBoard(text))
+                        {
+                            Console.WriteLine("Error: Spielstand konnte nicht geladen werden");
+                            return false;
+                        }
+                        break;
+                    case "<?xm":
+                        LoadGameXml(pFileName);
+                        break;
                 }
-            }
-
-            if (!WriteTxtSaveGameBoard(text))
-            {
-                Console.WriteLine("Error: Spielstand konnte nicht geladen werden");
-                return false;
             }
 
             return true;
@@ -445,7 +451,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        private bool WriteTxtSaveGameBoard(string text)
+        private bool FillTxtSaveToGameBoard(string text)
         {
             //liest jede Zahl und wandelt in true/false um und schreibt das in FieldFalse
             for (int row = 0; row < FieldFalse.GetLength(0); row++)
@@ -470,11 +476,6 @@ namespace GameOfLife
         /// <returns>Erfolgsstatus</returns>
         private bool CheckForValidTxtFileOutput(string text)
         {
-            if (text.Substring(0, 4) != "GOLA")
-            {
-                return false;
-            }
-
             if (!byte.TryParse(text.Substring(4, 2), out byte y)) return false;
             if (!byte.TryParse(text.Substring(6, 2), out byte x)) return false;
 
