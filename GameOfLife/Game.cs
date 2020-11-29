@@ -45,7 +45,7 @@ namespace GameOfLife
             
             logic = new GameLogic(0);
 
-            logic.LoadGame(pFileName, SaveGameVariante.Text);
+            logic.LoadGame(pFileName);
 
             Console.WindowWidth = logic.FieldFalse.GetLength(1) * 2;
 

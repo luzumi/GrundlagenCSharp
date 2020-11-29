@@ -6,7 +6,7 @@ namespace GameOfLife
 {
     class TextBox : UiElement
     {
-        private char[] content;
+        
         private readonly ConsoleColor color;
         private byte cursorPosition;
 
@@ -18,7 +18,7 @@ namespace GameOfLife
 
         public TextBox(byte Row, bool Centered, string Text = "") : base(Row, Centered)
         {
-            content = new char[15];
+            content = new char[40];
             byte count = 0;
             for (; count < Text.Length && count < content.Length; count++)
             {
@@ -30,15 +30,21 @@ namespace GameOfLife
                 content[count] = ' ';
             }
 
-            color = ConsoleColor.White;
+            color = colorUnSelected;
 
-            OnStateChanged = () => { };
+            SetColors();
+
+            OnStateChanged = StateChanged;
+
+            
+            State = ButtonStates.Available;
+            
         }
 
         public override void Draw()
         {
             Console.SetCursorPosition((center ? Console.WindowWidth / 2 - content.Length / 2 - 1 : 2), row);
-            Console.ForegroundColor = color;
+            Console.ForegroundColor = states == ButtonStates.Available? colorUnSelected : colorSelected;
             for (int counter = 0; counter < content.Length; counter++)
             {
                 Console.BackgroundColor = (counter != cursorPosition? ConsoleColor.Black: ConsoleColor.DarkBlue);

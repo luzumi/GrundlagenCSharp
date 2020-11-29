@@ -7,12 +7,14 @@ namespace GameOfLife
     abstract class Scene
     {
         protected List<UiElement> uiElements;
+        protected List<UiElement> uiTextBoxes;
+
         protected sbyte activeButton;
         protected int offset = Console.WindowWidth / 2 - GameLogic.size.col;
 
 
 
-        public sbyte ActiveButtonID
+        public virtual sbyte ActiveButtonID
         {
             get { return activeButton; }
             set

@@ -103,59 +103,6 @@ namespace GameOfLife
         }
 
 
-        //public void UpdateAlt()
-        //{
-        //    foreach (var item in needsRedraw)
-        //    {
-        //        item.Draw();
-        //    }
-
-        //    needsRedraw.Clear();
-
-        //    int row = 0;
-        //    Console.ResetColor();
-        //    for (; row < LogoLines.Count; row++)
-        //    {
-        //        Console.SetCursorPosition(Console.WindowWidth / 2 - LogoLines[row].Length / 2, 2 + row);
-        //        Console.Write(LogoLines[row]);
-        //    }
-
-        //    if (Console.KeyAvailable)
-        //    {
-        //        switch (Console.ReadKey(true).Key)
-        //        {
-        //            case ConsoleKey.UpArrow:
-        //                ActiveButtonID--;
-        //                break;
-        //            case ConsoleKey.DownArrow:
-        //                ActiveButtonID++;
-        //                break;
-        //            case ConsoleKey.Escape:
-        //                Program.Scenes.Pop();
-        //                break;
-        //            case ConsoleKey.Enter:
-        //                ClearScreen();
-        //                switch (ActiveButtonID)
-        //                {
-        //                    case 0:
-        //                        Program.Scenes.Push(new Game());
-        //                        break;
-        //                    case 1:
-        //                        Program.Scenes.Push(new Editor());
-        //                        break;
-        //                    case 2:
-        //                        Program.Scenes.Push(new LoadGame());
-        //                        break;
-        //                    case 3:
-        //                        Program.Scenes.Pop();
-        //                        Program.running = false;
-        //                        break;
-        //                }
-        //                break;
-        //        }
-        //    }
-        //}
-
         public override void Activate()
         {
             Console.ResetColor();

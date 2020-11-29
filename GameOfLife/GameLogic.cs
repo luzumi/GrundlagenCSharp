@@ -392,7 +392,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="pFileName"></param>
         /// <returns>ErfolgsStatus</returns>
-        public bool LoadGame(string pFileName, Enum pSaveGameVariante)
+        public bool LoadGame(string pFileName)
         {
             if (!File.Exists(pFileName))
             {

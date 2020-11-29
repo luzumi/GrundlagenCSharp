@@ -13,6 +13,13 @@ namespace GameOfLife
         private protected bool center;
         protected Action OnStateChanged;
         protected ButtonStates states;
+        protected ConsoleColor colorSelected;
+        protected ConsoleColor colorUnSelected;
+        protected ConsoleColor colorActive;
+        protected ConsoleColor colorInactive;
+        protected ConsoleColor currentForeground = ConsoleColor.DarkYellow;
+        protected ConsoleColor currentBackground;
+        public char[] content;
         
         public UiElement(int pRow, bool pCentered )
         {
@@ -20,7 +27,11 @@ namespace GameOfLife
             center = pCentered;
         }
 
-        
+        public override string ToString()
+        {
+            return new string(content).Trim();
+        }
+
         public ButtonStates State
         {
             get { return states; }
@@ -29,6 +40,34 @@ namespace GameOfLife
                 states = value;
                 OnStateChanged?.Invoke();
                 }
+        }
+
+
+        protected virtual void SetColors()
+        {
+            colorSelected = ConsoleColor.Gray;
+            colorUnSelected = ConsoleColor.Blue;
+            colorActive = ConsoleColor.Green;
+            colorInactive = ConsoleColor.DarkGreen;
+        }
+
+        public virtual void StateChanged()
+        {
+            switch (states)
+            {
+                case ButtonStates.Selected:
+                    currentBackground = colorSelected;
+                    currentForeground = colorActive;
+                    break;
+                case ButtonStates.Available:
+                    currentBackground = colorUnSelected;
+                    currentForeground = colorActive;
+                    break;
+                case ButtonStates.Inactive:
+                    currentBackground = colorUnSelected;
+                    currentForeground = colorInactive;
+                    break;
+            }
         }
 
         /// <summary>

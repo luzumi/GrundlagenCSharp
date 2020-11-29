@@ -7,16 +7,11 @@ namespace GameOfLife
     {
         readonly string buttonText;
         readonly byte col = 2;
-        ConsoleColor colorSelected;
-        ConsoleColor colorUnSelected;
-        ConsoleColor colorActive;
-        ConsoleColor colorInactive;
+        
         ConsoleColor living;
         ConsoleColor dead;
         ConsoleColor markAndLiving;
         ConsoleColor markAndDead;
-        ConsoleColor currentForeground = ConsoleColor.DarkYellow;
-        ConsoleColor currentBackground;
         private readonly Action method;
 
 
@@ -60,8 +55,7 @@ namespace GameOfLife
             }
         }
 
-
-        private void SetColors()
+        protected override void SetColors()
         {
             colorSelected = ConsoleColor.Gray;
             colorUnSelected = ConsoleColor.Blue;
@@ -72,6 +66,7 @@ namespace GameOfLife
             markAndLiving = ConsoleColor.DarkYellow;
             markAndDead = ConsoleColor.DarkGray;
         }
+        
 
 
         public override void ProcessKey(ConsoleKeyInfo KeyInfo)
@@ -90,7 +85,7 @@ namespace GameOfLife
         }
 
 
-        public void StateChanged()
+        public override void StateChanged()
         {
             switch (states)
             {
