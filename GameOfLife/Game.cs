@@ -8,6 +8,10 @@ namespace GameOfLife
         DateTime lastLogicUpdate;
         readonly BoardLabel[,] boardLabels;
 
+        /// <summary>
+        /// Konstruktor für leeres Spielfeld [0] oder mit vorgefertigtem Spielfeld [1],[2]
+        /// </summary>
+        /// <param name="template">[0] leeres Spielfeld, [1]/[2] vorgefertigte Spielfelder</param>
         public Game(int template)
         {
             lastLogicUpdate = DateTime.Now;
@@ -23,7 +27,10 @@ namespace GameOfLife
             BoardLabelsFill();
         }
 
-
+        /// <summary>
+        /// Konstruktor übernimmt entworfenes Spielfeld im Editor
+        /// </summary>
+        /// <param name="pLogic"></param>
         public Game(GameLogic pLogic)
         {
             lastLogicUpdate = DateTime.Now;
@@ -39,6 +46,11 @@ namespace GameOfLife
             BoardLabelsFill();
         }
 
+
+        /// <summary>
+        /// Konstruktor für Aufruf mit Dateinamen eines zu ladenden Spielstandes
+        /// </summary>
+        /// <param name="pFileName"></param>
         public Game(string pFileName)
         {
             lastLogicUpdate = DateTime.Now;
@@ -57,6 +69,9 @@ namespace GameOfLife
         }
 
 
+        /// <summary>
+        /// füllt BoardLabels mit den jeweiligen ´x,y coordinaten
+        /// </summary>
         private void BoardLabelsFill()
         {
             offset = Console.WindowWidth / 2 - GameLogic.size.col;

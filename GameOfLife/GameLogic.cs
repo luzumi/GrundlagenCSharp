@@ -386,7 +386,6 @@ namespace GameOfLife
         }
 
 
-        //TODO: switch für verschiedene Dateitypen einbauen
         /// <summary>
         /// Lädt SaveGameTxt in Spielfeld ein
         /// </summary>

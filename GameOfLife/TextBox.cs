@@ -9,14 +9,17 @@ namespace GameOfLife
 {
     class TextBox : UiElement
     {
-        
         private readonly ConsoleColor color;
         private byte cursorPosition;
         private string fileName;
 
-        public string Text
+        /// <summary>
+        /// returnt einen String aus CharArray content
+        /// </summary>
+        /// <returns>ein neuer String</returns>
+        public override string ToString()
         {
-            get { return content.ToString(); }
+            return new string (content).Trim();
         }
 
         public string FileName => fileName;
@@ -28,15 +31,7 @@ namespace GameOfLife
             byte count = 0;
             fileName = Text;
 
-            for (; count < Text.Length && count < content.Length; count++)
-            {
-                content[count] = Text[count];
-            }
-            cursorPosition = count;
-            for (; count < content.Length; count++)
-            {
-                content[count] = ' ';
-            }
+            SetContent(Text);
 
             color = colorUnSelected;
 
@@ -44,18 +39,32 @@ namespace GameOfLife
 
             OnStateChanged = StateChanged;
 
-            
             State = ButtonStates.Available;
-            
+        }
+
+        private void SetContent(string Text)
+        {
+            byte count = 0;
+
+            for (; count < Text.Length && count < content.Length; count++)
+            {
+                content[count] = Text[count];
+            }
+
+            cursorPosition = count;
+            for (; count < content.Length; count++)
+            {
+                content[count] = ' ';
+            }
         }
 
         public override void Draw()
         {
             Console.SetCursorPosition((center ? Console.WindowWidth / 2 - content.Length / 2 - 1 : 2), row);
-            Console.ForegroundColor = states == ButtonStates.Available? colorUnSelected : colorSelected;
+            Console.ForegroundColor = states == ButtonStates.Available ? colorUnSelected : colorSelected;
             for (int counter = 0; counter < content.Length; counter++)
             {
-                Console.BackgroundColor = (counter != cursorPosition? ConsoleColor.Black: ConsoleColor.DarkBlue);
+                Console.BackgroundColor = (counter != cursorPosition ? ConsoleColor.Black : ConsoleColor.DarkBlue);
                 Console.Write(content[counter]);
             }
         }
@@ -77,6 +86,7 @@ namespace GameOfLife
                     {
                         cursorPosition--;
                     }
+
                     Program.NeedsRedraw.Add(this);
                     break;
                 case ConsoleKey.RightArrow:
@@ -84,15 +94,23 @@ namespace GameOfLife
                     {
                         cursorPosition++;
                     }
+
                     Program.NeedsRedraw.Add(this);
                     break;
-                case ConsoleKey.F2:
-                    string newName = "";
-                    foreach (char letter in content)
+                case ConsoleKey.Enter:
+                    string newName = ToString(); //merkt sich den Dateinamen
+                    
+                    if (FileName.Equals(newName.Trim()))
                     {
-                        newName += letter;
+                        Program.SceneAdd(new Game(FileName));
                     }
-                    RenameFile(FileName, newName);
+                    else
+                    {
+                        RenameFile(FileName, newName.Trim());
+                        Program.NeedsRedraw.Add(this);
+                        fileName = newName.Trim();
+                    }
+
                     break;
                 default:
                     if (KeyInformation.KeyChar is >= 'A' and <= 'Z' ||
@@ -102,8 +120,8 @@ namespace GameOfLife
                         content[cursorPosition++] = KeyInformation.KeyChar;
                         Program.NeedsRedraw.Add(this);
                     }
+
                     break;
-                
             }
         }
 
@@ -115,5 +133,3 @@ namespace GameOfLife
         }
     }
 }
-
-

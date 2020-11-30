@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -96,7 +97,6 @@ namespace GameOfLife
                     case ConsoleKey.Enter:
                         animationRunning = true;
                         AnimationStart = DateTime.Now;
-                        // Todo: switch for buttonID to react to user choice or delegate!
                         break;
                 }
             }
@@ -110,12 +110,15 @@ namespace GameOfLife
             Program.NeedsRedraw.AddRange(uiElements);
             Program.NeedsRedraw.AddRange(labels);
             animationRunning = false;
-            FillClearCoordiantes();
+            FillClearCoordinates();
         }
 
-        private void FillClearCoordiantes()
-        {
 
+        /// <summary>
+        /// erstellt für jedes Zeichen des Logos einen Eintrag mit den Cursorpositionen in ClearCoordinates
+        /// </summary>
+        private void FillClearCoordinates()
+        {
             for ( int row = 0; row < LogoLines.Count; row++)
             {
                 for (int col = 0; col < LogoLines[0].Length; col++)
@@ -127,7 +130,10 @@ namespace GameOfLife
             _MaxFillCoordinates = ClearCoordinates.Count;
         }
 
-
+        
+        /// <summary>
+        /// blendet Logo beim öffnen einer neuen Scene pixelig aus
+        /// </summary>
         private void ClearScreen()
         {
             double percentToFinish = 1/1000d * (DateTime.Now - AnimationStart).TotalMilliseconds;

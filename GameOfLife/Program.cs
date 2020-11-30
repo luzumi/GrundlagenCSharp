@@ -13,15 +13,15 @@ namespace GameOfLife
         public static readonly List<IDrawable> NeedsRedraw = new List<IDrawable>();
         public static bool running = true;
 
-        static void Main(string[] pFilenames)
+        static void Main(string[] pCommandLineParameterFilenames)
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
 
-            if (pFilenames.Length > 0)
+            if (pCommandLineParameterFilenames.Length > 0)
             {
                 Environment.CurrentDirectory = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName;
                 SceneAdd(new MainMenue());
-                SceneAdd(new Game(pFilenames[0]));
+                SceneAdd(new Game(pCommandLineParameterFilenames[0]));
                 SceneAdd(new Intro());
             }
             else
@@ -34,16 +34,12 @@ namespace GameOfLife
             Console.CursorVisible = !running;
             do
             {
-                //Console.WindowWidth = GameLogic.size.col * 2;
-                //Console.WindowHeight = GameLogic.size.row;
-
                 if (NeedsRedraw.Count > 0)
                 {
                     foreach (var item in NeedsRedraw)
                     {
                         item.Draw();
                     }
-
                     NeedsRedraw.Clear();
                 }
 
@@ -72,7 +68,7 @@ namespace GameOfLife
         {
             NeedsRedraw.Clear();
 
-            Scene temp = Scenes.Pop(); // Szene vom Szenenstapel entfernen
+            Scenes.Pop(); // Szene vom Szenenstapel entfernen
 
             if (Scenes.Count > 0) // Nachschauen ob noch Szenen vorhanden sind
             {

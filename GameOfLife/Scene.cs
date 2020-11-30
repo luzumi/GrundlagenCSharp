@@ -7,13 +7,14 @@ namespace GameOfLife
     abstract class Scene
     {
         protected List<UiElement> uiElements;
-        protected List<UiElement> uiTextBoxes;
 
         protected sbyte activeButton;
         protected int offset = Console.WindowWidth / 2 - GameLogic.size.col;
 
 
-
+        /// <summary>
+        /// Zählt ausgewählten Button mit und setzt den jeweils aktuellen auf Selected
+        /// </summary>
         public virtual sbyte ActiveButtonID
         {
             get { return activeButton; }
@@ -41,8 +42,14 @@ namespace GameOfLife
             }
         }
 
+        /// <summary>
+        /// definiert eine aktuellisierte Scene
+        /// </summary>
         public abstract void Update();
 
+        /// <summary>
+        /// setzt Einstellungen für eine neu aktivierte Scene
+        /// </summary>
         public abstract void Activate();
     }
 }
