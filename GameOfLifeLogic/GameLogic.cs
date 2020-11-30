@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection.Metadata;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
-using System.Threading.Channels;
 using System.Xml.Serialization;
 
-namespace GameOfLife
+namespace GameOfLifeLogic
 {
-    class GameLogic
+    public class GameLogic
     {
         public static (int col, int row) size = (70, 37);
         private bool[,] _fieldTrue;

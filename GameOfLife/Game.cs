@@ -1,4 +1,5 @@
 ﻿using System;
+using GameOfLifeLogic;
 
 namespace GameOfLife
 {
@@ -113,7 +114,7 @@ namespace GameOfLife
                 }
             }
 
-            if ((DateTime.Now - lastLogicUpdate).TotalMilliseconds > 500)
+            if ((DateTime.Now - lastLogicUpdate).TotalMilliseconds > 50)
             {
                 lastLogicUpdate = DateTime.Now;
                 logic.Update();

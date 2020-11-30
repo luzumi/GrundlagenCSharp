@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading;
 
 namespace GameOfLife
 {
-    static class Program
+    class Program
     {
         public static Stack<Scene> Scenes = new Stack<Scene>(4);
         public static readonly List<IDrawable> NeedsRedraw = new List<IDrawable>();
