@@ -19,19 +19,19 @@ namespace GameOfLife
         /// <returns>ein neuer String</returns>
         public override string ToString()
         {
-            return new string (content).Trim();
+            return new string(content).Trim();
         }
 
         public string FileName => fileName;
 
 
-        public TextBox(byte Row, bool Centered, string Text = "") : base(Row, Centered)
+        public TextBox(byte Row, bool Centered, string pText = "") : base(Row, Centered)
         {
             content = new char[40];
-            byte count = 0;
-            fileName = Text;
+            
+            fileName = pText;
 
-            SetContent(Text);
+            SetContent(pText);
 
             color = colorUnSelected;
 
@@ -40,6 +40,25 @@ namespace GameOfLife
             OnStateChanged = StateChanged;
 
             State = ButtonStates.Available;
+        }
+
+        public TextBox(byte pRow, bool pCentered, string pText, Action pSceneRemove) : base(pRow, pCentered)
+        {
+            content = new char[40];
+            byte count = 0;
+            fileName = pText;
+
+            SetContent(pText);
+
+            color = colorUnSelected;
+
+            SetColors();
+
+            OnStateChanged = StateChanged;
+
+            State = ButtonStates.Available;
+
+            method = pSceneRemove;
         }
 
         private void SetContent(string Text)
@@ -74,13 +93,21 @@ namespace GameOfLife
             switch (KeyInformation.Key)
             {
                 case ConsoleKey.Delete:
+                    if (KeyInformation.Modifiers.HasFlag(ConsoleModifiers.Shift))
+                    {
+                        File.Delete(FileName);
+                        Program.SceneRefresh(new LoadGame());
+                        break;
+                    }
                     Array.Fill(content, ' ');
                     Program.NeedsRedraw.Add(this);
                     break;
+
                 case ConsoleKey.Backspace:
                     content[cursorPosition--] = ' ';
                     Program.NeedsRedraw.Add(this);
                     break;
+
                 case ConsoleKey.LeftArrow:
                     if (cursorPosition > 0)
                     {
@@ -89,6 +116,7 @@ namespace GameOfLife
 
                     Program.NeedsRedraw.Add(this);
                     break;
+
                 case ConsoleKey.RightArrow:
                     if (cursorPosition < content.Length - 1)
                     {
@@ -97,9 +125,16 @@ namespace GameOfLife
 
                     Program.NeedsRedraw.Add(this);
                     break;
+
                 case ConsoleKey.Enter:
                     string newName = ToString(); //merkt sich den Dateinamen
                     
+                    if (FileName == "Back")
+                    {
+                        method();
+                        break;
+                    }
+
                     if (FileName.Equals(newName.Trim()))
                     {
                         Program.SceneAdd(new Game(FileName));
@@ -110,8 +145,8 @@ namespace GameOfLife
                         Program.NeedsRedraw.Add(this);
                         fileName = newName.Trim();
                     }
-
                     break;
+
                 default:
                     if (KeyInformation.KeyChar is >= 'A' and <= 'Z' ||
                         KeyInformation.KeyChar is >= 'a' and <= 'z' ||

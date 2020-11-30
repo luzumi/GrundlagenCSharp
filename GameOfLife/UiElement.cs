@@ -20,6 +20,8 @@ namespace GameOfLife
         protected ConsoleColor currentForeground = ConsoleColor.DarkYellow;
         protected ConsoleColor currentBackground;
         public char[] content;
+        protected Action method;
+
         
         public UiElement(int pRow, bool pCentered )
         {

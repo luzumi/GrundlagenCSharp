@@ -15,19 +15,15 @@ namespace GameOfLife
             fileNames.AddRange(Directory.GetFiles(@".\", "*.gol"));
 
             byte row = 4;
+
             uiElements = new List<UiElement>();
-            
 
             foreach (var item in fileNames)
             {
-                //uiElements.Add(new Button(row += 2, false, "                                    ", 
-                //   () => { Program.SceneRemove(); Program.SceneAdd(new Game(item)); }));
-
                 uiElements.Add(new TextBox(row += 2, false, item.Substring(2, item.Length - 2)));
             }
 
-            //uiElements.Add(new Button(row += 2, false, "", () => Program.SceneRemove()));
-            uiElements.Add(new TextBox(row += 2, false, "Back"));
+            uiElements.Add(new TextBox(row += 2, false, "Back", Program.SceneRemove));
         }
 
         public override void Activate()

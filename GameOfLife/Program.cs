@@ -80,5 +80,28 @@ namespace GameOfLife
             Console.ResetColor();
             Console.Clear();
         }
+
+
+        /// <summary>
+        /// Nimmt aktuélle Scene vom Stack und aktiviert, wenn vorhanden, die letzte davor auf dem Stack gelegte
+        /// </summary>
+        public static void SceneRefresh(Scene pSceneToRefresh)
+        {
+            NeedsRedraw.Clear();
+
+            Scenes.Pop(); // Szene vom Szenenstapel entfernen
+
+            SceneAdd(pSceneToRefresh);
+
+            if (Scenes.Count > 0) // Nachschauen ob noch Szenen vorhanden sind
+            {
+                {
+                    Scenes.Peek().Activate(); // falls noch eine Szene vorhanden ist diese Aktivieren.
+                }
+            }
+
+            Console.ResetColor();
+            Console.Clear();
+        }
     }
 }

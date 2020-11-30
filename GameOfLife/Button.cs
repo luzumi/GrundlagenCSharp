@@ -13,7 +13,6 @@ namespace GameOfLife
         ConsoleColor dead;
         ConsoleColor markAndLiving;
         ConsoleColor markAndDead;
-        private readonly Action method;
 
 
         public Button(byte pRow, bool pCentered, string pButtonText) : base(pRow, pCentered)
