@@ -4,19 +4,52 @@ using System.Text;
 
 namespace GameOfLife
 {
-    class Scene
+    abstract class Scene
     {
-        protected static (int x, int y) size;
+        protected List<UiElement> uiElements;
+        protected GameLogic _saveGameLogic;
+        protected sbyte activeButton;
+        protected int offset = Console.WindowWidth / 2 - GameLogic.size.col;
 
-        public Scene()
+
+        /// <summary>
+        /// Zählt ausgewählten Button mit und setzt den jeweils aktuellen auf Selected
+        /// </summary>
+        public virtual sbyte ActiveButtonID
         {
-            Program.Scenes.Push(this);
+            get { return activeButton; }
+            set
+            {
+                if (activeButton != value)
+                {
+                    uiElements[activeButton].State = ButtonStates.Available;
+                    Program.NeedsRedraw.Add(uiElements[activeButton]);
+                }
+
+                activeButton = value;
+                // TODO: replace with search for next active button
+                if (activeButton < 0)
+                {
+                    activeButton = (sbyte)(uiElements.Count - 1);
+                }
+                else if (activeButton == uiElements.Count)
+                {
+                    activeButton = 0;
+                }
+
+                uiElements[activeButton].State = ButtonStates.Selected;
+                Program.NeedsRedraw.Add(uiElements[activeButton]);
+            }
         }
 
+        /// <summary>
+        /// definiert eine aktuellisierte Scene
+        /// </summary>
+        public abstract void Update();
 
-        public virtual void Update()
-        {
-
-        }
+        /// <summary>
+        /// setzt Einstellungen für eine neu aktivierte Scene
+        /// </summary>
+        public abstract void Activate();
     }
 }
