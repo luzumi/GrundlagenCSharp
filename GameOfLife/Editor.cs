@@ -4,27 +4,25 @@ namespace GameOfLife
 {
     class Editor : Scene
     {
-        private readonly GameLogic _saveGameLogic;
-        private readonly Button[,] _fieldButtons;
+        private UiElement[,] _fieldButton;
         private (byte x, byte y) _selectedField;
 
 
         public Editor()
         {
             _saveGameLogic = new GameLogic(0);
-            _fieldButtons = new Button[GameLogic.size.row, GameLogic.size.col];
+            _fieldButton = new Button[GameLogic.size.row, GameLogic.size.col];
             
 
             for (int row = 0; row < GameLogic.size.row; row++)
             {
                 for (int col = 0; col < GameLogic.size.col; col++)
                 {
-                    _fieldButtons[row, col] =
+                    _fieldButton[row, col] =
                         new Button((byte)row, (byte)(offset + col), false, "  ") {State = ButtonStates.Dead};
-                    Program.NeedsRedraw.Add(_fieldButtons[row, col]);
+                    Program.NeedsRedraw.Add(_fieldButton[row, col]);
                 }
             }
-
         }
 
         /// <summary>
@@ -52,7 +50,7 @@ namespace GameOfLife
         {
             Console.ResetColor();
             Console.Clear();
-            foreach (Button button in _fieldButtons)
+            foreach (Button button in _fieldButton)
             {
                 button.StateChanged();
                 Program.NeedsRedraw.Add(button);
@@ -133,21 +131,21 @@ namespace GameOfLife
 
         private void SwitchThisField()
         {
-            _fieldButtons[_selectedField.y, _selectedField.x].State =
-                _fieldButtons[_selectedField.y, _selectedField.x].State switch
+            _fieldButton[_selectedField.y, _selectedField.x].State =
+                _fieldButton[_selectedField.y, _selectedField.x].State switch
                 {
-                    ButtonStates.Living => _fieldButtons[_selectedField.y, _selectedField.x].State =
+                    ButtonStates.Living => _fieldButton[_selectedField.y, _selectedField.x].State =
                         ButtonStates.Dead,
-                    ButtonStates.Dead => _fieldButtons[_selectedField.y, _selectedField.x].State =
+                    ButtonStates.Dead => _fieldButton[_selectedField.y, _selectedField.x].State =
                         ButtonStates.Living,
-                    ButtonStates.MarkAndLiving => _fieldButtons[_selectedField.y, _selectedField.x].State =
+                    ButtonStates.MarkAndLiving => _fieldButton[_selectedField.y, _selectedField.x].State =
                         ButtonStates.MarkAndDead,
-                    ButtonStates.MarkAndDead => _fieldButtons[_selectedField.y, _selectedField.x].State =
+                    ButtonStates.MarkAndDead => _fieldButton[_selectedField.y, _selectedField.x].State =
                         ButtonStates.MarkAndLiving,
-                    _ => _fieldButtons[_selectedField.y, _selectedField.x].State =
+                    _ => _fieldButton[_selectedField.y, _selectedField.x].State =
                         ButtonStates.Hidden
                 };
-            Program.NeedsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
+            Program.NeedsRedraw.Add(_fieldButton[_selectedField.y, _selectedField.x]);
             _saveGameLogic.FieldFalse[_selectedField.y, _selectedField.x] =
                 !_saveGameLogic.FieldFalse[_selectedField.y, _selectedField.y];
         }
@@ -157,17 +155,17 @@ namespace GameOfLife
         /// </summary>
         private void FieldDeMarkOld()
         {
-            if (_fieldButtons[_selectedField.y, _selectedField.x].State == ButtonStates.MarkAndLiving)
+            if (_fieldButton[_selectedField.y, _selectedField.x].State == ButtonStates.MarkAndLiving)
             {
-                _fieldButtons[_selectedField.y, _selectedField.x].State = ButtonStates.Living;
+                _fieldButton[_selectedField.y, _selectedField.x].State = ButtonStates.Living;
             }
-            else if (_fieldButtons[_selectedField.y, _selectedField.x].State == ButtonStates.MarkAndDead)
+            else if (_fieldButton[_selectedField.y, _selectedField.x].State == ButtonStates.MarkAndDead)
             {
-                _fieldButtons[_selectedField.y, _selectedField.x].State = ButtonStates.Dead;
+                _fieldButton[_selectedField.y, _selectedField.x].State = ButtonStates.Dead;
             }
-            _fieldButtons[_selectedField.y, _selectedField.x].StateChanged();
+            _fieldButton[_selectedField.y, _selectedField.x].StateChanged();
 
-            Program.NeedsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
+            Program.NeedsRedraw.Add(_fieldButton[_selectedField.y, _selectedField.x]);
         }
 
         /// <summary>
@@ -175,18 +173,18 @@ namespace GameOfLife
         /// </summary>
         private void FieldMark()
         {
-            if (_fieldButtons[_selectedField.y, _selectedField.x].State == ButtonStates.Living)
+            if (_fieldButton[_selectedField.y, _selectedField.x].State == ButtonStates.Living)
             {
-                _fieldButtons[_selectedField.y, _selectedField.x].State = ButtonStates.MarkAndLiving;
+                _fieldButton[_selectedField.y, _selectedField.x].State = ButtonStates.MarkAndLiving;
             }
-            else if (_fieldButtons[_selectedField.y, _selectedField.x].State == ButtonStates.Dead)
+            else if (_fieldButton[_selectedField.y, _selectedField.x].State == ButtonStates.Dead)
             {
-                _fieldButtons[_selectedField.y, _selectedField.x].State = ButtonStates.MarkAndDead;
+                _fieldButton[_selectedField.y, _selectedField.x].State = ButtonStates.MarkAndDead;
             }
-            _fieldButtons[_selectedField.y, _selectedField.x].StateChanged();
+            _fieldButton[_selectedField.y, _selectedField.x].StateChanged();
 
 
-            Program.NeedsRedraw.Add(_fieldButtons[_selectedField.y, _selectedField.x]);
+            Program.NeedsRedraw.Add(_fieldButton[_selectedField.y, _selectedField.x]);
         }
     }
 }

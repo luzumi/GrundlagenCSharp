@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sortieren", "Sortieren\Sort
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dateizugriff", "Dateizugriff\Dateizugriff.csproj", "{F518E005-2EB3-4642-BDDC-58BF8FB2B63D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOfLife", "GameOfLife\GameOfLife.csproj", "{B066C2A9-F9A0-47A6-AAD7-BC4EB12F6F3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameOfLife", "GameOfLife\GameOfLife.csproj", "{B066C2A9-F9A0-47A6-AAD7-BC4EB12F6F3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

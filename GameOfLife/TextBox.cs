@@ -99,12 +99,31 @@ namespace GameOfLife
                         Program.SceneRefresh(new LoadGame());
                         break;
                     }
-                    Array.Fill(content, ' ');
+
+                    content[cursorPosition] = ' ';
+
+                    char tmp;
+
+                    for (int i = cursorPosition; i < content.Length-1; i++)
+                    {
+                        tmp = content[i];
+                        content[i] = content[i + 1];
+                        content[i + 1] = tmp;
+                    }
+
                     Program.NeedsRedraw.Add(this);
                     break;
 
                 case ConsoleKey.Backspace:
-                    content[cursorPosition--] = ' ';
+                    content[--cursorPosition] = ' ';
+
+                    for (int i = cursorPosition; i < content.Length-1; i++)
+                    {
+                        tmp = content[i];
+                        content[i] = content[i + 1];
+                        content[i + 1] = tmp;
+                    }
+
                     Program.NeedsRedraw.Add(this);
                     break;
 
