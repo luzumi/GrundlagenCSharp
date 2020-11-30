@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 
 namespace GameOfLife
@@ -23,7 +24,7 @@ namespace GameOfLife
             states = ButtonStates.Available;
         }
 
-
+        
         public Button(byte pRow, byte pColumn, bool pCentered, string pButtonText) : base(pRow, pCentered)
         {
             col = pColumn;

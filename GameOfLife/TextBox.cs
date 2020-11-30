@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Text;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace GameOfLife
 {
@@ -9,17 +12,22 @@ namespace GameOfLife
         
         private readonly ConsoleColor color;
         private byte cursorPosition;
+        private string fileName;
 
         public string Text
         {
             get { return content.ToString(); }
         }
 
+        public string FileName => fileName;
+
 
         public TextBox(byte Row, bool Centered, string Text = "") : base(Row, Centered)
         {
             content = new char[40];
             byte count = 0;
+            fileName = Text;
+
             for (; count < Text.Length && count < content.Length; count++)
             {
                 content[count] = Text[count];
@@ -78,6 +86,14 @@ namespace GameOfLife
                     }
                     Program.NeedsRedraw.Add(this);
                     break;
+                case ConsoleKey.F2:
+                    string newName = "";
+                    foreach (char letter in content)
+                    {
+                        newName += letter;
+                    }
+                    RenameFile(FileName, newName);
+                    break;
                 default:
                     if (KeyInformation.KeyChar is >= 'A' and <= 'Z' ||
                         KeyInformation.KeyChar is >= 'a' and <= 'z' ||
@@ -87,7 +103,17 @@ namespace GameOfLife
                         Program.NeedsRedraw.Add(this);
                     }
                     break;
+                
             }
+        }
+
+
+        private static void RenameFile(string path, string newName)
+        {
+            var fileInfo = new FileInfo(@".\\" + path);
+            File.Move(path, fileInfo.Directory + @".\\" + newName);
         }
     }
 }
+
+
