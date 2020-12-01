@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameOfLife
+namespace GameOfLifeLogic
 {
-    enum SaveGameVariante
+    public enum SaveGameVariante
     {
         Text,
-        Xml
+        Xml,
+        Binary,
+        Database
     }
 }

@@ -13,7 +13,8 @@ namespace GameOfLife
         {
             fileNames.AddRange(Directory.GetFiles(@".\", "*.xml"));
             fileNames.AddRange(Directory.GetFiles(@".\", "*.gol"));
-
+            
+            //TODO: fileNames aus "SaveGames.db" einpflegen;
             byte row = 4;
 
             uiElements = new List<UiElement>();

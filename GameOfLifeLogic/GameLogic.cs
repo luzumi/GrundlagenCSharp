@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 using System.Xml.Serialization;
+
 
 namespace GameOfLifeLogic
 {
@@ -314,7 +317,7 @@ namespace GameOfLifeLogic
 
             XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));
 
-            using (Stream file = new FileStream(sg.fileText + ".xml", FileMode.Create, FileAccess.Write))
+            using (Stream file = new FileStream("X-" + sg.fileText + ".xml", FileMode.Create, FileAccess.Write))
             {
                 serializer.Serialize(file, sg);
             }
@@ -343,7 +346,7 @@ namespace GameOfLifeLogic
                 }
             }
 
-            WriteTextToFile(pFileName, sg, convertedField);
+            WriteTextToFile("T-" + pFileName, sg, convertedField);
 
             return true;
         }
@@ -391,7 +394,7 @@ namespace GameOfLifeLogic
                 return false;
             }
 
-            if( !ReadSaveGameFromFile(pFileName) )
+            if (!ReadSaveGameFromFile(pFileName))
             {
                 Console.WriteLine("error 404");
                 return false;
@@ -412,7 +415,9 @@ namespace GameOfLifeLogic
             using (var reader = new StreamReader(pFileName))
             {
                 text = reader.ReadLine();
-                
+
+                if (text is null) return false;
+
                 switch (text.Substring(0, 4))
                 {
                     case "GOLA":
@@ -421,14 +426,22 @@ namespace GameOfLifeLogic
                             Console.WriteLine("Error: DateiFehler.");
                             return false;
                         }
+
                         if (!FillTxtSaveToGameBoard(text))
                         {
                             Console.WriteLine("Error: Spielstand konnte nicht geladen werden");
                             return false;
                         }
+
                         break;
                     case "<?xm":
                         LoadGameXml(pFileName);
+                        break;
+                    case "GOLB":
+                        LoadGameBinary(pFileName);
+                        break;
+                    default:
+                        LoadGameDatabase(pFileName);
                         break;
                 }
             }
@@ -447,12 +460,12 @@ namespace GameOfLifeLogic
             //liest jede Zahl und wandelt in true/false um und schreibt das in FieldFalse
             for (int row = 0; row < FieldFalse.GetLength(0); row++)
             {
-                for (int col = 8; col < FieldFalse.GetLength(1); col++)
+                for (int col = 8; col < FieldFalse.GetLength(1); col += 2)
                 {
                     if (!byte.TryParse(text.Substring(col + row * FieldFalse.GetLength(1), 1), out byte positionInText))
                         return false;
 
-                    FieldFalse[row, col] = text[col + row * FieldFalse.GetLength(1)] == '1';
+                    FieldFalse[row, col] = text[positionInText] == '1';
                 }
             }
 
@@ -475,6 +488,26 @@ namespace GameOfLifeLogic
             return true;
         }
 
+
+        public bool SaveGame(string pFilename, Enum pSaveGameVariante)
+        {
+            switch (pSaveGameVariante)
+            {
+                case SaveGameVariante.Text:
+                    return SaveGameTxt(pFilename);
+
+                case SaveGameVariante.Xml:
+                    return SaveGameXml(pFilename);
+
+                case SaveGameVariante.Binary:
+                    return SaveGameBinary(pFilename);
+
+                case SaveGameVariante.Database:
+                    return SaveGameDatabase(pFilename);
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Lädt ein SaveGameTxt aus einer xml Datei
@@ -569,6 +602,168 @@ namespace GameOfLifeLogic
             if (Field[CheckNumber(column + 1, 0), CheckNumber(row + 1, 1)]) { neighbours++; }
 
             return neighbours;
+        }
+
+
+        private void LoadGameBinary(string FileName)
+        {
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(FileName)))
+            {
+                reader.ReadChars(4); // überspringen der bereits geprüften magic number
+                byte Y = reader.ReadByte();
+                byte X = reader.ReadByte();
+
+                _fieldFalse = new bool[Y, X];
+                _fieldTrue = new bool[Y, X];
+
+                byte[] bytes = reader.ReadBytes((Y * X - 1) / 8 + 1);
+                BitArray bits = new BitArray(bytes);
+
+                for (int row = 0; row < Field.GetLength(0); row++)
+                {
+                    for (int col = 0; col < Field.GetLength(1); col++)
+                    {
+                        _fieldFalse[row, col] = bits[row * Field.GetLength(1) + col];
+                    }
+                }
+            }
+        }
+
+
+        private bool SaveGameBinary(string FileName)
+        {
+            using (BinaryWriter writer = new BinaryWriter(File.Open("B-" + FileName + ".gol", FileMode.Create)))
+            {
+                writer.Write("GOLB".ToCharArray());
+                writer.Write((byte)Field.GetLength(0));
+                writer.Write((byte)Field.GetLength(1));
+
+                var bytes = WriteFieldToByteArray();
+
+                writer.Write(bytes);
+            }
+
+            return true;
+        }
+
+        private byte[] WriteFieldToByteArray()
+        {
+            BitArray bits = new BitArray(Field.GetLength(0) * Field.GetLength(1));
+            for (int row = 0; row < Field.GetLength(0); row++)
+            {
+                for (int col = 0; col < Field.GetLength(1); col++)
+                {
+                    bits[row * Field.GetLength(1) + col] = Field[row, col];
+                }
+            }
+
+            byte[] bytes = new byte[(bits.Length - 1) / 8 + 1];
+            bits.CopyTo(bytes, 0);
+            return bytes;
+        }
+
+
+        private void LoadGameDatabase(string pFileName)
+        {
+            SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder();
+            builder.Version = 3;
+            builder.DataSource = "SaveGames.db";
+
+            using (SQLiteConnection connection = new SQLiteConnection(builder.ToString()))
+            {
+                connection.Open();
+                SQLiteCommand command = connection.CreateCommand();
+                command.CommandText = $"select Height, Width, Field from SaveGames where Name = {pFileName}";//todo select statement
+                //command.Parameters.AddWithValue("@name", pFileName);
+
+
+                int y;
+                int x;
+                SQLiteBlob blob;
+                byte[] byteArray;
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+
+                    reader.Read();// nur die erste zeile der rückgabe.
+                    y = reader.GetInt32(0);
+                    x = reader.GetInt32(1);
+                    blob = reader.GetBlob(2, true);
+                }
+
+                byteArray = new byte[blob.GetCount()];
+                blob.Read(byteArray, blob.GetCount(), 0);
+                BitArray bits = new BitArray(byteArray);
+
+                _fieldFalse = new bool[y, x];
+                _fieldTrue = new bool[y, x];
+                _fieldToRead = false;
+
+                for (int row = 0; row < y; row++)
+                {
+                    for (int col = 0; col < x; col++)
+                    {
+                        _fieldToRead = false;
+                        _fieldFalse[row, col] = bits[row * x + col];
+                    }
+                }
+            }
+        }
+
+
+        private bool SaveGameDatabase(string pFileName)
+        {
+            //TODO: check if database file exists
+            SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder();
+            builder.Version = 3;
+            builder.DataSource = "SaveGames.db";
+            if (!File.Exists(builder.DataSource)) // wenn die Datenbank noch nicht existiert soll sie erstellt werden
+            {
+                // bei sqlite ist das erstellen der datenbank, falls sie noch nicht exisitert ok
+                // NIEMALS bei Datenbankservern! Nie! Nada! NULL! VOID! Gar nich! 404! Nööööö!
+                using (SQLiteConnection connection = new SQLiteConnection(builder.ToString()))
+                {
+                    connection.Open(); // Open erstellt automatisch die datenbank wenn sie nicht da ist, es fehlen nur die tabellen.
+                    SQLiteCommand command = connection.CreateCommand();
+                    command.CommandText = "create table SaveGames (ID integer not null primary key, Name varchar(15) not null unique , Height integer not null, Width integer not null, Field blob not null)";
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            using (SQLiteConnection connection = new SQLiteConnection(builder.ToString()))
+            {
+                connection.Open();
+                SQLiteCommand command = connection.CreateCommand();
+
+                BitArray bits = new BitArray(Field.GetLength(0) * Field.GetLength(1));
+                
+                for (int row = 0; row < Field.GetLength(0); row++)
+                {
+                    for (int col = 0; col < Field.GetLength(1); col++)
+                    {
+                        bits[row * Field.GetLength(1) + col] = Field[row, col];
+                    }
+                }
+                
+                byte[] bytes = new byte[(bits.Length - 1) / 8 + 1];
+                
+                bits.CopyTo(bytes, 0);
+
+                command.CommandText = "replace into SaveGames (Name, Height, Width, Field) values (@name, @height, @width, @field)";
+                
+                command.Parameters.AddWithValue("@name", "DB-" + pFileName);
+                command.Parameters.AddWithValue("@height", Field.GetLength(0));
+                command.Parameters.AddWithValue("@width", Field.GetLength(1));
+                command.Parameters.AddWithValue("@field", bytes);
+               
+                
+                int linesAffected = command.ExecuteNonQuery();
+                if (linesAffected == 0)
+                {
+                    throw new IOException();
+                }
+            }
+
+            return true;
         }
     }
 }

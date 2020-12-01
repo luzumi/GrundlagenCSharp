@@ -45,7 +45,6 @@ namespace GameOfLife
         public TextBox(byte pRow, bool pCentered, string pText, Action pSceneRemove) : base(pRow, pCentered)
         {
             content = new char[40];
-            byte count = 0;
             fileName = pText;
 
             SetContent(pText);

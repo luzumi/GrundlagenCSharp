@@ -13,7 +13,13 @@ namespace GameOfLife
         {
             _saveGameLogic = new GameLogic(0);
             _fieldButton = new Button[GameLogic.size.row, GameLogic.size.col];
-            
+
+            Console.WindowWidth = _fieldButton.GetLength(1) * 2;
+
+            Console.WindowHeight = _fieldButton.GetLength(0);
+
+
+            offset = Console.WindowWidth / 2 - GameLogic.size.col;
 
             for (int row = 0; row < GameLogic.size.row; row++)
             {
@@ -58,10 +64,6 @@ namespace GameOfLife
             }
         }
 
-        private void Draw()
-        {
-            Console.Write("  ");
-        }
 
         /// <summary>
         /// [Pfeiltasten], [S], [Enter]
@@ -96,7 +98,7 @@ namespace GameOfLife
                     if (_selectedField.x > 0)
                     {
                         FieldDeMarkOld();
-                        _selectedField.x-=2;
+                        _selectedField.x--;
                         FieldMark();
                     }
 
@@ -106,7 +108,7 @@ namespace GameOfLife
                     if (_selectedField.x < GameLogic.size.col - 2)
                     {
                         FieldDeMarkOld();
-                        _selectedField.x+=2;
+                        _selectedField.x++;
                         FieldMark();
                     }
 
@@ -117,7 +119,8 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.S:
-                    _saveGameLogic.SaveGameTxt("SaveGame_"+DateTime.Now.ToString("hh-mm-ss"));
+                    string pFileName = "SaveGame_" + DateTime.Now.ToString("hh-mm-ss");
+                    _saveGameLogic.SaveGame(pFileName, SaveGameVariante.Database);
                     Program.SceneRemove();
                     Program.SceneAdd(new Game(_saveGameLogic));
                     break;

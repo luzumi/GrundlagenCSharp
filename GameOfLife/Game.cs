@@ -5,7 +5,6 @@ namespace GameOfLife
 {
     class Game : Scene
     {
-        readonly GameLogic logic;
         DateTime lastLogicUpdate;
         readonly BoardLabel[,] boardLabels;
 
@@ -17,11 +16,11 @@ namespace GameOfLife
         {
             lastLogicUpdate = DateTime.Now;
 
-            logic = new GameLogic(template);
+            _saveGameLogic = new GameLogic(template);
 
-            Console.WindowWidth = logic.FieldFalse.GetLength(1) * 2;
+            Console.WindowWidth = _saveGameLogic.FieldFalse.GetLength(1) * 2;
 
-            Console.WindowHeight = logic.FieldFalse.GetLength(0);
+            Console.WindowHeight = _saveGameLogic.FieldFalse.GetLength(0);
 
             boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
             
@@ -36,11 +35,11 @@ namespace GameOfLife
         {
             lastLogicUpdate = DateTime.Now;
 
-            logic = pLogic;
+            _saveGameLogic = pLogic;
 
-            Console.WindowWidth = logic.FieldFalse.GetLength(1) * 2;
+            Console.WindowWidth = _saveGameLogic.FieldFalse.GetLength(1) * 2;
 
-            Console.WindowHeight = logic.FieldFalse.GetLength(0);
+            Console.WindowHeight = _saveGameLogic.FieldFalse.GetLength(0);
 
             boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
 
@@ -55,14 +54,14 @@ namespace GameOfLife
         public Game(string pFileName)
         {
             lastLogicUpdate = DateTime.Now;
-            
-            logic = new GameLogic(0);
 
-            logic.LoadGame(pFileName);
+            _saveGameLogic = new GameLogic(0);
 
-            Console.WindowWidth = logic.FieldFalse.GetLength(1) * 2;
+            _saveGameLogic.LoadGame(pFileName);
 
-            Console.WindowHeight = logic.FieldFalse.GetLength(0);
+            Console.WindowWidth = _saveGameLogic.FieldFalse.GetLength(1) * 2;
+
+            Console.WindowHeight = _saveGameLogic.FieldFalse.GetLength(0);
 
             boardLabels = new BoardLabel[GameLogic.size.row, GameLogic.size.col];
             
@@ -89,7 +88,7 @@ namespace GameOfLife
 
         public override void Update()
         {
-            bool[,] arrayToDraw = logic.Field;
+            bool[,] arrayToDraw = _saveGameLogic.Field;
 
             for (int row = 0; row < arrayToDraw.GetLength(0); row++)
             {
@@ -108,16 +107,16 @@ namespace GameOfLife
                             Program.SceneRemove();
                             return;
                         case ConsoleKey.S: // spiel speichern
-                            logic.SaveGameTxt("Snapshot"+DateTime.Now.ToString("hh-mm-ss"));
+                            _saveGameLogic.SaveGameTxt("Snapshot"+DateTime.Now.ToString("hh-mm-ss"));
                             break;
                     }
                 }
             }
 
-            if ((DateTime.Now - lastLogicUpdate).TotalMilliseconds > 50)
+            if ((DateTime.Now - lastLogicUpdate).TotalMilliseconds > 30)
             {
                 lastLogicUpdate = DateTime.Now;
-                logic.Update();
+                _saveGameLogic.Update();
             }
         }
 

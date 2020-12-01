@@ -338,3 +338,15 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/SpeechDemo/My First Project-530fe9f470c1.json
+/SpeechDemo/SpeechDemo.csproj.DotSettings
+/SpeechDemo/SpeechDemo.csproj
+/SpeechDemo/Properties/AssemblyInfo.cs
+/SpeechDemo/Program.cs
+/SpeechDemo/packages.config
+/SpeechDemo/GoogleTxtToSpeech.cs
+/SpeechDemo/App.config
+/SQL/Steam.db
+/SQL/SQL.csproj.DotSettings
+/SQL/SQL.csproj
+/SQL/Program.cs

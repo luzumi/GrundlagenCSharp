@@ -27,7 +27,6 @@ namespace GameOfLife
         public Button(byte pRow, byte pColumn, bool pCentered, string pButtonText) : base(pRow, pCentered)
         {
             col = pColumn;
-            row = pRow;
             buttonText = pButtonText;
             SetColors();
             center = pCentered;
@@ -119,7 +118,7 @@ namespace GameOfLife
 
         public override void Draw()
         {
-            Console.SetCursorPosition(center ? Console.WindowWidth / 2 - buttonText.Length / 2 : col, row);
+            Console.SetCursorPosition(center ? Console.WindowWidth / 2 - buttonText.Length / 2 : col*2, row);
             Console.BackgroundColor = currentBackground;
             Console.ForegroundColor = currentForeground;
             Console.Write(buttonText);
