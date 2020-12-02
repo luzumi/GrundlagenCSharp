@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 
 namespace GameOfLife
@@ -11,20 +12,25 @@ namespace GameOfLife
         //GameScene preview; //TODO load file for preview, just constructor, no update or activate
         public LoadGame()
         {
-            fileNames.AddRange(Directory.GetFiles(@".\", "*.xml"));
-            fileNames.AddRange(Directory.GetFiles(@".\", "*.gol"));
-            
-            //TODO: fileNames aus "SaveGames.db" einpflegen;
-            byte row = 4;
+            var fileNames = GameOfLifeLogic.GameLogic.GetAvailableGames();
 
+            byte row = 4;
             uiElements = new List<UiElement>();
 
             foreach (var item in fileNames)
             {
-                uiElements.Add(new TextBox(row += 2, false, item.Substring(2, item.Length - 2)));
+                if (item.FromDatabase)
+                {
+                    uiElements.Add(new Button(row += 2, false, "DB " + item.Name, () => startLevel(item.Name)));
+                }
+                else
+                {
+                    uiElements.Add(new Button(row += 2, false, "FL " + item.Name.Substring(2, item.Name.Length - 2 - 4), () => startLevel(item.Name)));
+                }
             }
 
-            uiElements.Add(new TextBox(row += 2, false, "Back", Program.SceneRemove));
+            uiElements.Add(new Button(row += 2, false, "Back", () => Program.SceneRemove()));
+            activeButton = 0;
         }
 
         public override void Activate()
@@ -55,6 +61,12 @@ namespace GameOfLife
                         break;
                 }
             }
+        }
+
+
+        private void startLevel(string pFileName)
+        {
+            Program.SceneAdd(new Game(pFileName));
         }
     }
 }
