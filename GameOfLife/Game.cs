@@ -27,7 +27,6 @@ namespace GameOfLife
             
             BoardLabelsFill();
         }
-
         /// <summary>
         /// Konstruktor übernimmt entworfenes Spielfeld im Editor
         /// </summary>
