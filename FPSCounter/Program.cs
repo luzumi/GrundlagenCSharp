@@ -10,6 +10,8 @@ namespace FPSCounter
 {
     class Program 
     {
+        #region DLLsImporte für ConsolenHandling
+
         [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         static extern SafeFileHandle CreateFile(
             string fileName,
@@ -28,6 +30,8 @@ namespace FPSCounter
             Coord dwBufferSize,
             Coord dwBufferCoord,
             ref SmallRect lpWriteRegion);
+
+        #endregion
 
         public static short Height = 45;
         public static short Widht = 200;
@@ -81,10 +85,10 @@ namespace FPSCounter
                         break;
                 }
             } while (key != ConsoleKey.Escape);
-
-           // Console.ResetColor();
         }
     }
+
+    #region Structs für ConsolenHandling
 
     [StructLayout(LayoutKind.Sequential)]
     public struct Coord
@@ -124,4 +128,6 @@ namespace FPSCounter
             Bottom = pBottom;
         }
     }
+
+    #endregion
 }

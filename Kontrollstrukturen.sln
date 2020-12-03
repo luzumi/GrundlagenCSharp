@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechDemo", "SpeechDemo\Sp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQL", "SQL\SQL.csproj", "{796DAD98-0FB8-4765-B1C9-31A352804CE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPSCounter", "FPSCounter\FPSCounter.csproj", "{AEB8630D-948D-4C0D-9BB7-DC7BA77DD7C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPSCounter", "FPSCounter\FPSCounter.csproj", "{AEB8630D-948D-4C0D-9BB7-DC7BA77DD7C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
